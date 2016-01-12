@@ -30,7 +30,7 @@ public class cls_conexion {
     private static String host = "localhost";
     private static String dataBase = "facturaE";
     private static String user = "postgres";
-    private static String pass = "escarlata";
+    private static String pass = "Etics@216";
     
     public static void conectar()
      {
