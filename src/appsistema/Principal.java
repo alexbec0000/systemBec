@@ -1,5 +1,7 @@
 package appsistema;
 
+import javax.swing.JOptionPane;
+
 public class Principal extends javax.swing.JFrame {
  Proveedores proveedor = new Proveedores ();
  Clientes cliente = new Clientes ();
@@ -27,6 +29,11 @@ public class Principal extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -149,6 +156,20 @@ public class Principal extends javax.swing.JFrame {
         vendedor.setVisible(true);
     }//GEN-LAST:event_jButton6ActionPerformed
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        int op =  finalizar();
+        if(op == JOptionPane.OK_OPTION)
+        {
+            System.exit(0);
+        }
+    }//GEN-LAST:event_formWindowClosing
+
+    public int finalizar()
+    {
+        return JOptionPane.showConfirmDialog(this, "Si existe algun dato sin guardar "
+                + "se perderán.\n ¿Desea salir del programa?");
+    }
     /**
     * @param args the command line arguments
     */
