@@ -23,28 +23,27 @@ public class ClienteController extends AbstractController{
     {
          try{
              listCli=new ArrayList();
-             String sql="SELECT codigo, ruc, dni, nombre, direccion, razon, telefono, celular, " +
-                        "       fax, forma_p, credito, mail," +
-                        "       vendedor, obs, foto" +
-                        "  FROM clientes;";
+             String sql="SELECT ID_CLI, CED_RUC_CLI, NOMBRE_APELLIDO_CLI, "
+                      + " DIRECCION_CLI, RAZON_SOCIAL_CLI, "
+                      + " TELEFONO_CLI, CELULAR_CLI, " +
+                        " FORMA_PAGO_CLI, SALDO_CLI, EMAIL_CLI," +
+                        " OBSERVACION_CLI, FOTO_CLI" +
+                        " FROM clientes;";
                  rs = cls_conexion.getStatement().executeQuery(sql);
             while(rs.next())
             {
                 cli = new cls_cliente();
                 cli.setCodigo(rs.getString(1));
                 cli.setRUC(rs.getString(2));
-                cli.setDNI(rs.getString(3));
-                cli.setNombre(rs.getString(4));
-                cli.setDireccion(rs.getString(5));
-                cli.setRazon(rs.getString(6));
-                cli.setTelefono(rs.getString(7));
-                cli.setCelular(rs.getString(8));
-                cli.setFax(rs.getString(9));
-                cli.setForma_p(rs.getString(10));
-                cli.setCredito(rs.getString(11));
-                cli.setMail(rs.getString(12));
-                cli.setVendedor(rs.getString(13));
-                cli.setObs(rs.getString(14));
+                cli.setNombre(rs.getString(3));
+                cli.setDireccion(rs.getString(4));
+                cli.setRazon(rs.getString(5));
+                cli.setTelefono(rs.getString(6));
+                cli.setCelular(rs.getString(7));
+                cli.setForma_p(rs.getString(8));
+                cli.setCredito(rs.getString(9));
+                cli.setMail(rs.getString(10));
+                cli.setObs(rs.getString(11));
                 //cli.setFoto(rs.getByte(0));
 //                cl.setSueldo(rs.getDouble(14));
                 
@@ -62,12 +61,11 @@ public class ClienteController extends AbstractController{
     public int grabarRegistro(cls_cliente cli) {
         
         int resultado = 0;
-        String sql = "INSERT INTO clientes(codigo, ruc, dni, nombre, direccion, razon, telefono, celular, " +
+        String sql = "INSERT INTO clientes(codigo, ruc, nombre, direccion, razon, telefono, celular, " +
                                         " fax, forma_p, credito, mail, " +
-                                        " vendedor, obs, foto) " +
+                                        " obs, foto) " +
 	"VALUES('"+cli.getCodigo()+"','"+ 
             cli.getRUC()+"','"+
-                cli.getDNI()+"','"+
                 cli.getNombre()+"','"+
                 cli.getDireccion()+"','"+
                 cli.getRazon()+"','"+
@@ -77,7 +75,6 @@ public class ClienteController extends AbstractController{
                 cli.getForma_p()+"','"+
                 cli.getCredito()+"','"+
                 cli.getMail()+"','"+
-                cli.getVendedor()+"','"+
                 cli.getObs()+"','"+
             cli.getFoto()+"');";
         
@@ -86,7 +83,7 @@ public class ClienteController extends AbstractController{
                     "     telefono='"+cli.getTelefono()+"', fax='"+cli.getFax()+"', credito='"+cli.getCredito()+"', " +
                     "     mail='"+cli.getMail()+"', "+
                     "     forma_p='"+cli.getForma_p()+"', razon='"+cli.getRazon()+"', " +
-                    "     dni='"+cli.getDNI()+"', foto='"+cli.getFoto()+"', vendedor='" +cli.getVendedor()+"',"+
+                    "     foto='"+cli.getFoto()+"',"+
                     "     celular='"+cli.getCelular()+"', obs='"+cli.getObs()+"'" +
                     " WHERE codigo='"+cli.getCodigo()+"';"; 
         

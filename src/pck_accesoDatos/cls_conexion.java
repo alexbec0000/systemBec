@@ -28,16 +28,16 @@ public class cls_conexion {
     
     
     private static String host = "localhost";
-    private static String dataBase = "facturaE";
-    private static String user = "postgres";
-    private static String pass = "Etics@216";
+    private static String dataBase = "facturacion";
+    private static String user = "root";
+    private static String pass = "";
     
     public static void conectar()
      {
           try{
               if (cns==null){
-                    Class.forName("org.postgresql.Driver");
-                    String url = "jdbc:postgresql://"+host+":5432/"+dataBase;
+                    Class.forName("com.mysql.jdbc.Driver");
+                    String url = "jdbc:mysql://"+host+":3306/"+dataBase;
                     cns = DriverManager.getConnection( url, user, pass );
                  }
           }catch(ClassNotFoundException ex){

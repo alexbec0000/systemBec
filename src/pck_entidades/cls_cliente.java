@@ -8,7 +8,6 @@ public class cls_cliente implements Serializable
     //Declaramos la lista de atributos
     private String codigo;
     private String RUC;
-    private String DNI;
     private String nombre;
     private String direccion;
     private String razon;
@@ -18,7 +17,6 @@ public class cls_cliente implements Serializable
     private String forma_p;
     private String credito;
     private String mail;
-    private String vendedor;
     private String obs;
     private Icon foto;
 
@@ -26,12 +24,11 @@ public class cls_cliente implements Serializable
     public cls_cliente () {}
 
     //Declaramos el contructor con parametros
-    public cls_cliente (String codigo, String RUC, String DNI, String nombre, String direccion, String razon, String telefono, 
-                    String celular, String fax, String forma_p, String credito, String mail, String vendedor, String obs, Icon foto)
+    public cls_cliente (String codigo, String RUC, String nombre, String direccion, String razon, String telefono, 
+                    String celular, String fax, String forma_p, String credito, String mail, String obs, Icon foto)
     {
         this.codigo = codigo;
         this.RUC = RUC;
-        this.DNI = DNI;
         this.nombre = nombre;
         this.direccion = direccion;
         this.razon = razon;
@@ -41,7 +38,6 @@ public class cls_cliente implements Serializable
         this.forma_p = forma_p;
         this.credito = credito;
         this.mail = mail;
-        this.vendedor = vendedor;
         this.obs = obs;
         this.foto = foto;
     }
@@ -71,20 +67,6 @@ public class cls_cliente implements Serializable
      */
     public void setRUC(String RUC) {
         this.RUC = RUC;
-    }
-
-    /**
-     * @return the DNI
-     */
-    public String getDNI() {
-        return DNI;
-    }
-
-    /**
-     * @param DNI the DNI to set
-     */
-    public void setDNI(String DNI) {
-        this.DNI = DNI;
     }
 
     /**
@@ -211,20 +193,6 @@ public class cls_cliente implements Serializable
      */
     public void setMail(String mail) {
         this.mail = mail;
-    }
-
-    /**
-     * @return the vendedor
-     */
-    public String getVendedor() {
-        return vendedor;
-    }
-
-    /**
-     * @param vendedor the vendedor to set
-     */
-    public void setVendedor(String vendedor) {
-        this.vendedor = vendedor;
     }
 
     /**

@@ -23,8 +23,8 @@ public class ProveedorController extends AbstractController{
     {
          try{
              listProv=new ArrayList();
-             String sql="SELECT codigo, ruc, nombre, direccion, telefono, fax, web, mail, "
-                     + " nombre_r, telefono_r, celular_r, obs" +
+             String sql="SELECT CODIGO_PRV, RUC_PRV, NOMBRE_APELLIDO_PRV, DIRECCION_PRV, TELEFONO_PRV, fax, WEB_PRV, EMAIL_PRV, "
+                     + " nombre_r, telefono_r, celular_r, OBSERVACION_PRV" +
                      "  FROM proveedor;";
                  rs = cls_conexion.getStatement().executeQuery(sql);
             while(rs.next())
@@ -65,8 +65,8 @@ public class ProveedorController extends AbstractController{
     public int grabarRegistro(cls_proveedor prov) {
         
         int resultado = 0;
-        String sql = "INSERT INTO proveedor(codigo, ruc, nombre, direccion, telefono, fax, web, mail, "
-                + " nombre_r, telefono_r, celular_r, obs) " +
+        String sql = "INSERT INTO proveedor(CODIGO_PRV, RUC_PRV, NOMBRE_APELLIDO_PRV, DIRECCION_PRV, TELEFONO_PRV, fax, WEB_PRV, EMAIL_PRV, "
+                + " nombre_r, telefono_r, celular_r, OBSERVACION_PRV) " +
 	"VALUES('"+prov.getCodigo()+"','"+ 
             prov.getRuc()+"','"+
                 prov.getNombre()+"','"+
@@ -81,14 +81,14 @@ public class ProveedorController extends AbstractController{
             prov.getObs()+"');";
         
         String sql2 ="UPDATE proveedor " +
-                    "   SET ruc='"+prov.getRuc()+"', nombre='"+prov.getNombre()+"', direccion='"+prov.getDireccion()+"', "+
-                    "     telefono='"+prov.getTelefono()+"', fax='"+prov.getFax()+"', web='"+prov.getWeb()+"', " +
-                    "     mail='"+prov.getMail()+"', nombre_r='"+prov.getNombre_r()+"', " +
-                    "     telefono_r='"+prov.getTelefono_r()+"', celular_r='"+prov.getCelular_r()+"', obs='"+prov.getObs()+"'" +
-                    " WHERE codigo='"+prov.getCodigo()+"';"; 
+                    "   SET RUC_PRV='"+prov.getRuc()+"', NOMBRE_APELLIDO_PRV='"+prov.getNombre()+"', DIRECCION_PRV='"+prov.getDireccion()+"', "+
+                    "     TELEFONO_PRV='"+prov.getTelefono()+"', fax='"+prov.getFax()+"', WEB_PRV='"+prov.getWeb()+"', " +
+                    "     EMAIL_PRV='"+prov.getMail()+"', nombre_r='"+prov.getNombre_r()+"', " +
+                    "     telefono_r='"+prov.getTelefono_r()+"', celular_r='"+prov.getCelular_r()+"', OBSERVACION_PRV='"+prov.getObs()+"'" +
+                    " WHERE CODIGO_PRV='"+prov.getCodigo()+"';"; 
         
         try {
-            if(existeRegistro("proveedor","codigo",prov.getCodigo()))
+            if(existeRegistro("proveedor","CODIGO_PRV",prov.getCodigo()))
             {
                 System.out.println(sql2);
                 resultado = cls_conexion.getStatement().executeUpdate(sql2);
