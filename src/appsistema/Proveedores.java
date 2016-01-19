@@ -70,8 +70,10 @@ int num = 0;
         try
         {
             for(int i=0;i<objArreglo.Numero_Proveedor();i++)
-                objProveedorController.grabarRegistro(objArreglo.getProveedor(i));
-        
+            {
+                if(objArreglo.getProveedor(i).isEditar())
+                    objProveedorController.grabarRegistro(objArreglo.getProveedor(i));
+            }
         }//Fin del try
 
         catch(Exception e)
@@ -97,7 +99,6 @@ int num = 0;
             String nombre = objArreglo.getProveedor(i).getNombre();
             String direccion = objArreglo.getProveedor(i).getDireccion();
             String telefono = objArreglo.getProveedor(i).getTelefono();
-            String fax = objArreglo.getProveedor(i).getFax();
             String web = objArreglo.getProveedor(i).getWeb();
             String mail = objArreglo.getProveedor(i).getMail();
             String nombre_r = objArreglo.getProveedor(i).getNombre_r();
@@ -106,7 +107,7 @@ int num = 0;
 
             //Insertando la indormacion en la tabla
 
-            Insertar (i+1, codigo, ruc,nombre, direccion, telefono, fax, web, mail, nombre_r, telefono_r, celular_r);
+            Insertar (i+1, codigo, ruc,nombre, direccion, telefono, web, mail, nombre_r, telefono_r, celular_r);
 
         }//Fin del for
     }
@@ -120,7 +121,7 @@ int num = 0;
         }//Fin del for
     }
 
-    public  void Insertar(int  num, String codigo, String ruc, String nombre, String direccion, String telefono, String fax, String web, String mail, String nombre_r, String telefono_r, String celular_r)
+    public  void Insertar(int  num, String codigo, String ruc, String nombre, String direccion, String telefono, String web, String mail, String nombre_r, String telefono_r, String celular_r)
     {
 
         //Llenando la fila de la tabla
@@ -151,7 +152,6 @@ int num = 0;
                     String nombre = jTxtNombrePr.getText();
                     String direccion = jTxtDireccion.getText();
                     String telefono = jTxtTelefonoPr.getText();
-                    String fax = jTxtFax.getText();
                     String web = jTxtWeb.getText();
                     String mail = jTxtMail.getText();
                     String nombre_r = jTxtNombreRep.getText();
@@ -160,7 +160,8 @@ int num = 0;
                     String obs = jTxaObs.getText();
 
                 //Generando la clace para manejar un Registro 
-                objProveedores = new cls_proveedor (codigo, ruc, nombre, direccion, telefono, fax, web, mail, nombre_r, telefono_r, celular_r, obs);
+                objProveedores = new cls_proveedor (codigo, ruc, nombre, direccion, 
+                        telefono, web, mail, nombre_r, telefono_r, celular_r, obs, true);
                 //Verificando si el codigo existe dentro del arreglo
 
                 if(p==-1)//El codigo es nuevo
@@ -242,7 +243,6 @@ int num = 0;
         String nombre = objProveedores.getNombre();
         String direccion = objProveedores.getDireccion();
         String telefono = objProveedores.getTelefono();
-        String fax = objProveedores.getFax();
         String web = objProveedores.getWeb();
         String mail = objProveedores.getMail();
         String nombre_r = objProveedores.getNombre_r();
@@ -256,7 +256,6 @@ int num = 0;
         jTxtNombrePr.setText(nombre);
         jTxtDireccion.setText(direccion);
         jTxtTelefonoPr.setText(telefono);
-        jTxtFax.setText(fax);
         jTxtWeb.setText(web);
         jTxtMail.setText(mail);
         jTxtNombreRep.setText(nombre_r);
@@ -291,12 +290,6 @@ int num = 0;
         if(jTxtTelefonoPr.getText().equals(""))
         {dato="Verifique los datos en el apartado: Telefono del proveedor ";
             jTxtTelefonoPr.requestFocus();
-            return dato;
-        }
-
-        if(jTxtFax.getText().equals(""))
-        {dato="Verifique los datos en el apartado: Nº Fax ";
-            jTxtFax.requestFocus();
             return dato;
         }
 
@@ -350,7 +343,6 @@ int num = 0;
         jTxtNombrePr.setText("");
         jTxtDireccion.setText("");
         jTxtTelefonoPr.setText("");
-        jTxtFax.setText("");
         jTxtWeb.setText("");
         jTxtMail.setText("");
         jTxtNombreRep.setText("");
@@ -369,7 +361,6 @@ int num = 0;
         jTxtNombrePr.setEnabled(false);
         jTxtDireccion.setEnabled (false);
         jTxtTelefonoPr.setEnabled (false);
-        jTxtFax.setEnabled (false);
         jTxtWeb.setEnabled (false);
         jTxtMail.setEnabled (false);
         jTxtNombreRep.setEnabled (false);
@@ -388,7 +379,6 @@ int num = 0;
         jTxtNombrePr.setEnabled(true);
         jTxtDireccion.setEnabled (true);
         jTxtTelefonoPr.setEnabled (true);
-        jTxtFax.setEnabled (true);
         jTxtWeb.setEnabled (true);
         jTxtMail.setEnabled (true);
         jTxtNombreRep.setEnabled (true);
@@ -443,9 +433,7 @@ int num = 0;
         jLabel5 = new javax.swing.JLabel();
         jTxtDireccion = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         jTxtTelefonoPr = new javax.swing.JTextField();
-        jTxtFax = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jTxtWeb = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
@@ -545,17 +533,9 @@ int num = 0;
 
         jLabel6.setText("Teléfono:");
 
-        jLabel7.setText("Nº FAX:");
-
         jTxtTelefonoPr.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTxtTelefonoPrKeyPressed(evt);
-            }
-        });
-
-        jTxtFax.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTxtFaxKeyPressed(evt);
             }
         });
 
@@ -686,37 +666,31 @@ int num = 0;
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel12))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTxtMail)
+                                    .addComponent(jTxtWeb)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel8)
-                                            .addComponent(jLabel12))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jTxtMail)
-                                            .addComponent(jTxtWeb)))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel3)
-                                            .addComponent(jLabel4)
-                                            .addComponent(jLabel2)
-                                            .addComponent(jLabel5)
-                                            .addComponent(jLabel6))
-                                        .addGap(8, 8, 8)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLblCodigo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jTxtTelefonoPr, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jTxtDireccion)
-                                            .addComponent(jTxtRuc, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jTxtNombrePr)
-                                            .addComponent(jTxtFax, javax.swing.GroupLayout.Alignment.TRAILING)))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jBtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel6))
+                                .addGap(8, 8, 8)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLblCodigo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jTxtTelefonoPr, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jTxtDireccion)
+                                    .addComponent(jTxtRuc, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jTxtNombrePr)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jBtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -751,17 +725,13 @@ int num = 0;
                             .addComponent(jTxtTelefonoPr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
-                            .addComponent(jTxtFax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jTxtWeb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel8))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel12)
                             .addComponent(jTxtMail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(37, 37, 37)
                         .addComponent(jBtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -846,7 +816,6 @@ int num = 0;
          String nombre = jTxtNombrePr.getText();
          String direccion = jTxtDireccion.getText();
          String telefono = jTxtTelefonoPr.getText();
-         String fax = jTxtFax.getText();
          String web = jTxtWeb.getText();
          String mail = jTxtMail.getText();
          String nombre_r = jTxtNombreRep.getText();
@@ -855,7 +824,8 @@ int num = 0;
          String obs = jTxaObs.getText();
 
          //Generando la clace para manejar un registro 
-         objProveedores = new cls_proveedor (codigo, ruc, nombre, direccion, telefono, fax, web, mail, nombre_r, telefono_r, celular_r, obs);
+         objProveedores = new cls_proveedor (codigo, ruc, nombre, direccion, telefono, 
+                 web, mail, nombre_r, telefono_r, celular_r, obs, false);
          //Verificando si el codigo existe dentro del arreglo
          if(objArreglo.Buscar(objProveedores.getCodigo())!= -1)
              mensaje("Codigo Repetido");//Se muestrea el mensaje
@@ -863,11 +833,12 @@ int num = 0;
          else {
              //Instanciamos una clace con diferente codigo para el caso sea un nuevo registro
              String cod =  Generar_Codigo();
-             objProveedores = new cls_proveedor (cod, ruc, nombre, direccion, telefono, fax, web, mail, nombre_r, telefono_r, celular_r, obs);
+             objProveedores = new cls_proveedor (cod, ruc, nombre, direccion, telefono, 
+                     web, mail, nombre_r, telefono_r, celular_r, obs, true);
              //Se agrega el objeto al arreglo
              objArreglo.Agregar(objProveedores);
              //Insertando la ifnromacion en la tabla
-             Insertar(0,cod, ruc,nombre, direccion, telefono, fax, web, mail, nombre_r, telefono_r, celular_r);
+             Insertar(0,cod, ruc,nombre, direccion, telefono, web, mail, nombre_r, telefono_r, celular_r);
              //Limpiando las entradas
              Limpiar_Entradas();
              //Grabando la ifnromacion en el archivo binario
@@ -932,13 +903,8 @@ int num = 0;
 
     private void jTxtTelefonoPrKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTxtTelefonoPrKeyPressed
         if(evt.getKeyCode()==evt.VK_ENTER)
-            jTxtFax.requestFocus();// TODO add your handling code here:
-    }//GEN-LAST:event_jTxtTelefonoPrKeyPressed
-
-    private void jTxtFaxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTxtFaxKeyPressed
-        if(evt.getKeyCode()==evt.VK_ENTER)
             jTxtWeb.requestFocus();// TODO add your handling code here:
-    }//GEN-LAST:event_jTxtFaxKeyPressed
+    }//GEN-LAST:event_jTxtTelefonoPrKeyPressed
 
     private void jTxtWebKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTxtWebKeyPressed
         if(evt.getKeyCode()==evt.VK_ENTER)
@@ -1011,7 +977,6 @@ int num = 0;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLblCodigo;
@@ -1024,7 +989,6 @@ int num = 0;
     private javax.swing.JTextArea jTxaObs;
     private javax.swing.JTextField jTxtCelularRep;
     private javax.swing.JTextField jTxtDireccion;
-    private javax.swing.JTextField jTxtFax;
     private javax.swing.JTextField jTxtMail;
     private javax.swing.JTextField jTxtNombrePr;
     private javax.swing.JTextField jTxtNombreRep;

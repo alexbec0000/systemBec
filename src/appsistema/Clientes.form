@@ -312,9 +312,6 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Nombre:"/>
           </Properties>
-          <AccessibilityProperties>
-            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Nombre:"/>
-          </AccessibilityProperties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">
           <Properties>
@@ -341,7 +338,6 @@
             <Property name="text" type="java.lang.String" value="Fecha Ingreso:"/>
           </Properties>
           <AccessibilityProperties>
-            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Fecha Ingreso:"/>
             <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value=""/>
           </AccessibilityProperties>
         </Component>

@@ -23,8 +23,8 @@ public class ProveedorController extends AbstractController{
     {
          try{
              listProv=new ArrayList();
-             String sql="SELECT CODIGO_PRV, RUC_PRV, NOMBRE_APELLIDO_PRV, DIRECCION_PRV, TELEFONO_PRV, fax, WEB_PRV, EMAIL_PRV, "
-                     + " nombre_r, telefono_r, celular_r, OBSERVACION_PRV" +
+             String sql="SELECT CODIGO_PRV, RUC_PRV, NOMBRE_APELLIDO_PRV, DIRECCION_PRV, TELEFONO_PRV, WEB_PRV, EMAIL_PRV, "
+                     + " NOMBRE_R_PRV, TELEFONO_R_PRV, CELULAR_R_PRV, OBSERVACION_PRV" +
                      "  FROM proveedor;";
                  rs = cls_conexion.getStatement().executeQuery(sql);
             while(rs.next())
@@ -35,13 +35,12 @@ public class ProveedorController extends AbstractController{
                 prov.setNombre(rs.getString(3));
                 prov.setDireccion(rs.getString(4)); 
                 prov.setTelefono(rs.getString(5)); 
-                prov.setFax(rs.getString(6)); 
-                prov.setWeb(rs.getString(7)); 
-                prov.setMail(rs.getString(8)); 
-                prov.setNombre_r(rs.getString(9));
-                prov.setTelefono_r(rs.getString(10));
-                prov.setCelular_r(rs.getString(11));
-                prov.setObs(rs.getString(12));
+                prov.setWeb(rs.getString(6)); 
+                prov.setMail(rs.getString(7)); 
+                prov.setNombre_r(rs.getString(8));
+                prov.setTelefono_r(rs.getString(9));
+                prov.setCelular_r(rs.getString(10));
+                prov.setObs(rs.getString(11));
                
 //                cl.setSexo(rs.getString(8));
 //                cl.setFechaIngreso(rs.getDate(9));
@@ -65,14 +64,13 @@ public class ProveedorController extends AbstractController{
     public int grabarRegistro(cls_proveedor prov) {
         
         int resultado = 0;
-        String sql = "INSERT INTO proveedor(CODIGO_PRV, RUC_PRV, NOMBRE_APELLIDO_PRV, DIRECCION_PRV, TELEFONO_PRV, fax, WEB_PRV, EMAIL_PRV, "
-                + " nombre_r, telefono_r, celular_r, OBSERVACION_PRV) " +
+        String sql = "INSERT INTO proveedor(CODIGO_PRV, RUC_PRV, NOMBRE_APELLIDO_PRV, DIRECCION_PRV, TELEFONO_PRV, WEB_PRV, EMAIL_PRV, "
+                + " NOMBRE_R_PRV, TELEFONO_R_PRV, CELULAR_R_PRV, OBSERVACION_PRV) " +
 	"VALUES('"+prov.getCodigo()+"','"+ 
             prov.getRuc()+"','"+
                 prov.getNombre()+"','"+
                 prov.getDireccion()+"','"+
                 prov.getTelefono()+"','"+
-                prov.getFax()+"','"+
                 prov.getWeb()+"','"+
                 prov.getMail()+"','"+
                 prov.getNombre_r()+"','"+
@@ -81,10 +79,10 @@ public class ProveedorController extends AbstractController{
             prov.getObs()+"');";
         
         String sql2 ="UPDATE proveedor " +
-                    "   SET RUC_PRV='"+prov.getRuc()+"', NOMBRE_APELLIDO_PRV='"+prov.getNombre()+"', DIRECCION_PRV='"+prov.getDireccion()+"', "+
-                    "     TELEFONO_PRV='"+prov.getTelefono()+"', fax='"+prov.getFax()+"', WEB_PRV='"+prov.getWeb()+"', " +
-                    "     EMAIL_PRV='"+prov.getMail()+"', nombre_r='"+prov.getNombre_r()+"', " +
-                    "     telefono_r='"+prov.getTelefono_r()+"', celular_r='"+prov.getCelular_r()+"', OBSERVACION_PRV='"+prov.getObs()+"'" +
+                    " SET RUC_PRV='"+prov.getRuc()+"', NOMBRE_APELLIDO_PRV='"+prov.getNombre()+"', DIRECCION_PRV='"+prov.getDireccion()+"', "+
+                    " TELEFONO_PRV='"+prov.getTelefono()+"', WEB_PRV='"+prov.getWeb()+"', " +
+                    " EMAIL_PRV='"+prov.getMail()+"', NOMBRE_R_PRV='"+prov.getNombre_r()+"', " +
+                    " TELEFONO_R_PRV='"+prov.getTelefono_r()+"', CELULAR_R_PRV='"+prov.getCelular_r()+"', OBSERVACION_PRV='"+prov.getObs()+"'" +
                     " WHERE CODIGO_PRV='"+prov.getCodigo()+"';"; 
         
         try {

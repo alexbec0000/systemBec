@@ -18,7 +18,7 @@ public final class Clientes extends javax.swing.JFrame
     Arreglo_Cliente objArreglo;
     DefaultTableModel miModelo2;
     DefaultComboBoxModel cbxProv;
-    String[] cabecera = {"Nº","Código", "RUC", "Nombre", "Dirección", "Razón S.", "Teléfono", "Celular", "Fax", "Forma P.", "Linea C.", "E - Mail"};
+    String[] cabecera = {"Nº","Código", "RUC", "Nombre", "Dirección", "Razón S.", "Teléfono", "Celular", "Fecha Ingreso", "Forma P.", "Linea C.", "E - Mail"};
     String[][] data = {};
     ClienteController objClienteController;
     //Variables globales
@@ -69,7 +69,10 @@ public final class Clientes extends javax.swing.JFrame
         try
         {
             for(int i=0;i<objArreglo.Numero_Clientes();i++)
-                objClienteController.grabarRegistro(objArreglo.getCliente(i));
+            {
+                if(objArreglo.getCliente(i).isEditar())
+                    objClienteController.grabarRegistro(objArreglo.getCliente(i));
+            }
 
         }//Fin del try
 
@@ -97,12 +100,12 @@ public final class Clientes extends javax.swing.JFrame
             String razon = objArreglo.getCliente(i).getRazon();
             String telefono = objArreglo.getCliente(i).getTelefono();
             String celular = objArreglo.getCliente(i).getCelular();
-            String fax = objArreglo.getCliente(i).getFax();
+            String fechaIngreso = objArreglo.getCliente(i).getFechaIngreso();
             String forma_p = objArreglo.getCliente(i).getForma_p();
             String credito = objArreglo.getCliente(i).getCredito();
             String mail = objArreglo.getCliente(i).getMail();
 
-            Insertar (i+1, codigo, RUC, nombre, direccion, razon, telefono, celular, fax, forma_p, credito, mail);
+            Insertar (i+1, codigo, RUC, nombre, direccion, razon, telefono, celular, fechaIngreso, forma_p, credito, mail);
 
         }//Fin del for
     }
@@ -117,11 +120,11 @@ public final class Clientes extends javax.swing.JFrame
     }
 
     public  void Insertar(int  num, String codigo, String RUC, String nombre, String direccion, String razon,
-            String telefono, String celular, String fax, String forma_p, String credito, String mail)
+            String telefono, String celular, String fechaIngreso, String forma_p, String credito, String mail)
     {
 
         //Llenando la fila de la tabla
-        Object fila [] = {num, codigo, RUC, nombre, direccion, razon, telefono, celular, fax, forma_p, credito, mail};
+        Object fila [] = {num, codigo, RUC, nombre, direccion, razon, telefono, celular, fechaIngreso, forma_p, credito, mail};
          //Agregando la fila a nuestro modelo de tabla
         miModelo2.addRow(fila);
     }
@@ -150,7 +153,7 @@ public final class Clientes extends javax.swing.JFrame
                 String razon  = jTxtRazon.getText();
                 String telefono  = jTxtTelefono.getText();
                 String celular  = jTxtCelular.getText();
-                String fax  = jTxtFechaIngreso.getText();
+                String fechaIngreso  = jTxtFechaIngreso.getText();
                 String forma_p  = jTxtForma_p.getText();
                 String credito =   jTxtCredito.getText();
                 String mail  = jTxtMail.getText();
@@ -158,7 +161,8 @@ public final class Clientes extends javax.swing.JFrame
                 Icon foto = jLblFoto.getIcon();
 
                 //Generando la clace para manejar un Registro academico
-                objCliente = new cls_cliente (codigo, RUC, nombre, direccion, razon, telefono, celular, fax, forma_p, credito, mail, obs, foto);
+                objCliente = new cls_cliente (codigo, RUC, nombre, direccion, 
+                  razon, telefono, celular, fechaIngreso, forma_p, credito, mail, obs, foto,true);
                 //Verificando si el codigo existe dentro del arreglo
 
                 if(p==-1)//El codigo es nuevo
@@ -301,7 +305,7 @@ public final class Clientes extends javax.swing.JFrame
         String razon   = objCliente.getRazon();
         String telefono  = objCliente.getTelefono();
         String celular    = objCliente.getCelular();
-        String fax    = objCliente.getFax();
+        String fechaIngreso    = objCliente.getFechaIngreso();
         String forma_p    = objCliente.getForma_p();
         String credito   = objCliente.getCredito();
         String mail    = objCliente.getMail();
@@ -316,7 +320,7 @@ public final class Clientes extends javax.swing.JFrame
         jTxtRazon.setText(razon);
         jTxtTelefono.setText(telefono);
         jTxtCelular.setText(celular);
-        jTxtFechaIngreso.setText(fax);
+        jTxtFechaIngreso.setText(fechaIngreso);
         jTxtForma_p.setText(forma_p);
         jTxtCredito.setText(credito);
         jTxtMail.setText(mail);
@@ -366,7 +370,7 @@ public final class Clientes extends javax.swing.JFrame
         }
 
         if(jTxtFechaIngreso.getText().equals(""))
-        {dato="Verifique los datos en el apartado: Nº Fax ";
+        {dato="Verifique los datos en el apartado: Fecha Ingreso ";
         jTxtFechaIngreso.requestFocus();
         return dato;
         }
@@ -827,46 +831,48 @@ public final class Clientes extends javax.swing.JFrame
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jBtnGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnGrabarActionPerformed
-        String dato = Verifica_Datos();
+       String dato = Verifica_Datos();
        if(dato.equalsIgnoreCase(""))
        {
-       //Se leen los datos de entrada de los text file
-        String codigo = jLblCodigo.getText();
-        String RUC   = jTxtRuc.getText();
-        String nombre = jTxtNombre.getText();
-        String direccion  = jTxtDireccion.getText();
-        String razon  = jTxtRazon.getText();
-        String telefono  = jTxtTelefono.getText();
-        String celular  = jTxtCelular.getText();
-        String fax  = jTxtFechaIngreso.getText();
-        String forma_p  = jTxtForma_p.getText();
-        String credito =   jTxtCredito.getText();
-        String mail  = jTxtMail.getText();
-        String obs = jTxaObs.getText();
-        Icon foto = jLblFoto.getIcon();
+        //Se leen los datos de entrada de los text file
+         String codigo = jLblCodigo.getText();
+         String RUC   = jTxtRuc.getText();
+         String nombre = jTxtNombre.getText();
+         String direccion  = jTxtDireccion.getText();
+         String razon  = jTxtRazon.getText();
+         String telefono  = jTxtTelefono.getText();
+         String celular  = jTxtCelular.getText();
+         String fechaIngreso  = jTxtFechaIngreso.getText();
+         String forma_p  = jTxtForma_p.getText();
+         String credito =   jTxtCredito.getText();
+         String mail  = jTxtMail.getText();
+         String obs = jTxaObs.getText();
+         Icon foto = jLblFoto.getIcon();
 
 
-        //Generando la clace para manejar un Registro academico
-        objCliente = new cls_cliente (codigo, RUC,nombre, direccion, razon, telefono, celular, fax, forma_p, credito, mail, obs, foto);
-        //Verificando si el codigo existe dentro del arreglo
-        if(objArreglo.Buscar(objCliente.getCodigo())!= -1)
-            mensaje("Codigo Repetido");//Se muestrea el mensaje
+         //Generando la clace para manejar un Registro academico
+         objCliente = new cls_cliente (codigo, RUC,nombre, direccion, razon, telefono, 
+                 celular, fechaIngreso, forma_p, credito, mail, obs, foto, false);
+         //Verificando si el codigo existe dentro del arreglo
+         if(objArreglo.Buscar(objCliente.getCodigo())!= -1)
+             mensaje("Codigo Repetido");//Se muestrea el mensaje
 
-        else {
-            //Instanciamos una clace con diferente codigo para el caso sea un nuevo registro
-            String cod =  Generar_Codigo();
-            objCliente = new cls_cliente (cod, RUC, nombre, direccion, razon, telefono, celular, fax, forma_p, credito, mail, obs, foto);
-            //Se agrega el objeto al arreglo
-            objArreglo.Agregar(objCliente);
-            //Insertando la ifnromacion en la tabla
-            Insertar (0, codigo, RUC, nombre, direccion, razon, telefono, celular, fax, forma_p, credito, mail);
-            //Limpiando las entradas
-            Limpiar_Entradas();
-            //Grabando la ifnromacion en el archivo binario
-            Grabar();
-            //Actualizando la tabla de registros
-            Actualizar_Tabla();
-        }//Fin del else
+         else {
+             //Instanciamos una clace con diferente codigo para el caso sea un nuevo registro
+             String cod =  Generar_Codigo();
+             objCliente = new cls_cliente (cod, RUC, nombre, direccion, razon, 
+                     telefono, celular, fechaIngreso, forma_p, credito, mail, obs, foto, true);
+             //Se agrega el objeto al arreglo
+             objArreglo.Agregar(objCliente);
+             //Insertando la ifnromacion en la tabla
+             Insertar (0, codigo, RUC, nombre, direccion, razon, telefono, celular, fechaIngreso, forma_p, credito, mail);
+             //Limpiando las entradas
+             Limpiar_Entradas();
+             //Grabando la ifnromacion en el archivo binario
+             Grabar();
+             //Actualizando la tabla de registros
+             Actualizar_Tabla();
+         }//Fin del else
        }
        else
        {

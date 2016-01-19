@@ -5,38 +5,51 @@ import javax.swing.*;
 
 public class cls_vendedor implements Serializable
 {
-//Declaramos la lista de atributos
-private String codigo;
-private String CI;
-private String nombres;
-private String direccion;
-private String telefono;
-private String celular;
-private float comision;
-private String mail;
-private String obs;
-private Icon foto;
+    //Declaramos la lista de atributos
+    private String codigo;
+    private String CI;
+    private String nombres;
+    private String usuario;
+    private String clave;
+    private String fechaIngreso;
+    private String fechaNacimiento;
+    private String direccion;
+    private String telefono;
+    private String celular;
+    private float ventas;
+    private String mail;
+    private String obs;
+    private Icon foto;
+    private boolean estado;
+    private boolean editar;
 
-//Declarando el constructor vacío
-public cls_vendedor () {}
+    //Declarando el constructor vacío
+    public cls_vendedor () {}
 
-//Declarando el constructor con parámetros
-public cls_vendedor (String codigo, String CI, String nombres, String direccion, String telefono, String celular, float comision, String mail, 
-                  String obs, Icon foto)
-{
-this.codigo = codigo;
-this.CI = CI;
-this.nombres = nombres;
-this.direccion = direccion;
-this.telefono = telefono;
-this.celular = celular;
-this.comision = comision;
-this.mail = mail;
-this.obs = obs;
-this.foto = foto;
-}
+    //Declarando el constructor con parámetros
+    
+    public cls_vendedor (boolean editar) 
+    {
+        this.editar = editar;
+    }
+    
+    public cls_vendedor (String codigo, String CI, String nombres, String direccion, String telefono, String celular, float comision, String mail, 
+                      String obs, Icon foto, boolean editar)
+    {
+        this.codigo = codigo;
+        this.CI = CI;
+        this.nombres = nombres;
+        this.direccion = direccion;
+        this.telefono = telefono;
+        this.celular = celular;
+        this.ventas = comision;
+        this.mail = mail;
+        this.obs = obs;
+        this.foto = foto;
+        this.editar = editar;
+    }
 
-//Iniziando el seteo
+    //Iniziando el seteo
     public String getCodigo() {
         return codigo;
     }
@@ -119,20 +132,6 @@ this.foto = foto;
     }
 
     /**
-     * @return the comision
-     */
-    public float getComision() {
-        return comision;
-    }
-
-    /**
-     * @param comision the comision to set
-     */
-    public void setComision(float comision) {
-        this.comision = comision;
-    }
-
-    /**
      * @return the mail
      */
     public String getMail() {
@@ -175,4 +174,62 @@ this.foto = foto;
         this.foto = foto;
     }
 
+    public boolean isEditar() {
+        return editar;
+    }
+
+    public void setEditar(boolean editar) {
+        this.editar = editar;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getClave() {
+        return clave;
+    }
+
+    public void setClave(String clave) {
+        this.clave = clave;
+    }
+
+    public String getFechaIngreso() {
+        return fechaIngreso;
+    }
+
+    public void setFechaIngreso(String fechaIngreso) {
+        this.fechaIngreso = fechaIngreso;
+    }
+
+    public String getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(String fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public float getVentas() {
+        return ventas;
+    }
+
+    public void setVentas(float ventas) {
+        this.ventas = ventas;
+    }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+    
+    
+    
 }//Fin de la clace Vendedor

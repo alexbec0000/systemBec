@@ -10,34 +10,34 @@ private String ruc;
 private String nombre;
 private String direccion;
 private String telefono;
-private String fax;
 private String web;
 private String mail;
 private String nombre_r;
 private String telefono_r;
 private String celular_r;
 private String obs;
+private boolean editar;
 
 //Declaramos el constructor vacio
 public cls_proveedor(){}
 
 //Declaramos el segundo constructor con los parametros
-public cls_proveedor (String codigo, String ruc, String nombre, String direccion, String telefono, String fax,
+public cls_proveedor (String codigo, String ruc, String nombre, String direccion, String telefono, 
                   String web, String mail, String nombre_r,
-                  String telefono_r, String celular_r, String obs )
+                  String telefono_r, String celular_r, String obs, boolean editar )
 {
-this.codigo = codigo;
-this.ruc = ruc;
-this.nombre = nombre;
-this.direccion = direccion;
-this.telefono = telefono;
-this.fax = fax;
-this.web = web;
-this.mail = mail;
-this.nombre_r = nombre_r;
-this.telefono_r = telefono_r;
-this.celular_r = celular_r;
-this.obs = obs;
+    this.codigo = codigo;
+    this.ruc = ruc;
+    this.nombre = nombre;
+    this.direccion = direccion;
+    this.telefono = telefono;
+    this.web = web;
+    this.mail = mail;
+    this.nombre_r = nombre_r;
+    this.telefono_r = telefono_r;
+    this.celular_r = celular_r;
+    this.obs = obs;
+    this.editar = editar;
 }
 
 
@@ -109,19 +109,6 @@ this.obs = obs;
         this.telefono = telefono;
     }
 
-    /**
-     * @return the fax
-     */
-    public String getFax() {
-        return fax;
-    }
-
-    /**
-     * @param fax the fax to set
-     */
-    public void setFax(String fax) {
-        this.fax = fax;
-    }
 
     /**
      * @return the web
@@ -193,8 +180,16 @@ this.obs = obs;
         this.celular_r = celular_r;
     }
 
-public String getObs() {return obs;}
-public void setObs(String obs) {this.obs = obs;}
+    public boolean isEditar() {
+        return editar;
+    }
+
+    public void setEditar(boolean editar) {
+        this.editar = editar;
+    }
+    
+    public String getObs() {return obs;}
+    public void setObs(String obs) {this.obs = obs;}
 
 }//Fin de la clace
 

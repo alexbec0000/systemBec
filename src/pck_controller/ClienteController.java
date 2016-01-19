@@ -27,7 +27,7 @@ public class ClienteController extends AbstractController{
                       + " DIRECCION_CLI, RAZON_SOCIAL_CLI, "
                       + " TELEFONO_CLI, CELULAR_CLI, " +
                         " FORMA_PAGO_CLI, SALDO_CLI, EMAIL_CLI," +
-                        " OBSERVACION_CLI, FOTO_CLI" +
+                        " OBSERVACION_CLI, FOTO_CLI, FECHA_INGRESO_CLI" +
                         " FROM clientes;";
                  rs = cls_conexion.getStatement().executeQuery(sql);
             while(rs.next())
@@ -44,6 +44,8 @@ public class ClienteController extends AbstractController{
                 cli.setCredito(rs.getString(9));
                 cli.setMail(rs.getString(10));
                 cli.setObs(rs.getString(11));
+                //cli.setFoto(rs.getByte(12));
+                cli.setFechaIngreso(rs.getString(13));
                 //cli.setFoto(rs.getByte(0));
 //                cl.setSueldo(rs.getDouble(14));
                 
@@ -61,9 +63,9 @@ public class ClienteController extends AbstractController{
     public int grabarRegistro(cls_cliente cli) {
         
         int resultado = 0;
-        String sql = "INSERT INTO clientes(codigo, ruc, nombre, direccion, razon, telefono, celular, " +
-                                        " fax, forma_p, credito, mail, " +
-                                        " obs, foto) " +
+        String sql = "INSERT INTO clientes(ID_CLI, CED_RUC_CLI, NOMBRE_APELLIDO_CLI, DIRECCION_CLI, RAZON_SOCIAL_CLI, TELEFONO_CLI, CELULAR_CLI, " +
+                                        " FECHA_INGRESO_CLI, FORMA_PAGO_CLI, SALDO_CLI, EMAIL_CLI, " +
+                                        " OBSERVACION_CLI, FOTO_CLI) " +
 	"VALUES('"+cli.getCodigo()+"','"+ 
             cli.getRUC()+"','"+
                 cli.getNombre()+"','"+
@@ -71,7 +73,7 @@ public class ClienteController extends AbstractController{
                 cli.getRazon()+"','"+
                 cli.getTelefono()+"','"+
                 cli.getCelular()+"','"+
-                cli.getFax()+"','"+
+                cli.getFechaIngreso()+"','"+
                 cli.getForma_p()+"','"+
                 cli.getCredito()+"','"+
                 cli.getMail()+"','"+
@@ -79,16 +81,16 @@ public class ClienteController extends AbstractController{
             cli.getFoto()+"');";
         
         String sql2 ="UPDATE clientes " +
-                    "   SET ruc='"+cli.getRUC()+"', nombre='"+cli.getNombre()+"', direccion='"+cli.getDireccion()+"', "+
-                    "     telefono='"+cli.getTelefono()+"', fax='"+cli.getFax()+"', credito='"+cli.getCredito()+"', " +
-                    "     mail='"+cli.getMail()+"', "+
-                    "     forma_p='"+cli.getForma_p()+"', razon='"+cli.getRazon()+"', " +
-                    "     foto='"+cli.getFoto()+"',"+
-                    "     celular='"+cli.getCelular()+"', obs='"+cli.getObs()+"'" +
-                    " WHERE codigo='"+cli.getCodigo()+"';"; 
+                    "   SET CED_RUC_CLI='"+cli.getRUC()+"', NOMBRE_APELLIDO_CLI='"+cli.getNombre()+"', DIRECCION_CLI='"+cli.getDireccion()+"', "+
+                    "     TELEFONO_CLI='"+cli.getTelefono()+"', FECHA_INGRESO_CLI='"+cli.getFechaIngreso()+"', SALDO_CLI='"+cli.getCredito()+"', " +
+                    "     EMAIL_CLI='"+cli.getMail()+"', "+
+                    "     FORMA_PAGO_CLI='"+cli.getForma_p()+"', RAZON_SOCIAL_CLI='"+cli.getRazon()+"', " +
+                    "     FOTO_CLI='"+cli.getFoto()+"',"+
+                    "     CELULAR_CLI='"+cli.getCelular()+"', OBSERVACION_CLI='"+cli.getObs()+"'" +
+                    " WHERE ID_CLI='"+cli.getCodigo()+"';"; 
         
         try {
-            if(existeRegistro("clientes","codigo",cli.getCodigo()))
+            if(existeRegistro("clientes","ID_CLI",cli.getCodigo()))
             {
                 System.out.println(sql2);
                 resultado = cls_conexion.getStatement().executeUpdate(sql2);

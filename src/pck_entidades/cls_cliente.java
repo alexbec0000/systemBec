@@ -13,19 +13,21 @@ public class cls_cliente implements Serializable
     private String razon;
     private String telefono;
     private String celular;
-    private String fax;
+    private String fechaIngreso;
     private String forma_p;
     private String credito;
     private String mail;
     private String obs;
     private Icon foto;
+    private boolean editar;
 
     //Declaramos el contructor vacio
     public cls_cliente () {}
 
     //Declaramos el contructor con parametros
     public cls_cliente (String codigo, String RUC, String nombre, String direccion, String razon, String telefono, 
-                    String celular, String fax, String forma_p, String credito, String mail, String obs, Icon foto)
+                    String celular, String fechaIngreso, String forma_p, String credito, String mail, 
+                    String obs, Icon foto,boolean editar)
     {
         this.codigo = codigo;
         this.RUC = RUC;
@@ -34,12 +36,13 @@ public class cls_cliente implements Serializable
         this.razon = razon;
         this.telefono = telefono;
         this.celular = celular;
-        this.fax = fax;
+        this.fechaIngreso = fechaIngreso;
         this.forma_p = forma_p;
         this.credito = credito;
         this.mail = mail;
         this.obs = obs;
         this.foto = foto;
+        this.editar = editar;
     }
 
     //iniziamos el seteo
@@ -139,19 +142,14 @@ public class cls_cliente implements Serializable
         this.celular = celular;
     }
 
-    /**
-     * @return the fax
-     */
-    public String getFax() {
-        return fax;
+    public String getFechaIngreso() {
+        return fechaIngreso;
     }
 
-    /**
-     * @param fax the fax to set
-     */
-    public void setFax(String fax) {
-        this.fax = fax;
+    public void setFechaIngreso(String fechaIngreso) {
+        this.fechaIngreso = fechaIngreso;
     }
+
 
     /**
      * @return the forma_p
@@ -222,5 +220,14 @@ public class cls_cliente implements Serializable
     public void setFoto(Icon foto) {
         this.foto = foto;
     }
+
+    public boolean isEditar() {
+        return editar;
+    }
+
+    public void setEditar(boolean editar) {
+        this.editar = editar;
+    }
+
 }// Fin de la clace
 

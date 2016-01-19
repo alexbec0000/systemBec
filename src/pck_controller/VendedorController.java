@@ -36,7 +36,7 @@ public class VendedorController extends AbstractController{
                 vend.setDireccion(rs.getString(4)); 
                 vend.setTelefono(rs.getString(5)); 
                 vend.setCelular(rs.getString(6)); 
-                vend.setComision(rs.getFloat(7)); 
+                vend.setVentas(rs.getFloat(7)); 
                 vend.setMail(rs.getString(8)); 
                 vend.setObs(rs.getString(9));
                 //vend.setFoto(rs.getString(13));
@@ -64,7 +64,7 @@ public class VendedorController extends AbstractController{
                 vend.getDireccion()+"','"+
                 vend.getTelefono()+"','"+
                 vend.getCelular()+"','"+
-                vend.getComision()+"','"+
+                vend.getVentas()+"','"+
                 vend.getMail()+"','"+
                 vend.getObs()+"','"+
                 vend.getFoto()+"');";
