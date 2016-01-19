@@ -203,29 +203,22 @@ public class Vendedores extends javax.swing.JFrame {
         Habilitar();
         //Instanciamos el objeto
         objVendedor = objArreglo.getVendedor(pos);
-        //Se extrae la ifnromacion de los campos del objeto
-        String codigo = objVendedor.getCodigo();
-        String CI = objVendedor.getCI();
-        String nombres = objVendedor.getNombres();
-        String direccion = objVendedor.getDireccion();
-        String telefono = objVendedor.getTelefono();
-        String celular = objVendedor.getCelular();
-        float comision = objVendedor.getVentas();
-        String mail = objVendedor.getMail();
-        String obs = objVendedor.getObs();
-        Icon foto = objVendedor.getFoto();
 
         //Colocando la informacion en los objetos
-        jLblCodigo.setText(codigo);
-        jTxtCI.setText(CI);
-        jTxtNombres.setText(nombres);
-        jTxtDireccion.setText(direccion);
-        jTxtTelefono.setText(telefono);
-        jTxtCelular.setText(celular);
-        jTxtComision.setText(String.valueOf(comision));
-        jTxtMail.setText(mail);
-        jTxaObs.setText(obs);
-        jLblFoto.setIcon(foto);
+        jLblCodigo.setText(objVendedor.getCodigo());
+        jTxtCI.setText(objVendedor.getCI());
+        jTxtNombres.setText(objVendedor.getNombres());
+        jTxtDireccion.setText(objVendedor.getDireccion());
+        jTxtTelefono.setText(objVendedor.getTelefono());
+        jTxtCelular.setText(objVendedor.getCelular());
+        jTxtComision.setText(String.valueOf(objVendedor.getVentas()));
+        jTxtMail.setText(objVendedor.getMail());
+        jTxaObs.setText(objVendedor.getObs());
+        jLblFoto.setIcon(objVendedor.getFoto());
+        jTxtUsuario.setText(objVendedor.getUsuario());
+        jTxtClave.setText(objVendedor.getClave());
+        jTxtFechaNacimiento.setText(objVendedor.getFechaNacimiento());
+        jCheckBoxEstado.setSelected(objVendedor.isEstado());
 
     }
 
@@ -287,6 +280,10 @@ public class Vendedores extends javax.swing.JFrame {
         jTxtComision.setEnabled(false);
         jTxtMail.setEnabled(false);
         jTxaObs.setEnabled(false);
+        jTxtUsuario.setEnabled(false);
+        jTxtClave.setEnabled(false);
+        jTxtFechaNacimiento.setEnabled(false);
+        jCheckBoxEstado.setEnabled(false);
         removerFiltroCampos();
     }
 
@@ -300,6 +297,10 @@ public class Vendedores extends javax.swing.JFrame {
         jTxtComision.setEnabled(true);
         jTxtMail.setEnabled(true);
         jTxaObs.setEnabled(true);
+        jTxtUsuario.setEnabled(true);
+        jTxtClave.setEnabled(true);
+        jTxtFechaNacimiento.setEnabled(true);
+        jCheckBoxEstado.setEnabled(true);
         setFiltroCampos();
     }
 
@@ -315,6 +316,10 @@ public class Vendedores extends javax.swing.JFrame {
         jTxtMail.setText("");
         jTxaObs.setText("");
         jLblFoto.setIcon(null);
+        jTxtUsuario.setText("");
+        jTxtClave.setText("");
+        jTxtFechaNacimiento.setText("");
+        jCheckBoxEstado.setSelected(false);
     }
 
     public void mensaje(String texto) {
