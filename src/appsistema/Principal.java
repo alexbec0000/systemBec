@@ -1,6 +1,9 @@
 package appsistema;
 
+import appFactura.Factura_venta;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 public class Principal extends javax.swing.JFrame {
  Proveedores proveedor = new Proveedores ();
@@ -62,6 +65,11 @@ public class Principal extends javax.swing.JFrame {
         jButton4.setBackground(new java.awt.Color(255, 255, 255));
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/order_shop_icon.gif"))); // NOI18N
         jButton4.setText("FACTURAR");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jButton3.setBackground(new java.awt.Color(255, 255, 255));
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/prod_icon.jpg"))); // NOI18N
@@ -164,6 +172,19 @@ public class Principal extends javax.swing.JFrame {
             System.exit(0);
         }
     }//GEN-LAST:event_formWindowClosing
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        
+        SwingUtilities.invokeLater(new Runnable() {
+                       public void run() {
+                               Factura_venta thisClass = new Factura_venta();
+                               thisClass.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                               thisClass.setVisible(true);
+                       }
+               });
+        
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     public int finalizar()
     {
