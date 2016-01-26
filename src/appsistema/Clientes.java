@@ -5,9 +5,17 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 import java.awt.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import pck_controller.ClienteController;
 import pck_entidades.Arreglo_Cliente;
 import pck_entidades.cls_cliente;
+import pck_utilidades.CustomImageIcon;
 import pck_utilidades.FiltraEntrada;
 import pck_utilidades.Generales;
 
@@ -21,6 +29,7 @@ public final class Clientes extends javax.swing.JFrame
     String[] cabecera = {"Nº","Código", "RUC", "Nombre", "Dirección", "Razón S.", "Teléfono", "Celular", "Fecha Ingreso", "Forma P.", "Linea C.", "E - Mail"};
     String[][] data = {};
     ClienteController objClienteController;
+    FileInputStream foto;
     //Variables globales
     int num = 0;
 
@@ -51,6 +60,7 @@ public final class Clientes extends javax.swing.JFrame
         //Lee la data del objeto serializable
         try
         {
+            objArreglo.Elimina();
             ArrayList <cls_cliente> listCli= objClienteController.cargarClientes();
             for (cls_cliente listCli1 : listCli) {
                 objArreglo.Agregar(listCli1);
@@ -73,6 +83,9 @@ public final class Clientes extends javax.swing.JFrame
                 if(objArreglo.getCliente(i).isEditar())
                     objClienteController.grabarRegistro(objArreglo.getCliente(i));
             }
+            
+            Cargar_Data();
+            Actualizar_Tabla();
 
         }//Fin del try
 
@@ -158,11 +171,10 @@ public final class Clientes extends javax.swing.JFrame
                 String credito =   jTxtCredito.getText();
                 String mail  = jTxtMail.getText();
                 String obs = jTxaObs.getText();
-                Icon foto = jLblFoto.getIcon();
 
                 //Generando la clace para manejar un Registro academico
                 objCliente = new cls_cliente (codigo, RUC, nombre, direccion, 
-                  razon, telefono, celular, fechaIngreso, forma_p, credito, mail, obs, foto,true);
+                  razon, telefono, celular, fechaIngreso, forma_p, credito, mail, obs, foto, true);
                 //Verificando si el codigo existe dentro del arreglo
 
                 if(p==-1)//El codigo es nuevo
@@ -176,7 +188,7 @@ public final class Clientes extends javax.swing.JFrame
                 //Grabamos la informacion en el archivo binario
                 Grabar();
                 //Actualizando la tabla
-                Actualizar_Tabla();
+                //Actualizar_Tabla();
                 //Colocando el cursor el en primer area de texto
                 jTxtRuc.requestFocus();
             }//Fin de else
@@ -201,7 +213,7 @@ public final class Clientes extends javax.swing.JFrame
                 objArreglo.Elimina(p);
                 Limpiar_Entradas();//Limpiando las entradas
                 Grabar();//Grabamos la informacion en el archivo binario
-                Actualizar_Tabla();//Actualizamos la tabla
+                //Actualizar_Tabla();//Actualizamos la tabla
                 mensaje("Los datos se eliminaron correctamente");
                 jTxtRuc.requestFocus();//Colocando el cursor en el primer area de texto
             }//Fin del if
@@ -244,7 +256,7 @@ public final class Clientes extends javax.swing.JFrame
         jTxtForma_p.setEnabled(false);
         jTxtCredito.setEnabled(false);
         jTxtMail.setEnabled(false);
-        jBtnFoto.setEnabled(false);
+        jLblFoto.setEnabled(false);
         jTxaObs.setEnabled(false);
         removerFiltroCampos();
     }
@@ -262,7 +274,7 @@ public final class Clientes extends javax.swing.JFrame
         jTxtForma_p.setEnabled(true);
         jTxtCredito.setEnabled(true);
         jTxtMail.setEnabled(true);
-        jBtnFoto.setEnabled(true);
+        jLblFoto.setEnabled(true);
         jTxaObs.setEnabled(true);
         jTxtRuc.requestFocus();
         setFiltroCampos();
@@ -295,6 +307,8 @@ public final class Clientes extends javax.swing.JFrame
 
     public void Imprimir_Datos(int pos)
     {
+         Limpiar_Entradas();
+         Habilitar();
         //Se extrae todo el objeto con toda la informacion
         objCliente = objArreglo.getCliente(pos);
         //Se extrae la ifnromacion de los campos del objeto
@@ -310,7 +324,6 @@ public final class Clientes extends javax.swing.JFrame
         String credito   = objCliente.getCredito();
         String mail    = objCliente.getMail();
         String obs   = objCliente.getObs();
-        Icon foto   = objCliente.getFoto();
 
         //Colocando la informacion en los objetos
         jLblCodigo.setText(codigo);
@@ -325,7 +338,17 @@ public final class Clientes extends javax.swing.JFrame
         jTxtCredito.setText(credito);
         jTxtMail.setText(mail);
         jTxaObs.setText(obs);
-        jLblFoto.setIcon(foto);
+        
+        try{
+            jLblFoto.setIcon(Generales.getFoto(codigo));
+        }
+        catch(Exception ex){
+            //ex.printStackTrace();
+            jLblFoto.setIcon(new CustomImageIcon(getClass().getResource("/recursos/icono_cliente.jpg")));
+        }
+        
+        jLblFoto.updateUI();
+                    
         Habilitar();
     }
 
@@ -442,7 +465,6 @@ public final class Clientes extends javax.swing.JFrame
         jTxtMail = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
         jLblFoto = new javax.swing.JLabel();
-        jBtnFoto = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTxaObs = new javax.swing.JTextArea();
         jBtnIngresaDatos = new javax.swing.JButton();
@@ -505,13 +527,10 @@ public final class Clientes extends javax.swing.JFrame
         jLabel18.setText("Otros Datos:");
 
         jLblFoto.setBackground(new java.awt.Color(255, 255, 204));
-
-        jBtnFoto.setBackground(new java.awt.Color(255, 255, 255));
-        jBtnFoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/user-icon.jpg"))); // NOI18N
-        jBtnFoto.setText("LOGO");
-        jBtnFoto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtnFotoActionPerformed(evt);
+        jLblFoto.setPreferredSize(new java.awt.Dimension(100, 180));
+        jLblFoto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLblFotoMouseClicked(evt);
             }
         });
 
@@ -552,7 +571,7 @@ public final class Clientes extends javax.swing.JFrame
                     .addComponent(jBtnIngresaDatos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -564,7 +583,31 @@ public final class Clientes extends javax.swing.JFrame
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                         .addGap(6, 6, 6)
                                         .addComponent(jTxtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(35, 35, 35))
+                                .addGap(35, 35, 35)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(11, 11, 11)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel11)
+                                            .addComponent(jLabel12)
+                                            .addComponent(jLabel13))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jTxtForma_p)
+                                            .addComponent(jTxtCredito)
+                                            .addComponent(jTxtMail, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(11, 11, 11)
+                                                .addComponent(jLabel8))
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(10, 10, 10)
+                                                .addComponent(jLabel9)))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jTxtTelefono)
+                                            .addComponent(jTxtCelular)))))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -578,46 +621,21 @@ public final class Clientes extends javax.swing.JFrame
                                                 .addComponent(jTxtRuc))
                                             .addComponent(jLblCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addComponent(jLabel5)
-                                    .addComponent(jLabel10)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel6)
-                                        .addGap(20, 20, 20)
-                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel10))
+                                .addGap(0, 263, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(11, 11, 11)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel11)
-                                    .addComponent(jLabel12)
-                                    .addComponent(jLabel13))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTxtForma_p)
-                                    .addComponent(jTxtCredito)
-                                    .addComponent(jTxtMail, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(11, 11, 11)
-                                        .addComponent(jLabel8))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(10, 10, 10)
-                                        .addComponent(jLabel9)))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTxtTelefono)
-                                    .addComponent(jTxtCelular))))
+                                .addComponent(jLabel6)
+                                .addGap(20, 20, 20)
+                                .addComponent(jScrollPane3)))
                         .addGap(17, 17, 17)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(14, 14, 14)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel18)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                    .addComponent(jBtnFoto, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE))
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(25, 25, 25)))))
@@ -632,31 +650,37 @@ public final class Clientes extends javax.swing.JFrame
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLblCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(jTxtRuc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(jTxtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(jTxtRazon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel10)
+                            .addComponent(jTxtFechaIngreso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jTxtRuc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jTxtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jTxtRazon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel10)
-                                    .addComponent(jTxtFechaIngreso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(8, 8, 8)
-                                        .addComponent(jLabel6))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(9, 9, 9)
-                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(21, 21, 21))
+                                .addGap(8, 8, 8)
+                                .addComponent(jLabel6))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(21, 21, 21)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(21, 21, 21))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jLabel18)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel11)
@@ -676,17 +700,7 @@ public final class Clientes extends javax.swing.JFrame
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jTxtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel9))
-                                .addGap(91, 91, 91))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel18)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jBtnFoto))
-                            .addComponent(jLblFoto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(jLabel9))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(6, 6, 6)))
@@ -694,8 +708,6 @@ public final class Clientes extends javax.swing.JFrame
                 .addContainerGap())
         );
 
-        jLabel5.getAccessibleContext().setAccessibleName("Nombre:");
-        jLabel10.getAccessibleContext().setAccessibleName("Fecha Ingreso:");
         jLabel10.getAccessibleContext().setAccessibleDescription("");
 
         jBtnGrabar.setBackground(new java.awt.Color(255, 255, 255));
@@ -847,7 +859,7 @@ public final class Clientes extends javax.swing.JFrame
          String credito =   jTxtCredito.getText();
          String mail  = jTxtMail.getText();
          String obs = jTxaObs.getText();
-         Icon foto = jLblFoto.getIcon();
+         //Icon foto = jLblFoto.getIcon();
 
 
          //Generando la clace para manejar un Registro academico
@@ -871,7 +883,7 @@ public final class Clientes extends javax.swing.JFrame
              //Grabando la ifnromacion en el archivo binario
              Grabar();
              //Actualizando la tabla de registros
-             Actualizar_Tabla();
+             //Actualizar_Tabla();
          }//Fin del else
        }
        else
@@ -919,33 +931,27 @@ public final class Clientes extends javax.swing.JFrame
         Limpiar_Entradas();
     }//GEN-LAST:event_jBtnIngresaDatosActionPerformed
 
-    private void jBtnFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnFotoActionPerformed
+    private void jTxtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTxtNombreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTxtNombreActionPerformed
+
+    private void jLblFotoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLblFotoMouseClicked
+        // TODO add your handling code here:
+        
         JFileChooser dlg = new JFileChooser();
         //Abre la ventana de dialogo
         int option = dlg.showOpenDialog(this);
         //Si hace click en el boton abrir del dialogo
         if(option==JFileChooser.APPROVE_OPTION) {
-            //Obtiene nombre del archivo seleccionado
-            String file = dlg.getSelectedFile().getPath();
-            jLblFoto.setIcon(new ImageIcon(file));
-            //Modificando la imagen
-            ImageIcon icon = new ImageIcon(file);
-            //Se extrae la imagen del icono
-            Image img = icon.getImage();
-            //Se modifica su tamaño
-            Image newimg = img.getScaledInstance(140,170,java.awt.Image.SCALE_SMOOTH);
-            //SE GENERA EL IMAGE ICON CON LA NUEVA IMAGEN
-            ImageIcon newIcon = new ImageIcon(newimg);
-            //Se coloca el nuevo icono modificado
-            jLblFoto.setIcon(newIcon);
-            //Se cambia el tamaño de la etiqueta
-            jLblFoto.setSize(470,290);
+            try {
+                foto= new FileInputStream(dlg.getSelectedFile());
+                Image icono = ImageIO.read(dlg.getSelectedFile()).getScaledInstance(jLblFoto.getWidth(), jLblFoto.getHeight(), Image.SCALE_DEFAULT);
+                jLblFoto.setIcon(new ImageIcon(icono));
+                jLblFoto.updateUI();
+            } catch (FileNotFoundException ex) {ex.printStackTrace();}
+            catch (IOException ex){ex.printStackTrace();}
         }
-    }//GEN-LAST:event_jBtnFotoActionPerformed
-
-    private void jTxtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTxtNombreActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTxtNombreActionPerformed
+    }//GEN-LAST:event_jLblFotoMouseClicked
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -956,7 +962,6 @@ public final class Clientes extends javax.swing.JFrame
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jBtnFoto;
     private javax.swing.JButton jBtnGrabar;
     private javax.swing.JButton jBtnIngresaDatos;
     private javax.swing.JButton jButton2;

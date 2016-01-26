@@ -1,7 +1,8 @@
 package pck_entidades;
 //Importando las librerias
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.Serializable;
-import javax.swing.*;
 
 public class cls_cliente implements Serializable
 {
@@ -18,7 +19,7 @@ public class cls_cliente implements Serializable
     private String credito;
     private String mail;
     private String obs;
-    private Icon foto;
+    private FileInputStream foto;
     private boolean editar;
 
     //Declaramos el contructor vacio
@@ -27,7 +28,7 @@ public class cls_cliente implements Serializable
     //Declaramos el contructor con parametros
     public cls_cliente (String codigo, String RUC, String nombre, String direccion, String razon, String telefono, 
                     String celular, String fechaIngreso, String forma_p, String credito, String mail, 
-                    String obs, Icon foto,boolean editar)
+                    String obs, FileInputStream foto, boolean editar)
     {
         this.codigo = codigo;
         this.RUC = RUC;
@@ -210,14 +211,14 @@ public class cls_cliente implements Serializable
     /**
      * @return the foto
      */
-    public Icon getFoto() {
+    public FileInputStream getFoto() {
         return foto;
     }
 
     /**
      * @param foto the foto to set
      */
-    public void setFoto(Icon foto) {
+    public void setFoto(FileInputStream foto) {
         this.foto = foto;
     }
 
