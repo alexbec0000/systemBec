@@ -6,10 +6,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 public class Principal extends javax.swing.JFrame {
- Proveedores proveedor = new Proveedores ();
- Clientes cliente = new Clientes ();
- Productos productos = new Productos();
- Vendedores vendedor = new Vendedores();
+
 // OrdenCompra orden = new OrdenCompra();
 
     public Principal() {
@@ -146,21 +143,25 @@ public class Principal extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        Proveedores proveedor = new Proveedores ();
         proveedor.setVisible(true); 
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        Clientes cliente = new Clientes ();
         cliente.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        Productos productos = new Productos();
         productos.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
+         Vendedores vendedor = new Vendedores();
         vendedor.setVisible(true);
     }//GEN-LAST:event_jButton6ActionPerformed
 

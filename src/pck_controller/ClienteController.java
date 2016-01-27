@@ -31,7 +31,7 @@ public class ClienteController extends AbstractController{
                       + " DIRECCION_CLI, RAZON_SOCIAL_CLI, "
                       + " TELEFONO_CLI, CELULAR_CLI, " +
                         " FORMA_PAGO_CLI, SALDO_CLI, EMAIL_CLI," +
-                        " OBSERVACION_CLI, FECHA_INGRESO_CLI" +
+                        " OBSERVACION_CLI, FECHA_INGRESO_CLI, FOTO_CLI" +
                         " FROM clientes;";
                  rs = cls_conexion.getStatement().executeQuery(sql);
             while(rs.next())
@@ -48,11 +48,15 @@ public class ClienteController extends AbstractController{
                 cli.setCredito(rs.getString(9));
                 cli.setMail(rs.getString(10));
                 cli.setObs(rs.getString(11));
-                //cli.setFoto(rs.getBinaryStream(12));
                 cli.setFechaIngreso(rs.getString(12));
-                //cli.setFoto(rs.getByte(0));
-//                cl.setSueldo(rs.getDouble(14));
-                
+                try{
+                    cli.setImagen(Generales.getFoto(rs.getBinaryStream(13)));
+                }
+                catch(Exception ex){
+                    //ex.printStackTrace();
+                    cli.setImagen(new CustomImageIcon(getClass().getResource("/recursos/icono_cliente.jpg")));
+                }
+
                 listCli.add(cli);
             }
            
@@ -64,7 +68,7 @@ public class ClienteController extends AbstractController{
         return listCli;
     }
     
-    public InputStream getFoto(String id)
+    /*public InputStream getFoto(String id)
     {
         InputStream is = null;
         String sql ="SELECT FOTO_CLI from clientes where ID_CLI ='"+id+"';";
@@ -82,7 +86,7 @@ public class ClienteController extends AbstractController{
         }
         
         return is;
-    }
+    }*/
     
     public int grabarRegistro(cls_cliente cli) {
         

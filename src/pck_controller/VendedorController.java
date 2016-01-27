@@ -5,10 +5,13 @@
  */
 package pck_controller;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import pck_accesoDatos.cls_conexion;
 import pck_entidades.cls_vendedor;
+import pck_utilidades.CustomImageIcon;
+import pck_utilidades.Generales;
 
 /**
  *
@@ -27,8 +30,7 @@ public class VendedorController extends AbstractController{
                       + "TELEFONO_VEN, CELULAR_VEN, VENTAS," +
                         "  EMAIL_VEN, OBSERVACION_VEN, FOTO_VEN, LABORA,"
                       + " FECHA_INGRESO_VEN,FEC_NACIMIENTO_VEN,USUARIO_VEN,"
-                      + " CLAVE_VEN" +
-                        "  FROM vendedores;";
+                      + " CLAVE_VEN  FROM vendedores;";
                  rs = cls_conexion.getStatement().executeQuery(sql);
             while(rs.next())
             {
@@ -42,7 +44,13 @@ public class VendedorController extends AbstractController{
                 vend.setVentas(rs.getFloat(7)); 
                 vend.setMail(rs.getString(8)); 
                 vend.setObs(rs.getString(9));
-                //vend.setFoto(rs.getString(10));
+                try{
+                    vend.setImagen(Generales.getFoto(rs.getBinaryStream(10)));
+                }
+                catch(Exception ex){
+                    //ex.printStackTrace();
+                    vend.setImagen(new CustomImageIcon(getClass().getResource("/recursos/icono_cliente.jpg")));
+                }
                 vend.setEstado(rs.getBoolean(11));
                 vend.setFechaIngreso(rs.getString(12));
                 vend.setFechaNacimiento(rs.getString(13));
@@ -74,26 +82,30 @@ public class VendedorController extends AbstractController{
                 vend.getCelular()+"','"+
                 vend.getVentas()+"','"+
                 vend.getMail()+"','"+
-                vend.getObs()+"','"+
-                vend.getFoto()+"');";
+                vend.getObs()+"',?);";
         
         String sql2 ="UPDATE vendedores " +
                     "   SET CED_RUC_VEN='"+vend.getCI()+"', NOMBRE_APELLIDO_VEN='"+vend.getNombres()+"', DIRECCION_VEN='"+vend.getDireccion()+"', "+
                     "     TELEFONO_VEN='"+vend.getTelefono()+"', CELULAR_VEN='"+vend.getCelular()+"', " +
                     "     EMAIL_VEN='"+vend.getMail()+"', "+
                     "     OBSERVACION_VEN='"+vend.getObs()+"', " +
-                    "     FOTO_VEN='"+vend.getFoto()+"'"+
-                    " WHERE ID_VEN='"+vend.getCodigo()+"';"; 
+                    "     FOTO_VEN=? WHERE ID_VEN='"+vend.getCodigo()+"';"; 
         
         try {
             if(existeRegistro("vendedores","ID_VEN",vend.getCodigo()))
             {
                 System.out.println(sql2);
-                resultado = cls_conexion.getStatement().executeUpdate(sql2);
+                //resultado = cls_conexion.getStatement().executeUpdate(sql2);
+                PreparedStatement ps=cls_conexion.getPreparedStatement(sql2);
+                ps.setBinaryStream(1,vend.getFoto());
+                ps.execute();
             }
             else{
                 System.out.println(sql);
-                resultado = cls_conexion.getStatement().executeUpdate(sql);
+                //resultado = cls_conexion.getStatement().executeUpdate(sql);
+                PreparedStatement ps=cls_conexion.getPreparedStatement(sql);
+                ps.setBinaryStream(1,vend.getFoto());
+                ps.execute();
             }
         } catch (SQLException ex) {
             ex.printStackTrace();

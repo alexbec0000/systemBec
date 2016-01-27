@@ -3,8 +3,6 @@ package pck_utilidades;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -164,13 +162,32 @@ public class Generales {
         ((AbstractDocument)dc).setDocumentFilter(new DocumentFilter());
     }
     
-    public static CustomImageIcon getFoto(String id)
+    /*public static CustomImageIcon getFoto(String id)
     {
         CustomImageIcon ii = null;
         try
         {
             ClienteController objClienteController=new ClienteController();
             InputStream is=objClienteController.getFoto(id);
+            if(is != null)
+            {
+                BufferedImage bi = ImageIO.read(is);
+                ii = new CustomImageIcon(bi);
+            }
+
+       }
+       catch(IOException ex)
+       {
+           ex.printStackTrace();
+       }
+       return ii;
+    }*/
+    
+    public static CustomImageIcon getFoto(InputStream is)
+    {
+        CustomImageIcon ii = null;
+        try
+        {
             if(is != null)
             {
                 BufferedImage bi = ImageIO.read(is);

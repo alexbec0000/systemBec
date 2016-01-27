@@ -6,6 +6,12 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 import java.awt.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import pck_controller.VendedorController;
 import pck_entidades.Arreglo_Vendedores;
 import pck_entidades.cls_vendedor;
@@ -22,6 +28,7 @@ public class Vendedores extends javax.swing.JFrame {
     String[] cabecera = {"Nº", "Código", "CI", "Nombres", "Usuario", "Direccion", "Tlf.", "Celular", "Ventas", "E-Mail"};
     String[][] data = {};
     VendedorController objVendedorController;
+    FileInputStream foto;
     //Variables globales
     int num = 0;
 
@@ -64,6 +71,7 @@ public class Vendedores extends javax.swing.JFrame {
             for (int i = 0; i < objArreglo.Numero_Vendedores(); i++) {
                 if (objArreglo.getVendedor(i).isEditar()) {
                     objVendedorController.grabarRegistro(objArreglo.getVendedor(i));
+                    objArreglo.getVendedor(i).setFoto(null);
                 }
             }
         }//Fin del try
@@ -200,6 +208,7 @@ public class Vendedores extends javax.swing.JFrame {
 
     public void Imprimir_Datos(int pos) {
 
+        Limpiar_Entradas();
         Habilitar();
         //Instanciamos el objeto
         objVendedor = objArreglo.getVendedor(pos);
@@ -214,7 +223,7 @@ public class Vendedores extends javax.swing.JFrame {
         jTxtComision.setText(String.valueOf(objVendedor.getVentas()));
         jTxtMail.setText(objVendedor.getMail());
         jTxaObs.setText(objVendedor.getObs());
-        jLblFoto.setIcon(objVendedor.getFoto());
+        jLblFoto.setIcon(objVendedor.getImagen());
         jTxtUsuario.setText(objVendedor.getUsuario());
         jTxtClave.setText(objVendedor.getClave());
         jTxtFechaNacimiento.setText(objVendedor.getFechaNacimiento());
@@ -355,7 +364,8 @@ public class Vendedores extends javax.swing.JFrame {
         objCls_vendedor.setVentas(Float.parseFloat(jTxtComision.getText()));
         objCls_vendedor.setMail(jTxtMail.getText());
         objCls_vendedor.setObs(jTxaObs.getText());
-        objCls_vendedor.setFoto(jLblFoto.getIcon());
+        objCls_vendedor.setFoto(foto);
+        objCls_vendedor.setImagen(jLblFoto.getIcon());
 
         return objCls_vendedor;
     }
@@ -402,7 +412,6 @@ public class Vendedores extends javax.swing.JFrame {
         jBtnEliminar = new javax.swing.JButton();
         jBtnSalir = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
-        jBtnFoto = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "INGRESAR DATOS DEL VENDEDOR: ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
@@ -623,6 +632,12 @@ public class Vendedores extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(jTblVendedores);
 
+        jLblFoto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLblFotoMouseClicked(evt);
+            }
+        });
+
         jBtnGrabar.setBackground(new java.awt.Color(255, 255, 255));
         jBtnGrabar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/save.png"))); // NOI18N
         jBtnGrabar.setText("Grabar");
@@ -712,13 +727,6 @@ public class Vendedores extends javax.swing.JFrame {
             }
         });
 
-        jBtnFoto.setText("FOTO");
-        jBtnFoto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtnFotoActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -735,11 +743,7 @@ public class Vendedores extends javax.swing.JFrame {
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 422, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 422, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLblFoto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(55, 55, 55)
-                                        .addComponent(jBtnFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jLblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -758,13 +762,10 @@ public class Vendedores extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane1)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jBtnFoto)))))
+                            .addComponent(jLblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5))
@@ -864,30 +865,6 @@ public class Vendedores extends javax.swing.JFrame {
         //  jCbxDepartamento.requestFocus();         // TODO add your handling code here:
     }//GEN-LAST:event_jTxtMailKeyPressed
 
-    private void jBtnFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnFotoActionPerformed
-        JFileChooser dlg = new JFileChooser();
-        //Abre la ventana de dialogo
-        int option = dlg.showOpenDialog(this);
-        //Si hace click en el boton abrir del dialogo
-        if (option == JFileChooser.APPROVE_OPTION) {
-            //Obtiene nombre del archivo seleccionado
-            String file = dlg.getSelectedFile().getPath();
-            jLblFoto.setIcon(new ImageIcon(file));
-            //Modificando la imagen
-            ImageIcon icon = new ImageIcon(file);
-            //Se extrae la imagen del icono
-            Image img = icon.getImage();
-            //Se modifica su tamaño
-            Image newimg = img.getScaledInstance(140, 170, java.awt.Image.SCALE_SMOOTH);
-            //SE GENERA EL IMAGE ICON CON LA NUEVA IMAGEN
-            ImageIcon newIcon = new ImageIcon(newimg);
-            //Se coloca el nuevo icono modificado
-            jLblFoto.setIcon(newIcon);
-            //Se cambia el tamaño de la etiqueta
-            jLblFoto.setSize(256, 256);
-        }
-    }//GEN-LAST:event_jBtnFotoActionPerformed
-
     private void jTblVendedoresKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTblVendedoresKeyPressed
 
     }//GEN-LAST:event_jTblVendedoresKeyPressed
@@ -913,6 +890,25 @@ public class Vendedores extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTxtFechaNacimientoKeyPressed
 
+    private void jLblFotoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLblFotoMouseClicked
+        // TODO add your handling code here:
+        JFileChooser dlg = new JFileChooser();
+        //Abre la ventana de dialogo
+        int option = dlg.showOpenDialog(this);
+        //Si hace click en el boton abrir del dialogo
+        if (option == JFileChooser.APPROVE_OPTION) {
+            try {
+                foto = new FileInputStream(dlg.getSelectedFile());
+                Image icono = ImageIO.read(dlg.getSelectedFile()).getScaledInstance(jLblFoto.getWidth(), jLblFoto.getHeight(), Image.SCALE_DEFAULT);
+                jLblFoto.setIcon(new ImageIcon(icono));
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Vendedores.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Vendedores.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jLblFotoMouseClicked
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -924,7 +920,6 @@ public class Vendedores extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBtnBuscar;
     private javax.swing.JButton jBtnEliminar;
-    private javax.swing.JButton jBtnFoto;
     private javax.swing.JButton jBtnGrabar;
     private javax.swing.JButton jBtnImprimir;
     private javax.swing.JButton jBtnModificar;

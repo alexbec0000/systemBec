@@ -1,8 +1,8 @@
 package pck_entidades;
 //Importando las librerias
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.Serializable;
+import javax.swing.Icon;
 
 public class cls_cliente implements Serializable
 {
@@ -20,6 +20,7 @@ public class cls_cliente implements Serializable
     private String mail;
     private String obs;
     private FileInputStream foto;
+    private Icon imagen;
     private boolean editar;
 
     //Declaramos el contructor vacio
@@ -47,6 +48,14 @@ public class cls_cliente implements Serializable
     }
 
     //iniziamos el seteo
+
+    public Icon getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(Icon imagen) {
+        this.imagen = imagen;
+    }
 
     public String getCodigo() {
         return codigo;

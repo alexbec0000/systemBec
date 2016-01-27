@@ -1,5 +1,6 @@
 package pck_entidades;
 //Importando las librerias
+import java.io.FileInputStream;
 import java.io.Serializable;
 import javax.swing.*;
 
@@ -19,7 +20,8 @@ public class cls_vendedor implements Serializable
     private float ventas;
     private String mail;
     private String obs;
-    private Icon foto;
+    private FileInputStream foto;
+    private Icon imagen;
     private boolean estado;
     private boolean editar;
 
@@ -34,7 +36,7 @@ public class cls_vendedor implements Serializable
     }
     
     public cls_vendedor (String codigo, String CI, String nombres, String direccion, String telefono, String celular, float comision, String mail, 
-                      String obs, Icon foto, boolean editar)
+                      String obs, FileInputStream foto, boolean editar)
     {
         this.codigo = codigo;
         this.CI = CI;
@@ -163,17 +165,25 @@ public class cls_vendedor implements Serializable
     /**
      * @return the foto
      */
-    public Icon getFoto() {
+    public FileInputStream getFoto() {
         return foto;
     }
 
     /**
      * @param foto the foto to set
      */
-    public void setFoto(Icon foto) {
+    public void setFoto(FileInputStream foto) {
         this.foto = foto;
     }
 
+    public Icon getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(Icon imagen) {
+        this.imagen = imagen;
+    }
+    
     public boolean isEditar() {
         return editar;
     }

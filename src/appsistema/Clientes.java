@@ -8,9 +8,6 @@ import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import pck_controller.ClienteController;
 import pck_entidades.Arreglo_Cliente;
@@ -81,11 +78,11 @@ public final class Clientes extends javax.swing.JFrame
             for(int i=0;i<objArreglo.Numero_Clientes();i++)
             {
                 if(objArreglo.getCliente(i).isEditar())
+                {
                     objClienteController.grabarRegistro(objArreglo.getCliente(i));
+                    objArreglo.getCliente(i).setFoto(null);
+                }
             }
-            
-            Cargar_Data();
-            Actualizar_Tabla();
 
         }//Fin del try
 
@@ -171,10 +168,12 @@ public final class Clientes extends javax.swing.JFrame
                 String credito =   jTxtCredito.getText();
                 String mail  = jTxtMail.getText();
                 String obs = jTxaObs.getText();
+                Icon imagen = jLblFoto.getIcon();
 
                 //Generando la clace para manejar un Registro academico
                 objCliente = new cls_cliente (codigo, RUC, nombre, direccion, 
                   razon, telefono, celular, fechaIngreso, forma_p, credito, mail, obs, foto, true);
+                objCliente.setImagen(imagen);
                 //Verificando si el codigo existe dentro del arreglo
 
                 if(p==-1)//El codigo es nuevo
@@ -188,7 +187,7 @@ public final class Clientes extends javax.swing.JFrame
                 //Grabamos la informacion en el archivo binario
                 Grabar();
                 //Actualizando la tabla
-                //Actualizar_Tabla();
+                Actualizar_Tabla();
                 //Colocando el cursor el en primer area de texto
                 jTxtRuc.requestFocus();
             }//Fin de else
@@ -213,7 +212,7 @@ public final class Clientes extends javax.swing.JFrame
                 objArreglo.Elimina(p);
                 Limpiar_Entradas();//Limpiando las entradas
                 Grabar();//Grabamos la informacion en el archivo binario
-                //Actualizar_Tabla();//Actualizamos la tabla
+                Actualizar_Tabla();//Actualizamos la tabla
                 mensaje("Los datos se eliminaron correctamente");
                 jTxtRuc.requestFocus();//Colocando el cursor en el primer area de texto
             }//Fin del if
@@ -307,46 +306,26 @@ public final class Clientes extends javax.swing.JFrame
 
     public void Imprimir_Datos(int pos)
     {
-         Limpiar_Entradas();
-         Habilitar();
+        Limpiar_Entradas();
+        Habilitar();
         //Se extrae todo el objeto con toda la informacion
         objCliente = objArreglo.getCliente(pos);
-        //Se extrae la ifnromacion de los campos del objeto
-        String codigo = objCliente.getCodigo();
-        String RUC = objCliente.getRUC();
-        String nombre  = objCliente.getNombre();
-        String direccion   = objCliente.getDireccion();
-        String razon   = objCliente.getRazon();
-        String telefono  = objCliente.getTelefono();
-        String celular    = objCliente.getCelular();
-        String fechaIngreso    = objCliente.getFechaIngreso();
-        String forma_p    = objCliente.getForma_p();
-        String credito   = objCliente.getCredito();
-        String mail    = objCliente.getMail();
-        String obs   = objCliente.getObs();
 
         //Colocando la informacion en los objetos
-        jLblCodigo.setText(codigo);
-        jTxtRuc.setText(RUC);
-        jTxtNombre.setText(nombre);
-        jTxtDireccion.setText(direccion);
-        jTxtRazon.setText(razon);
-        jTxtTelefono.setText(telefono);
-        jTxtCelular.setText(celular);
-        jTxtFechaIngreso.setText(fechaIngreso);
-        jTxtForma_p.setText(forma_p);
-        jTxtCredito.setText(credito);
-        jTxtMail.setText(mail);
-        jTxaObs.setText(obs);
+        jLblCodigo.setText(objCliente.getCodigo());
+        jTxtRuc.setText(objCliente.getRUC());
+        jTxtNombre.setText(objCliente.getNombre());
+        jTxtDireccion.setText(objCliente.getDireccion());
+        jTxtRazon.setText(objCliente.getRazon());
+        jTxtTelefono.setText(objCliente.getTelefono());
+        jTxtCelular.setText(objCliente.getCelular());
+        jTxtFechaIngreso.setText(objCliente.getFechaIngreso());
+        jTxtForma_p.setText(objCliente.getForma_p());
+        jTxtCredito.setText(objCliente.getCredito());
+        jTxtMail.setText(objCliente.getMail());
+        jTxaObs.setText(objCliente.getObs());
         
-        try{
-            jLblFoto.setIcon(Generales.getFoto(codigo));
-        }
-        catch(Exception ex){
-            //ex.printStackTrace();
-            jLblFoto.setIcon(new CustomImageIcon(getClass().getResource("/recursos/icono_cliente.jpg")));
-        }
-        
+        jLblFoto.setIcon(objCliente.getImagen());
         jLblFoto.updateUI();
                     
         Habilitar();
@@ -627,18 +606,15 @@ public final class Clientes extends javax.swing.JFrame
                                 .addComponent(jLabel6)
                                 .addGap(20, 20, 20)
                                 .addComponent(jScrollPane3)))
-                        .addGap(17, 17, 17)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(31, 31, 31)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(14, 14, 14)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel18)
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(25, 25, 25)))))
+                            .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -859,12 +835,12 @@ public final class Clientes extends javax.swing.JFrame
          String credito =   jTxtCredito.getText();
          String mail  = jTxtMail.getText();
          String obs = jTxaObs.getText();
-         //Icon foto = jLblFoto.getIcon();
-
+         Icon imagen = jLblFoto.getIcon();
 
          //Generando la clace para manejar un Registro academico
-         objCliente = new cls_cliente (codigo, RUC,nombre, direccion, razon, telefono, 
+         objCliente = new cls_cliente (codigo, RUC, nombre, direccion, razon, telefono, 
                  celular, fechaIngreso, forma_p, credito, mail, obs, foto, false);
+         objCliente.setImagen(imagen);
          //Verificando si el codigo existe dentro del arreglo
          if(objArreglo.Buscar(objCliente.getCodigo())!= -1)
              mensaje("Codigo Repetido");//Se muestrea el mensaje
@@ -872,8 +848,9 @@ public final class Clientes extends javax.swing.JFrame
          else {
              //Instanciamos una clace con diferente codigo para el caso sea un nuevo registro
              String cod =  Generar_Codigo();
-             objCliente = new cls_cliente (cod, RUC, nombre, direccion, razon, 
-                     telefono, celular, fechaIngreso, forma_p, credito, mail, obs, foto, true);
+             objCliente.setCodigo(cod);
+             objCliente.setEditar(true);
+
              //Se agrega el objeto al arreglo
              objArreglo.Agregar(objCliente);
              //Insertando la ifnromacion en la tabla
@@ -883,7 +860,7 @@ public final class Clientes extends javax.swing.JFrame
              //Grabando la ifnromacion en el archivo binario
              Grabar();
              //Actualizando la tabla de registros
-             //Actualizar_Tabla();
+             Actualizar_Tabla();
          }//Fin del else
        }
        else
@@ -944,7 +921,7 @@ public final class Clientes extends javax.swing.JFrame
         //Si hace click en el boton abrir del dialogo
         if(option==JFileChooser.APPROVE_OPTION) {
             try {
-                foto= new FileInputStream(dlg.getSelectedFile());
+                foto = new FileInputStream(dlg.getSelectedFile());
                 Image icono = ImageIO.read(dlg.getSelectedFile()).getScaledInstance(jLblFoto.getWidth(), jLblFoto.getHeight(), Image.SCALE_DEFAULT);
                 jLblFoto.setIcon(new ImageIcon(icono));
                 jLblFoto.updateUI();
