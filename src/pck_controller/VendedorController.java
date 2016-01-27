@@ -161,6 +161,21 @@ public class VendedorController extends AbstractController{
         return null;
     }
     
+    public static ResultSet listarVendedores(String nombre)
+    {
+        try 
+        {          
+            Statement sentenciacli=cls_conexion.getStatement();
+            sentenciacli.executeQuery("select id_ven,concat(USUARIO_VEN,' ',NOMBRE_APELLIDO_VEN) as elvendedor from vendedores where concat(USUARIO_VEN,' ',NOMBRE_APELLIDO_VEN) like '"+nombre+"%' order by elvendedor");
+            return sentenciacli.getResultSet();
+        } 
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        return null;
+    }
+    
     public static ResultSet obtenerVendedores(String condicion)
     {
         try 
@@ -176,6 +191,16 @@ public class VendedorController extends AbstractController{
         }
         
         return null;
+    }
+    
+    public static void actualizarVentasVendedores(String total, String ID_VEN)
+    {
+        try {
+            String sql ="UPDATE VENDEDORES SET VENTAS=VENTAS+"+Double.valueOf(total)+" WHERE ID_VEN='"+ID_VEN+"'";
+            cls_conexion.getStatement().executeUpdate(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
     
 }

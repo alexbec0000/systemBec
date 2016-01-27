@@ -5,7 +5,9 @@
  */
 package pck_controller;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import pck_accesoDatos.cls_conexion;
 import pck_entidades.cls_producto;
@@ -127,5 +129,74 @@ public class ProductoController extends AbstractController{
         
     }
     
+    public static ResultSet obtenerARTICULOS()
+    {
+        try 
+        {          
+            Statement sentenciacli=cls_conexion.getStatement();
+            sentenciacli.executeQuery("SELECT ID_ART,DESCRIPCION_ART,STOCK,PVP_ART FROM ARTICULOS ORDER BY ID_ART");
+            return sentenciacli.getResultSet();
+        } 
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+    public static ResultSet listarARTICULOS(String descripcion)
+    {
+        try 
+        {          
+            Statement sentenciacli=cls_conexion.getStatement();
+            sentenciacli.executeQuery("SELECT ID_ART,DESCRIPCION_ART,STOCK,PVP_ART FROM ARTICULOS WHERE DESCRIPCION_ART LIKE '" + descripcion + "%' ORDER BY DESCRIPCION_ART");
+            return sentenciacli.getResultSet();
+        } 
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+    public static ResultSet obtenerTotalARTICULOS()
+    {
+        try 
+        {          
+            Statement sentenciacli=cls_conexion.getStatement();
+            sentenciacli.executeQuery("select count(id_art) as cuantos from articulos");
+            return sentenciacli.getResultSet();
+        } 
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+    public static ResultSet obtenerStockARTICULOS(String codlinea)
+    {
+        try 
+        {          
+            Statement sentenciacli=cls_conexion.getStatement();
+            sentenciacli.executeQuery("SELECT STOCK FROM ARTICULOS WHERE ID_ART='"+codlinea+"'");
+            return sentenciacli.getResultSet();
+        } 
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+    public static void actualizarStock(Object stock, Object ID_ART)
+    {
+        try {
+            String sql ="UPDATE ARTICULOS SET STOCK=STOCK+"+stock+" WHERE ID_ART='"+ID_ART+"'";
+            cls_conexion.getStatement().executeUpdate(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
     
 }

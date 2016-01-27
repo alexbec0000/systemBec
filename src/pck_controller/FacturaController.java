@@ -17,51 +17,6 @@ import pck_accesoDatos.cls_conexion;
  */
 public class FacturaController extends AbstractController{
     
-    public static ResultSet obtenerARTICULOS()
-    {
-        try 
-        {          
-            Statement sentenciacli=cls_conexion.getStatement();
-            sentenciacli.executeQuery("SELECT ID_ART,DESCRIPCION_ART,STOCK,PVP_ART FROM ARTICULOS ORDER BY ID_ART");
-            return sentenciacli.getResultSet();
-        } 
-        catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        
-        return null;
-    }
-    
-    public static ResultSet obtenerTotalARTICULOS()
-    {
-        try 
-        {          
-            Statement sentenciacli=cls_conexion.getStatement();
-            sentenciacli.executeQuery("select count(id_art) as cuantos from articulos");
-            return sentenciacli.getResultSet();
-        } 
-        catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        
-        return null;
-    }
-    
-    public static ResultSet obtenerStockARTICULOS(String codlinea)
-    {
-        try 
-        {          
-            Statement sentenciacli=cls_conexion.getStatement();
-            sentenciacli.executeQuery("SELECT STOCK FROM ARTICULOS WHERE ID_ART='"+codlinea+"'");
-            return sentenciacli.getResultSet();
-        } 
-        catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        
-        return null;
-    }
-    
     public static ResultSet obtenerFACV_CAB()
     {
         try 
@@ -118,37 +73,7 @@ public class FacturaController extends AbstractController{
             ex.printStackTrace();
         }
     }
-    
-    public static void actualizarStock(Object stock, Object ID_ART)
-    {
-        try {
-            String sql ="UPDATE ARTICULOS SET STOCK=STOCK+"+stock+" WHERE ID_ART='"+ID_ART+"'";
-            cls_conexion.getStatement().executeUpdate(sql);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-    
-    public static void actualizarVentasVendedores(String total, String ID_VEN)
-    {
-        try {
-            String sql ="UPDATE VENDEDORES SET VENTAS=VENTAS+"+Double.valueOf(total)+" WHERE ID_VEN='"+ID_VEN+"'";
-            cls_conexion.getStatement().executeUpdate(sql);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-    
-    public static void actualizarSaldoCliente(String saldo, String id_cli)
-    {
-        try {
-            String sql ="UPDATE CLIENTES SET SALDO_CLI=SALDO_CLI+"+Double.valueOf(saldo)+" WHERE ID_CLI='"+id_cli+"'";
-            cls_conexion.getStatement().executeUpdate(sql);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-    
+     
     public static void insertarFACV_CAB(String Numero, String id_cli, String ID_VEN, String fechasql
                     ,Object formaPago, String Descuento, String Subtotal, String Totdes, String Totiva
                     ,String Pago, String Observa)

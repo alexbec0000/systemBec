@@ -31,6 +31,7 @@ import java.text.ParseException;
 import javax.swing.JOptionPane;
 import pck_controller.ClienteController;
 import pck_controller.FacturaController;
+import pck_controller.ProductoController;
 import pck_controller.VendedorController;
 
 public class Factura_venta extends JFrame {
@@ -1236,7 +1237,7 @@ public class Factura_venta extends JFrame {
                                 long xcant = Long.parseLong(f_lineadetalle.cantidad);
                                 actualizarticulos();
                                 resultadoart.first();
-                                resultadoxreg = FacturaController.obtenerTotalARTICULOS();
+                                resultadoxreg = ProductoController.obtenerTotalARTICULOS();
                                 resultadoxreg.last();
                                 for (int xreg = 1; xreg <= resultadoxreg.getInt("cuantos"); xreg++) {
                                     if (resultadoart.getString("id_art").equals(elarticulo) == true) {
@@ -1464,7 +1465,7 @@ public class Factura_venta extends JFrame {
 
     public void actualizarticulos() {
         try {
-            resultadoart = FacturaController.obtenerARTICULOS();
+            resultadoart = ProductoController.obtenerARTICULOS();
             resultadoart.last();
         } catch (Exception s) {
             JOptionPane.showMessageDialog(null, "Error: actualizarticulos");
@@ -1484,7 +1485,7 @@ public class Factura_venta extends JFrame {
             }
             if (existe == false) {
                 actualizarticulos();
-                resultadoxreg = FacturaController.obtenerTotalARTICULOS();
+                resultadoxreg = ProductoController.obtenerTotalARTICULOS();
                 resultadoxreg.last();
                 resultadoart.first();
                 for (int xreg = 1; xreg <= resultadoxreg.getInt("cuantos"); xreg++) {
@@ -1772,7 +1773,7 @@ public class Factura_venta extends JFrame {
             FacturaController.anularFactura(observacion, LblNumero.getText());
 
             for (int x = 0; x < modelo.getRowCount(); x++) {
-                FacturaController.actualizarStock(JTable.getValueAt(x, 3), JTable.getValueAt(x, 0));
+                ProductoController.actualizarStock(JTable.getValueAt(x, 3), JTable.getValueAt(x, 0));
             }
 
             localizafactura();
@@ -1801,7 +1802,7 @@ public class Factura_venta extends JFrame {
             boolean control = true;
             for (int x = 0; x < xfac; x++) {
                 String codlinea = new String(JTable.getValueAt(x, 0).toString());
-                resultadostock = FacturaController.obtenerStockARTICULOS(codlinea);
+                resultadostock = ProductoController.obtenerStockARTICULOS(codlinea);
                 resultadostock.first();
                 int cantiart = Integer.parseInt(modelo.getValueAt(x, 3).toString());
                 if (resultadostock.getInt("stock") < cantiart) {
@@ -1820,10 +1821,10 @@ public class Factura_venta extends JFrame {
                     }
                     resultadoven.next();
                 }
-                FacturaController.actualizarVentasVendedores(TxtTotal.getText(), resultadoven.getString("ID_VEN"));
+                VendedorController.actualizarVentasVendedores(TxtTotal.getText(), resultadoven.getString("ID_VEN"));
                 //ACTUALIZAR SALDO DEL CLIENTE
                 if (CboForma.getSelectedItem() == "CREDITO") {
-                    FacturaController.actualizarSaldoCliente(TxtSaldo.getText(), resultadocli.getString("id_cli"));
+                    ClienteController.actualizarSaldoCliente(TxtSaldo.getText(), resultadocli.getString("id_cli"));
                 }
                 //GUARDAR CABECERA
                 String fechasql = new String(TxtFecha.getText().substring(6) + "-" + TxtFecha.getText().substring(3, 5) + "-" + TxtFecha.getText().substring(0, 2));
@@ -1832,7 +1833,7 @@ public class Factura_venta extends JFrame {
                 //GUARDAR DETALLE Y ACTUALIZAR STOCK DE ARTICULOS
                 for (int i = 0; i < xfac; i++) {
                     FacturaController.insertarFACV_DET(LblNumero.getText(), JTable.getValueAt(i, 0), JTable.getValueAt(i, 3), JTable.getValueAt(i, 2));
-                    FacturaController.actualizarStock(JTable.getValueAt(i, 3), JTable.getValueAt(i, 0));
+                    ProductoController.actualizarStock(JTable.getValueAt(i, 3), JTable.getValueAt(i, 0));
                 }
 
                 resultadocab = FacturaController.obtenerFACV_CAB();

@@ -201,4 +201,15 @@ public class ClienteController extends AbstractController{
             ex.printStackTrace();
         }
     }
+    
+    public static void actualizarSaldoCliente(String saldo, String id_cli)
+    {
+        try {
+            String sql ="UPDATE CLIENTES SET SALDO_CLI=SALDO_CLI+"+Double.valueOf(saldo)+" WHERE ID_CLI='"+id_cli+"'";
+            cls_conexion.getStatement().executeUpdate(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
 }
