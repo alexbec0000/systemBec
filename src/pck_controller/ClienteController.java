@@ -5,9 +5,10 @@
  */
 package pck_controller;
 
-import java.io.InputStream;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import pck_accesoDatos.cls_conexion;
 import pck_entidades.cls_cliente;
@@ -68,26 +69,6 @@ public class ClienteController extends AbstractController{
         return listCli;
     }
     
-    /*public InputStream getFoto(String id)
-    {
-        InputStream is = null;
-        String sql ="SELECT FOTO_CLI from clientes where ID_CLI ='"+id+"';";
-        try{
-            rs = cls_conexion.getStatement().executeQuery(sql);
-            while(rs.next())
-            {
-                is=rs.getBinaryStream(1);
-            }
-  
-            rs.close();
-           
-        }catch(SQLException ex){
-                     
-        }
-        
-        return is;
-    }*/
-    
     public int grabarRegistro(cls_cliente cli) {
         
         int resultado = 0;
@@ -140,4 +121,84 @@ public class ClienteController extends AbstractController{
         
     }
     
+    public static ResultSet listarClientes(String cliente)
+    {
+        try 
+        {          
+            Statement sentenciacli=cls_conexion.getStatement();
+            sentenciacli.executeQuery("select id_cli,concat(RAZON_SOCIAL_CLI,' ',NOMBRE_APELLIDO_CLI) as elcliente from clientes where concat(RAZON_SOCIAL_CLI,' ',NOMBRE_APELLIDO_CLI) like '" + cliente + "%' order by elcliente");
+            return sentenciacli.getResultSet();
+        } 
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+    public static ResultSet obtenerClientes()
+    {
+        try 
+        {          
+            Statement sentenciacli=cls_conexion.getStatement();
+            sentenciacli.executeQuery("select * from clientes order by id_cli");
+            return sentenciacli.getResultSet();
+        } 
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+    public static ResultSet obtenerTotalClientes()
+    {
+        try 
+        {          
+            Statement sentenciacli=cls_conexion.getStatement();
+            sentenciacli.executeQuery("select count(id_cli) as cuantos from clientes");
+            return sentenciacli.getResultSet();
+        } 
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+    public static void eliminarCliente(String ID_CLI)
+    {
+        try {
+            String sql ="DELETE FROM CLIENTES WHERE ID_CLI='" + ID_CLI + "'";
+            cls_conexion.getStatement().executeUpdate(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public static void ingresarCliente(String ID_CLI, String nombreComercial, String razonSocial, String direccion
+                ,String cedula, String telefono, String celular, Object sexo, String fecha, String email, String saldo)
+    {
+        try {
+            String sql ="INSERT INTO CLIENTES (ID_CLI,NOMBRE_APELLIDO_CLI,RAZON_SOCIAL_CLI,DIRECCION_CLI,CED_RUC_CLI,TELEFONO_CLI,CELULAR_CLI,SEXO_CLI,FECHA_INGRESO_CLI,EMAIL_CLI,SALDO_CLI) VALUES('" + ID_CLI
+                        + "','" + nombreComercial + "','" + razonSocial + "','" + direccion + "','" + cedula + "','" + telefono
+                        + "','" + celular + "','" + sexo + "','" + fecha + "','" + email + "'," + saldo + ")";
+            cls_conexion.getStatement().executeUpdate(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public static void actualizarCliente(String ID_CLI, String nombreComercial, String razonSocial, String direccion
+                ,String cedula, String telefono, String celular, Object sexo, String fecha, String email)
+    {
+        try {
+            String sql ="UPDATE CLIENTES SET NOMBRE_APELLIDO_CLI='" + nombreComercial + "',RAZON_SOCIAL_CLI='" + razonSocial + "',DIRECCION_CLI='" + direccion
+                        + "',CED_RUC_CLI='" + cedula + "',TELEFONO_CLI='" + telefono + "',CELULAR_CLI='" + celular
+                        + "',SEXO_CLI='" + sexo + "',FECHA_INGRESO_CLI='" + fecha + "',EMAIL_CLI='" + email + "' WHERE ID_CLI='" + ID_CLI + "'";
+            cls_conexion.getStatement().executeUpdate(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
 }

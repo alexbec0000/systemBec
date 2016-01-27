@@ -6,7 +6,9 @@
 package pck_controller;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import pck_accesoDatos.cls_conexion;
 import pck_entidades.cls_vendedor;
@@ -110,11 +112,70 @@ public class VendedorController extends AbstractController{
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        
-        
         return resultado;
         
     }
     
+    public static ResultSet obtenerVendedores()
+    {
+        try 
+        {          
+            Statement sentenciacli=cls_conexion.getStatement();
+            sentenciacli.executeQuery("select id_ven, NOMBRE_APELLIDO_VEN as elvendedor from vendedores order by elvendedor");
+            return sentenciacli.getResultSet();
+        } 
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+    public static ResultSet obtenerTotalVendedores()
+    {
+        try 
+        {          
+            Statement sentenciacli=cls_conexion.getStatement();
+            sentenciacli.executeQuery("select count(id_ven) as cuantos from vendedores");
+            return sentenciacli.getResultSet();
+        } 
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+    public static ResultSet listarVendedores()
+    {
+        try 
+        {          
+            Statement sentenciacli=cls_conexion.getStatement();
+            sentenciacli.executeQuery("select concat(USUARIO_VEN,' ',NOMBRE_APELLIDO_VEN) as elvendedor from vendedores order by elvendedor");
+            return sentenciacli.getResultSet();
+        } 
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+    public static ResultSet obtenerVendedores(String condicion)
+    {
+        try 
+        {          
+            Statement sentenciacli=cls_conexion.getStatement();
+            sentenciacli.executeQuery("select facv_cab.num_facv,DATE_FORMAT(facv_cab.fecha,'%d/%m/%Y') as fecha,concat(clientes.RAZON_SOCIAL_CLI,' ',clientes.NOMBRE_APELLIDO_CLI) as elcliente,concat(vendedores.USUARIO_VEN,' ',vendedores.NOMBRE_APELLIDO_VEN) as elvendedor,"
+                    + "(facv_cab.sub_gen-facv_cab.tot_des+facv_cab.tot_iva) as total,anulada from facv_cab inner join clientes on(facv_cab.id_cli=clientes.id_cli) inner join vendedores on(facv_cab.id_ven=vendedores.id_ven) "
+                    + condicion);
+            return sentenciacli.getResultSet();
+        } 
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        return null;
+    }
     
 }
