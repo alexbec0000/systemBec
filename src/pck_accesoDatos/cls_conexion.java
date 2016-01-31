@@ -27,10 +27,10 @@ public class cls_conexion {
     public static final int CERRAR_ST_PS = 4;
     
     
-    private static final String host = "localhost";
-    private static final String dataBase = "facturacion";
-    private static final String user = "root";
-    private static final String pass = "";
+    private static String host = "localhost";
+    private static String dataBase = "facturacion";
+    private static String user = "root";
+    private static String pass = "";
     
     public static void conectar()
      {
