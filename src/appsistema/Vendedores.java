@@ -1,6 +1,7 @@
 package appsistema;
 //Declaracion de librerias
 
+import appFactura.f_vendedores;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -665,6 +666,11 @@ public class Vendedores extends javax.swing.JFrame {
         jBtnImprimir.setBackground(new java.awt.Color(255, 255, 255));
         jBtnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/iconPrint.gif"))); // NOI18N
         jBtnImprimir.setText("Imprimir");
+        jBtnImprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnImprimirActionPerformed(evt);
+            }
+        });
 
         jBtnEliminar.setBackground(new java.awt.Color(255, 255, 255));
         jBtnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/RTEmagicC_EliminarPag_10_png.png"))); // NOI18N
@@ -814,6 +820,7 @@ public class Vendedores extends javax.swing.JFrame {
 
     private void jBtnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnBuscarActionPerformed
         Consultar();
+        
     }//GEN-LAST:event_jBtnBuscarActionPerformed
 
     private void jBtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEliminarActionPerformed
@@ -898,6 +905,11 @@ public class Vendedores extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jLblFotoMouseClicked
+
+    private void jBtnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnImprimirActionPerformed
+        // TODO add your handling code here:
+        new f_vendedores().setVisible(true);
+    }//GEN-LAST:event_jBtnImprimirActionPerformed
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {

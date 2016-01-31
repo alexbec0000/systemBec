@@ -148,7 +148,7 @@ public class ProductoController extends AbstractController{
         try 
         {          
             Statement sentenciacli=cls_conexion.getStatement();
-            sentenciacli.executeQuery("select NOMBRE_APELLIDO_PRV from proveedor order by NOMBRE_APELLIDO_PRV");
+            sentenciacli.executeQuery("select detalle_lm, id_lm from linea_marca where linea=false order by detalle_lm");
             return sentenciacli.getResultSet();
         } 
         catch (SQLException ex) {
@@ -163,7 +163,7 @@ public class ProductoController extends AbstractController{
         try 
         {          
             Statement sentenciacli=cls_conexion.getStatement();
-            sentenciacli.executeQuery("select NOMBRE_APELLIDO_PRV from proveedor order by NOMBRE_APELLIDO_PRV");
+            sentenciacli.executeQuery("select detalle_lm, id_lm from linea_marca where linea=true order by detalle_lm");
             return sentenciacli.getResultSet();
         } 
         catch (SQLException ex) {
@@ -171,6 +171,56 @@ public class ProductoController extends AbstractController{
         }
         
         return null;
+    }
+    
+     public static ResultSet listarMarcas(String detalle)
+    {
+        try 
+        {          
+            Statement sentenciacli=cls_conexion.getStatement();
+            sentenciacli.executeQuery("select detalle_lm as detalle, id_lm as id from linea_marca where linea=false and detalle_lm like '%"+detalle+"%' order by detalle_lm");
+            return sentenciacli.getResultSet();
+        } 
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+     public static ResultSet listarLineas(String detalle)
+    {
+        try 
+        {          
+            Statement sentenciacli=cls_conexion.getStatement();
+            sentenciacli.executeQuery("select detalle_lm as detalle, id_lm as id from linea_marca where linea=true and detalle_lm like '%"+detalle+"%' order by detalle_lm");
+            return sentenciacli.getResultSet();
+        } 
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        return null;
+    }
+     
+    public static void insertarLineaMarca(String id, String detalle, boolean linea)
+    {
+        try {
+            String sql ="insert into linea_marca (id_lm,detalle_lm,linea) values ('"+id+"','"+detalle+"',"+linea+");";
+            cls_conexion.getStatement().executeUpdate(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public static void actualizarLineaMarca(String id, String detalle, boolean linea)
+    {
+        try {
+            String sql ="update linea_marca set detalle_lm ='"+detalle+"' values where linea="+linea+" and id_lm='"+id+"';";
+            cls_conexion.getStatement().executeUpdate(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
     
     public static ResultSet listarARTICULOS(String descripcion)

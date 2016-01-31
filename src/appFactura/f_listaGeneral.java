@@ -18,9 +18,9 @@ import javax.swing.JOptionPane;
 import javax.swing.table.*;
 import javax.swing.BorderFactory;
 import javax.swing.border.EtchedBorder;
-import pck_controller.ClienteController;
+import pck_controller.ProductoController;
 
-public class f_listaclientes extends JDialog {
+public class f_listaGeneral extends JDialog {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,14 +38,17 @@ public class f_listaclientes extends JDialog {
     editable modelo = new editable();
     static String codigocli = new String("");  //  @jve:decl-index=0:
     static boolean seleccionacli = false;
+    boolean linea;
 
     /**
+     * @param linea
      * @param owner
      */
-    public f_listaclientes() {
+    public f_listaGeneral(boolean linea) {
         super();
         initialize();
-
+        this.linea=linea;
+        conectar();
     }
 
     /**
@@ -54,19 +57,19 @@ public class f_listaclientes extends JDialog {
     private void initialize() {
         this.setSize(731, 395);
         this.setResizable(false);
-        this.setTitle("Lista de Clientes");
+        this.setTitle("Lista de Registros");
         this.setContentPane(getJContentPane());
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setModal(true);
         modelo.addColumn("ID");
-        modelo.addColumn("CLIENTES");
+        modelo.addColumn("DETALLE");
         TableColumn columna0 = JTable.getColumn("ID");
         columna0.setPreferredWidth(0);
         columna0.setMinWidth(0);
         columna0.setMaxWidth(0);
         JTable.isCellEditable(JTable.getSelectedRow(), 1);
-        conectar();
+        //conectar();
     }
 
     /**
@@ -82,7 +85,7 @@ public class f_listaclientes extends JDialog {
             jLabel.setText("");
             LblCliente = new JLabel();
             LblCliente.setBounds(new Rectangle(12, 15, 64, 21));
-            LblCliente.setText("CLIENTE:");
+            LblCliente.setText("NOMBRE:");
             jContentPane = new JPanel();
             jContentPane.setLayout(null);
             jContentPane.add(getTxtCliente(), null);
@@ -197,11 +200,11 @@ public class f_listaclientes extends JDialog {
         return JTable;
     }
 
-    public void conectar() {
+    private void conectar() {
         try {
             actualizalista();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "¡Ha ocurrido un error al intentar acceder los datos del Cliente!", "Error de acceso", 2);
+            JOptionPane.showMessageDialog(null, "¡Ha ocurrido un error al intentar acceder los datos!", "Error de acceso", 2);
             return;
         }
     }
@@ -217,10 +220,18 @@ public class f_listaclientes extends JDialog {
             return false;
         }
     }
+    
+    private ResultSet cargar(String buscar)
+    {
+        if(this.linea)
+            return ProductoController.listarLineas(buscar);
+        else
+            return ProductoController.listarMarcas(buscar);
+    }
 
     private void actualizalista() {
         try {
-            resultado = ClienteController.listarClientes(TxtCliente.getText());
+            resultado = cargar(TxtCliente.getText());
             int xreg = modelo.getRowCount();
             if (xreg > 0) {
                 for (int x = 1; x <= xreg; x++) {
@@ -232,8 +243,8 @@ public class f_listaclientes extends JDialog {
                 resultado.first();
                 while (resultado.isAfterLast() == false) {
                     Object[] fila = new Object[2]; // Se crea un array con dos columnas para las filas en la tabla
-                    fila[0] = resultado.getObject("id_cli");
-                    fila[1] = resultado.getObject("elcliente");
+                    fila[0] = resultado.getObject("id");
+                    fila[1] = resultado.getObject("detalle");
                     modelo.addRow(fila);// Se añade al modelo la fila completa.
                     resultado.next();
                 }
@@ -247,7 +258,7 @@ public class f_listaclientes extends JDialog {
 
     private void seleccionar() {
         if (JTable.isCellSelected(JTable.getSelectedRow(), 0) == false) {
-            JOptionPane.showMessageDialog(null, "¡Seleccione un Cliente de la lista!", "Error de selección", 2);
+            JOptionPane.showMessageDialog(null, "¡Seleccione un registro de la lista!", "Error de selección", 2);
         } else {
             codigocli = JTable.getValueAt(JTable.getSelectedRow(), 0).toString();
             seleccionacli = true;
