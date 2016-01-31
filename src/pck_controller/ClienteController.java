@@ -101,6 +101,8 @@ public class ClienteController extends AbstractController{
             if(existeRegistro("clientes","ID_CLI",cli.getCodigo()))
             {
                 System.out.println(sql2);
+                if(cli.getFoto() == null)
+                    cli.setFoto(recuperaImagen("clientes","FOTO_CLI","ID_CLI",cli.getCodigo()));
                 PreparedStatement ps=cls_conexion.getPreparedStatement(sql2);
                 ps.setBinaryStream(1,cli.getFoto());
                 ps.execute();

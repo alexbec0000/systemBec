@@ -226,7 +226,7 @@ public class Vendedores extends javax.swing.JFrame {
         jLblFoto.setIcon(objVendedor.getImagen());
         jTxtUsuario.setText(objVendedor.getUsuario());
         jTxtClave.setText(objVendedor.getClave());
-        jTxtFechaNacimiento.setText(objVendedor.getFechaNacimiento());
+        jTxtFechaNacimiento.setDate(Generales.stringToDate(objVendedor.getFechaNacimiento(), Generales.ANIO_MES_DIA));
         jCheckBoxEstado.setSelected(objVendedor.isEstado());
 
     }
@@ -327,7 +327,7 @@ public class Vendedores extends javax.swing.JFrame {
         jLblFoto.setIcon(null);
         jTxtUsuario.setText("");
         jTxtClave.setText("");
-        jTxtFechaNacimiento.setText("");
+        jTxtFechaNacimiento.setDate(null);
         jCheckBoxEstado.setSelected(false);
     }
 
@@ -397,7 +397,7 @@ public class Vendedores extends javax.swing.JFrame {
         jTxtClave = new javax.swing.JTextField();
         jCheckBoxEstado = new javax.swing.JCheckBox();
         jLabel19 = new javax.swing.JLabel();
-        jTxtFechaNacimiento = new javax.swing.JTextField();
+        jTxtFechaNacimiento = new com.toedter.calendar.JDateChooser();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTxaObs = new javax.swing.JTextArea();
@@ -496,12 +496,6 @@ public class Vendedores extends javax.swing.JFrame {
 
         jLabel19.setText("Fecha Nacimiento:");
 
-        jTxtFechaNacimiento.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTxtFechaNacimientoKeyPressed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -541,11 +535,11 @@ public class Vendedores extends javax.swing.JFrame {
                                 .addComponent(jCheckBoxEstado))
                             .addComponent(jTxtNombres, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTxtFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTxtFechaNacimiento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel12)
@@ -558,7 +552,7 @@ public class Vendedores extends javax.swing.JFrame {
                             .addComponent(jTxtMail, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jTxtComision, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jTxtClave, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap())
+                .addGap(15, 15, 15))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -607,9 +601,9 @@ public class Vendedores extends javax.swing.JFrame {
                             .addComponent(jLabel18)
                             .addComponent(jTxtClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTxtFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel19))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel19)
+                            .addComponent(jTxtFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(6, 6, 6))
         );
 
@@ -886,10 +880,6 @@ public class Vendedores extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTxtClaveKeyPressed
 
-    private void jTxtFechaNacimientoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTxtFechaNacimientoKeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTxtFechaNacimientoKeyPressed
-
     private void jLblFotoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLblFotoMouseClicked
         // TODO add your handling code here:
         JFileChooser dlg = new JFileChooser();
@@ -951,7 +941,7 @@ public class Vendedores extends javax.swing.JFrame {
     private javax.swing.JTextField jTxtClave;
     private javax.swing.JTextField jTxtComision;
     private javax.swing.JTextField jTxtDireccion;
-    private javax.swing.JTextField jTxtFechaNacimiento;
+    private com.toedter.calendar.JDateChooser jTxtFechaNacimiento;
     private javax.swing.JTextField jTxtMail;
     private javax.swing.JTextField jTxtNombres;
     private javax.swing.JTextField jTxtTelefono;

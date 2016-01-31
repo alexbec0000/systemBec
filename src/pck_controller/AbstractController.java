@@ -1,6 +1,7 @@
 package pck_controller;
 
 
+import java.io.FileInputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import pck_accesoDatos.cls_conexion;
@@ -48,6 +49,23 @@ public abstract class AbstractController{
             rs.close();
         }catch(SQLException ex){
             return false;           
+        }
+        return codigo;
+    }
+    
+    public FileInputStream recuperaImagen(String nombreTabla,String nombreColumna, String columnaCond, String dato)
+    {
+        String sql = "SELECT "+nombreColumna+" FROM "+nombreTabla+" WHERE "+columnaCond+" ='"+dato+"';";
+        FileInputStream codigo = null;
+        try{
+            rs = cls_conexion.getStatement().executeQuery(sql);
+            while(rs.next())
+            {
+               codigo=rs.getObject(1, FileInputStream.class);
+            }
+            rs.close();
+        }catch(SQLException ex){
+            return null;           
         }
         return codigo;
     }

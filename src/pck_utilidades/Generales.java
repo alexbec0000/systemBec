@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import javax.imageio.ImageIO;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.Document;
@@ -26,6 +28,30 @@ public class Generales {
     
     private static Date fechaString;
    
+    private static String fechaActual()
+    {
+        String strFecha="1990-01-01";
+        Calendar fecha = new GregorianCalendar();
+        int año = fecha.get(Calendar.YEAR);
+        int mes = fecha.get(Calendar.MONTH);
+        int dia = fecha.get(Calendar.DAY_OF_MONTH);
+        //strFecha = dia + "/" + (mes+1) + "/" + año;
+        
+        strFecha=año+"-";
+        
+        if((mes+1)<10)
+            strFecha+="0"+(mes+1)+"-";
+        else
+            strFecha+=(mes+1)+"-";
+        
+        if(dia<10)
+            strFecha+="0"+dia;
+        else
+            strFecha+=dia;
+        
+        return strFecha;
+    }
+   
     public static String getFechaFormateada(Date fecha,int tipoFormato)
     {
         formato = new SimpleDateFormat("yyyy-MM-dd");
@@ -36,12 +62,15 @@ public class Generales {
     
     public static Date stringToDate(String text,int tipoFormato)
     {  
+        text=text==null?fechaActual():text;
         formato = new SimpleDateFormat("yyyy-MM-dd");
         if(tipoFormato == DIA_MES_ANIO)
             formato = new SimpleDateFormat("dd-MM-yyyy");
         try {
             fechaString=(Date)formato.parseObject(text);
-        } catch (ParseException ex) {}
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
         return fechaString;
     }
     

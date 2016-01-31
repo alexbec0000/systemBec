@@ -5,7 +5,9 @@
  */
 package pck_controller;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import pck_accesoDatos.cls_conexion;
 import pck_entidades.cls_proveedor;
@@ -104,4 +106,18 @@ public class ProveedorController extends AbstractController{
         
     }
     
+    public static ResultSet listarProveedores()
+    {
+        try 
+        {          
+            Statement sentenciacli=cls_conexion.getStatement();
+            sentenciacli.executeQuery("select NOMBRE_APELLIDO_PRV from proveedor order by NOMBRE_APELLIDO_PRV");
+            return sentenciacli.getResultSet();
+        } 
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        return null;
+    }
 }

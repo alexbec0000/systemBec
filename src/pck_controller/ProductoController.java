@@ -5,12 +5,15 @@
  */
 package pck_controller;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import pck_accesoDatos.cls_conexion;
 import pck_entidades.cls_producto;
+import pck_utilidades.CustomImageIcon;
+import pck_utilidades.Generales;
 
 /**
  *
@@ -25,38 +28,38 @@ public class ProductoController extends AbstractController{
     {
          try{
              listProd=new ArrayList();
-             String sql="SELECT codigo_barras, codigo_producto, codigo_fabricante, nombre, linea, " +
-                        "       marca, modelo, obs, proveedor, vendedor, garantia, fecha, stk_minimo, " +
-                        "       stk_maximo, p_compra, moneda, p_venta, utilidad1, valor1, utilidad2, " +
-                        "       valor2, p_pmayor, imagen" +
-                        "  FROM producto;";
+             String sql="SELECT ID_ART, CODIGO_BARRAS_ART, FECHA_ART, DESCRIPCION_ART, "
+                     + "MARCA_ART, MODELO_ART, LINEA_ART, STOCK, STK_MIN, STK_MAX, "
+                     + "PVP_ART, PCO_ART, OBSERVACION_ART, PROVEEDOR_ART, GARANTIA, "
+                     + "FECHA_VENCIMIENTO_ART, FOTO_ART FROM articulos;";
                  rs = cls_conexion.getStatement().executeQuery(sql);
             while(rs.next())
             {
                 prod = new cls_producto();
-                prod.setCodigo_barras(rs.getString(1));
-                prod.setCodigo_producto(rs.getString(2));
-                prod.setCodigo_fabricante(rs.getString(3));
+                prod.setCodigo_art(rs.getString(1));
+                prod.setCodigo_barras(rs.getString(2));
+                prod.setFecha(rs.getString(3));
                 prod.setNombre(rs.getString(4));
-                prod.setLinea(rs.getString(5));
-                prod.setMarca(rs.getString(6));
-                prod.setModelo(rs.getString(7));
-                prod.setObs(rs.getString(8));
-                prod.setProveedor(rs.getString(9));
-                prod.setVendedor(rs.getString(10));
-                prod.setGarantia(rs.getString(11));
-                prod.setFecha(rs.getString(12));
-                prod.setStk_minimo(rs.getInt(13));
-                prod.setStk_maximo(rs.getInt(14));
-                prod.setP_compra(rs.getFloat(15));
-                prod.setMoneda(rs.getString(16));
-                prod.setP_venta(rs.getFloat(17));
-                prod.setUtilidad1(rs.getString(18));
-                prod.setValor1(rs.getFloat(19));
-                prod.setUtilidad2(rs.getString(20));
-                prod.setValor2(rs.getFloat(21));
-                prod.setP_pmayor(rs.getFloat(22));
-                //prod.setImagen(rs.getString(1));
+                prod.setMarca(rs.getString(5));
+                prod.setModelo(rs.getString(6));
+                prod.setLinea(rs.getString(7));
+                prod.setStock(rs.getInt(8));
+                prod.setStk_minimo(rs.getInt(9));
+                prod.setStk_maximo(rs.getInt(10));
+                prod.setP_venta(rs.getFloat(11));
+                prod.setP_compra(rs.getFloat(12));
+                prod.setObs(rs.getString(13));
+                prod.setProveedor(rs.getString(14));
+                prod.setGarantia(rs.getString(15));
+                prod.setFechaVencimiento(rs.getString(16));
+
+                try{
+                    prod.setImagen(Generales.getFoto(rs.getBinaryStream(17)));
+                }
+                catch(Exception ex){
+                    //ex.printStackTrace();
+                    prod.setImagen(new CustomImageIcon(getClass().getResource("/recursos/icono_cliente.jpg")));
+                }
 
                 listProd.add(prod);
             }
@@ -64,7 +67,7 @@ public class ProductoController extends AbstractController{
             rs.close();
            
           }catch(SQLException ex){
-                     
+               ex.printStackTrace();
         }
         return listProd;
     }
@@ -72,58 +75,54 @@ public class ProductoController extends AbstractController{
     public int grabarRegistro(cls_producto prod) {
         
         int resultado = 0;
-        String sql = "INSERT INTO producto(codigo_barras, codigo_producto, codigo_fabricante, nombre, linea, " +
-                    "  marca, modelo, obs, proveedor, vendedor, garantia, fecha, stk_minimo, " +
-                    "  stk_maximo, p_compra, moneda, p_venta, utilidad1, valor1, utilidad2, " +
-                    "  valor2, p_pmayor, imagen)" +
-	"VALUES('"+prod.getCodigo_barras()+"','"+ 
-            prod.getCodigo_producto()+"','"+
-                prod.getCodigo_fabricante()+"','"+
+        String sql = "INSERT INTO articulos(ID_ART, CODIGO_BARRAS_ART, FECHA_ART, "
+                + "DESCRIPCION_ART, MARCA_ART, MODELO_ART, LINEA_ART, STOCK, "
+                + "STK_MIN, STK_MAX, PVP_ART, PCO_ART, OBSERVACION_ART, PROVEEDOR_ART, "
+                + "GARANTIA, FECHA_VENCIMIENTO_ART, FOTO_ART)" +
+	"VALUES('"+prod.getCodigo_art()+"','"+ 
+                prod.getCodigo_barras()+"','"+
+                prod.getFecha()+"','"+
                 prod.getNombre()+"','"+
-                prod.getLinea()+"','"+
                 prod.getMarca()+"','"+
                 prod.getModelo()+"','"+
+                prod.getLinea()+"',"+
+                prod.getStock()+"',"+
+                prod.getStk_minimo()+","+
+                prod.getStk_maximo()+","+
+                prod.getP_venta()+","+
+                prod.getP_compra()+",'"+
                 prod.getObs()+"','"+
                 prod.getProveedor()+"','"+
-                prod.getVendedor()+"','"+
                 prod.getGarantia()+"','"+
-                prod.getFecha()+"',"+
-                prod.getStk_minimo()+","+
-                prod.getStk_maximo()+",'"+
-                prod.getP_compra()+"','"+
-                prod.getMoneda()+"','"+
-                prod.getP_venta()+"','"+
-                prod.getUtilidad1()+"','"+
-                prod.getValor1()+"','"+
-                prod.getUtilidad2()+"','"+
-                prod.getValor2()+"','"+
-                prod.getP_pmayor()+"','"+
-            prod.getImagen()+"');";
+                prod.getFechaVencimiento()+"',?);";
         
-        String sql2 ="UPDATE producto" +
-            " SET codigo_barras='"+prod.getCodigo_barras()+"', codigo_fabricante='"+prod.getCodigo_fabricante()+"', nombre='"+prod.getNombre()+"', " +
-            "   linea='"+prod.getLinea()+"', marca='"+prod.getMarca()+"', modelo='"+prod.getModelo()+"', "+
-            "   obs='"+prod.getObs()+"', proveedor='"+prod.getProveedor()+"', vendedor='"+prod.getVendedor()+"', garantia='"+prod.getGarantia()+"', " +
-            "   fecha='"+prod.getFecha()+"', stk_minimo="+prod.getStk_minimo()+", stk_maximo="+prod.getStk_maximo()+", "+
-            "   p_compra="+prod.getP_compra()+", moneda='"+prod.getMoneda()+"', p_venta="+prod.getP_venta()+", " +
-            "   utilidad1='"+prod.getUtilidad1()+"', valor1="+prod.getValor1()+", utilidad2='"+prod.getUtilidad2()+"', "+
-            "   valor2="+prod.getValor2()+", p_pmayor="+prod.getP_pmayor()+", imagen='"+prod.getImagen()+"'" +
-            " WHERE codigo_producto='"+prod.getCodigo_producto()+"';"; 
+        String sql2 ="UPDATE articulos" +
+            " SET CODIGO_BARRAS_ART='"+prod.getCodigo_barras()+"', DESCRIPCION_ART='"+prod.getNombre()+"', FECHA_VENCIMIENTO_ART='" +prod.getFechaVencimiento()+"', "+
+            "   LINEA_ART='"+prod.getLinea()+"', MARCA_ART='"+prod.getMarca()+"', MODELO_ART='"+prod.getModelo()+"', "+
+            "   OBSERVACION_ART='"+prod.getObs()+"', PROVEEDOR_ART='"+prod.getProveedor()+"', GARANTIA='"+prod.getGarantia()+"', " +
+            "   STK_MIN="+prod.getStk_minimo()+", STK_MAX="+prod.getStk_maximo()+", "+
+            "   PCO_ART="+prod.getP_compra()+", STOCK="+prod.getStock()+", PVP_ART="+prod.getP_venta()+", " +
+            "   FOTO_ART=? WHERE id_art='"+prod.getCodigo_art()+"';"; 
         
         try {
-            if(existeRegistro("producto","codigo_producto",prod.getCodigo_producto()))
+            if(existeRegistro("articulos","id_art",prod.getCodigo_art()))
             {
                 System.out.println(sql2);
-                resultado = cls_conexion.getStatement().executeUpdate(sql2);
+                if(prod.getFoto() == null)
+                    prod.setFoto(recuperaImagen("articulos","FOTO_ART","id_art",prod.getCodigo_art()));
+                PreparedStatement ps=cls_conexion.getPreparedStatement(sql2);
+                ps.setBinaryStream(1,prod.getFoto());
+                ps.execute();
             }
             else{
                 System.out.println(sql);
-                resultado = cls_conexion.getStatement().executeUpdate(sql);
+                PreparedStatement ps=cls_conexion.getPreparedStatement(sql);
+                ps.setBinaryStream(1,prod.getFoto());
+                ps.execute();
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        
         
         return resultado;
         
@@ -135,6 +134,36 @@ public class ProductoController extends AbstractController{
         {          
             Statement sentenciacli=cls_conexion.getStatement();
             sentenciacli.executeQuery("SELECT ID_ART,DESCRIPCION_ART,STOCK,PVP_ART FROM ARTICULOS ORDER BY ID_ART");
+            return sentenciacli.getResultSet();
+        } 
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+    public static ResultSet listarMarcas()
+    {
+        try 
+        {          
+            Statement sentenciacli=cls_conexion.getStatement();
+            sentenciacli.executeQuery("select NOMBRE_APELLIDO_PRV from proveedor order by NOMBRE_APELLIDO_PRV");
+            return sentenciacli.getResultSet();
+        } 
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+     public static ResultSet listarLineas()
+    {
+        try 
+        {          
+            Statement sentenciacli=cls_conexion.getStatement();
+            sentenciacli.executeQuery("select NOMBRE_APELLIDO_PRV from proveedor order by NOMBRE_APELLIDO_PRV");
             return sentenciacli.getResultSet();
         } 
         catch (SQLException ex) {

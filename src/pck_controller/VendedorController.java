@@ -97,7 +97,8 @@ public class VendedorController extends AbstractController{
             if(existeRegistro("vendedores","ID_VEN",vend.getCodigo()))
             {
                 System.out.println(sql2);
-                //resultado = cls_conexion.getStatement().executeUpdate(sql2);
+                if(vend.getFoto() == null)
+                    vend.setFoto(recuperaImagen("vendedores","FOTO_VEN","ID_VEN",vend.getCodigo()));
                 PreparedStatement ps=cls_conexion.getPreparedStatement(sql2);
                 ps.setBinaryStream(1,vend.getFoto());
                 ps.execute();
