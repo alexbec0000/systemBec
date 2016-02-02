@@ -17,15 +17,13 @@ import java.sql.ResultSet;
 import java.awt.Toolkit;
 import java.awt.Color;
 import java.awt.Font;
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
 import java.util.Calendar;
-import java.util.Locale;
 import java.awt.event.KeyEvent;
-import java.sql.SQLException;
-import pck_controller.ProductoController;
+import javax.swing.JCheckBox;
+import pck_controller.ParametrosController;
+import javax.swing.JTextArea;
 
-public class f_lineas extends JFrame {
+public class f_parametros extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,7 +36,10 @@ public class f_lineas extends JFrame {
     private JLabel jLabel33 = null;
     private JLabel jLabel34 = null;
     private JTextField txtCodigo = null;
-    private JTextField txtLinea = null;
+    private JTextField txtNombre = null;
+    private JTextArea txtDescripcion=null;
+    private JTextField txtValor = null;
+    private JCheckBox ckbxEstado=null;
     private JLabel jLabel311 = null;
     private JLabel jLabel321 = null;
     private JLabel jLabel3211 = null;
@@ -60,8 +61,8 @@ public class f_lineas extends JFrame {
     private JLabel jLabel5 = null;
 
     ResultSet resultado, resultadoventas, resultadoxreg;
-    int xregistros, totalReg;
-    boolean nuevoreg, linea;
+    int xregistros;
+    boolean nuevoreg;
     Calendar lafecha = Calendar.getInstance();  //  @jve:decl-index=0:
     String elcodigo = new String("");  //  @jve:decl-index=0:
 
@@ -70,17 +71,17 @@ public class f_lineas extends JFrame {
      *
      * @return javax.swing.JTextField
      */
-    private JTextField getTxtLinea() {
-        if (txtLinea == null) {
-            txtLinea = new JTextField();
-            txtLinea.setEnabled(false);
-            txtLinea.setSize(new Dimension(452, 24));
-            txtLinea.setDisabledTextColor(Color.darkGray);
-            txtLinea.setPreferredSize(new Dimension(4, 24));
-            txtLinea.setLocation(new Point(131, 66));
-            txtLinea.addKeyListener(new java.awt.event.KeyAdapter() {
+    private JTextField getTxtNombre() {
+        if (txtNombre == null) {
+            txtNombre = new JTextField();
+            txtNombre.setEnabled(false);
+            txtNombre.setSize(new Dimension(452, 24));
+            txtNombre.setDisabledTextColor(Color.darkGray);
+            txtNombre.setPreferredSize(new Dimension(4, 24));
+            txtNombre.setLocation(new Point(131, 66));
+            txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyTyped(java.awt.event.KeyEvent e) {
-                    if (txtLinea.getText().length() < 30) {
+                    if (txtNombre.getText().length() < 30) {
                         char letra;
                         letra = (e.getKeyChar() + "").toUpperCase().charAt(0);
                         e.setKeyChar(letra);
@@ -89,13 +90,52 @@ public class f_lineas extends JFrame {
                     }
                 }
             });
-            txtLinea.addFocusListener(new java.awt.event.FocusAdapter() {
+            txtNombre.addFocusListener(new java.awt.event.FocusAdapter() {
                 public void focusLost(java.awt.event.FocusEvent e) {
-                    txtLinea.setText(txtLinea.getText().trim());
+                    txtNombre.setText(txtNombre.getText().trim());
                 }
             });
         }
-        return txtLinea;
+        return txtNombre;
+    }
+
+    /**
+     * This method initializes txtCedula
+     *
+     * @return javax.swing.JTextField
+     */
+    private JTextField getTxtValor() {
+        if (txtValor == null) {
+            txtValor = new JTextField();
+            txtValor.setEnabled(false);
+            txtValor.setSize(new Dimension(123, 24));
+            txtValor.setDisabledTextColor(Color.darkGray);
+            txtValor.setLocation(new Point(131, 242));
+            txtValor.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyTyped(java.awt.event.KeyEvent e) {
+                    if (txtValor.getText().length() < 13) {
+                        char caracter;
+                        caracter = e.getKeyChar();
+                        if ((caracter + "").matches("[0-9]")) {
+                            e.setKeyChar(caracter);
+                        } else {
+                            e.consume();
+                        }
+                    } else {
+                        e.consume();
+                    }
+                }
+            });
+            txtValor.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusLost(java.awt.event.FocusEvent e) {
+                    if (txtValor.getText().length() != 10 & txtValor.getText().length() != 13) {
+                        JOptionPane.showMessageDialog(null, "Ingrese 10 numeros para la Cedula o 13 para el RUC", "Error de ingreso", 2);
+                        txtValor.setText("");
+                    }
+                }
+            });
+        }
+        return txtValor;
     }
 
     /**
@@ -107,7 +147,7 @@ public class f_lineas extends JFrame {
         if (jPanel == null) {
             jPanel = new JPanel();
             jPanel.setLayout(null);
-            jPanel.setBounds(new Rectangle(10, 155, 705, 56));
+            jPanel.setBounds(new Rectangle(8, 291, 705, 56));
             jPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
             jPanel.add(getBNuevo(), null);
             jPanel.add(getBModificar(), null);
@@ -127,7 +167,7 @@ public class f_lineas extends JFrame {
     private JButton getBNuevo() {
         if (bNuevo == null) {
             bNuevo = new JButton();
-            bNuevo.setToolTipText("Nuevo registro de Linea");
+            bNuevo.setToolTipText("Nuevo registro de Parametros");
             bNuevo.setLocation(new Point(7, 8));
             bNuevo.setSize(new Dimension(112, 41));
             bNuevo.setText("   Nuevo");
@@ -140,7 +180,7 @@ public class f_lineas extends JFrame {
                     limpiar();
                     generacodigo();
                     habilitanuemod();
-                    txtLinea.requestFocus();
+                    txtNombre.requestFocus();
 
                 }
             });
@@ -156,7 +196,7 @@ public class f_lineas extends JFrame {
     private JButton getBModificar() {
         if (bModificar == null) {
             bModificar = new JButton();
-            bModificar.setToolTipText("Modificar datos de Linea");
+            bModificar.setToolTipText("Modificar datos de Parametros");
             bModificar.setSize(new Dimension(112, 41));
             bModificar.setLocation(new Point(123, 8));
             bModificar.setText("Modificar");
@@ -167,7 +207,7 @@ public class f_lineas extends JFrame {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     nuevoreg = false;
                     habilitanuemod();
-                    txtLinea.requestFocus();
+                    txtNombre.requestFocus();
                 }
             });
         }
@@ -182,7 +222,7 @@ public class f_lineas extends JFrame {
     private JButton getBGuardar() {
         if (bGuardar == null) {
             bGuardar = new JButton();
-            bGuardar.setToolTipText("Guardar datos de Linea");
+            bGuardar.setToolTipText("Guardar datos de Parametros");
             bGuardar.setSize(new Dimension(112, 41));
             bGuardar.setLocation(new Point(239, 8));
             bGuardar.setEnabled(false);
@@ -192,9 +232,15 @@ public class f_lineas extends JFrame {
             bGuardar.setIcon(new ImageIcon(getClass().getResource("/recursos/GUARDAR2.JPG")));
             bGuardar.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    if (txtLinea.getText().trim().length() == 0) {
-                        JOptionPane.showMessageDialog(null, "¡Ingrese los Nombres del Linea!", "Error de almacenamiento", 2);
-                        txtLinea.requestFocus();
+                    if (txtNombre.getText().trim().length() == 0) {
+                        JOptionPane.showMessageDialog(null, "�Ingrese el Nombre del Parametros!", "Error de almacenamiento", 2);
+                        txtNombre.requestFocus();
+                    } else if (txtDescripcion.getText().trim().length() == 0) {
+                        JOptionPane.showMessageDialog(null, "�Ingrese la descripcion del Parametros!", "Error de almacenamiento", 2);
+                        txtDescripcion.requestFocus();
+                    } else if (txtValor.getText().trim().length() == 0) {
+                        JOptionPane.showMessageDialog(null, "�Ingrese el valor del Parametros!", "Error de almacenamiento", 2);
+                        txtValor.requestFocus();
                     } else {
                         guardar();
                     }
@@ -223,13 +269,13 @@ public class f_lineas extends JFrame {
             bCancelar.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     try {
-                        int respuesta = JOptionPane.showConfirmDialog(null, "¿Desea descartar los datos ingresados?", "Cancelar ingresos", 0, 3);
+                        int respuesta = JOptionPane.showConfirmDialog(null, "�Desea descartar los datos ingresados?", "Cancelar ingresos", 0, 3);
                         if (respuesta == 0) {
-                            resultado = cargar();
+                            resultado = ParametrosController.obtenerParametros();
                             habilitaguacan();
                             if (resultado.next() == false) {
                                 if (nuevoreg == false) {
-                                    JOptionPane.showMessageDialog(null, "¡Los datos de este Linea acaban de ser eliminados por otro usuario del sistema!", "Linea inexistente", 0);
+                                    JOptionPane.showMessageDialog(null, "�Los datos de este Parametros acaban de ser eliminados por otro usuario del sistema!", "Parametros inexistente", 0);
                                 }
                                 limpiar();
                                 vacio();
@@ -259,7 +305,7 @@ public class f_lineas extends JFrame {
     private JButton getBEliminar() {
         if (bEliminar == null) {
             bEliminar = new JButton();
-            bEliminar.setToolTipText("Eliminar registro de Linea");
+            bEliminar.setToolTipText("Eliminar registro de Parametros");
             bEliminar.setSize(new Dimension(112, 41));
             bEliminar.setLocation(new Point(471, 8));
             bEliminar.setFont(new Font("Dialog", Font.PLAIN, 11));
@@ -268,7 +314,7 @@ public class f_lineas extends JFrame {
             bEliminar.setIcon(new ImageIcon(getClass().getResource("/recursos/ELIMINAR.JPG")));
             bEliminar.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    int respuesta = JOptionPane.showConfirmDialog(null, "¿Desea eliminar el registro del Linea " + txtLinea.getText().trim() + "?", "Eliminar cliente", 0, 3);
+                    int respuesta = JOptionPane.showConfirmDialog(null, "�Desea eliminar el registro del Parametros " + txtNombre.getText().trim() + " " + txtDescripcion.getText() + "?", "Eliminar cliente", 0, 3);
                     if (respuesta == 0) {
                         eliminar();
                     }
@@ -286,7 +332,7 @@ public class f_lineas extends JFrame {
     private JButton getBAnterior() {
         if (bAnterior == null) {
             bAnterior = new JButton();
-            bAnterior.setToolTipText("Anterior Linea");
+            bAnterior.setToolTipText("Anterior Parametros");
             bAnterior.setLocation(new Point(45, 6));
             bAnterior.setSize(new Dimension(34, 34));
             bAnterior.setIcon(new ImageIcon(getClass().getResource("/recursos/ANTERIOR.JPG")));
@@ -316,15 +362,15 @@ public class f_lineas extends JFrame {
     private JButton getBBuscar() {
         if (bBuscar == null) {
             bBuscar = new JButton();
-            bBuscar.setToolTipText("Buscar Linea");
+            bBuscar.setToolTipText("Buscar Parametros");
             bBuscar.setLocation(new Point(85, 6));
             bBuscar.setSize(new Dimension(34, 34));
             bBuscar.setIcon(new ImageIcon(getClass().getResource("/recursos/BUSCAR.JPG")));
             bBuscar.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    new f_listaGeneral(linea).setVisible(true);
-                    if (f_listaGeneral.seleccionacli == true) {
-                        elcodigo = f_listaGeneral.codigocli;
+                    new f_listaclientes().setVisible(true);
+                    if (f_listaclientes.seleccionacli == true) {
+                        elcodigo = f_listaclientes.codigocli;
                         encuentra();
                     }
                 }
@@ -341,7 +387,7 @@ public class f_lineas extends JFrame {
     private JButton getBSiguiente() {
         if (bSiguiente == null) {
             bSiguiente = new JButton();
-            bSiguiente.setToolTipText("Siguiente Linea");
+            bSiguiente.setToolTipText("Siguiente Parametros");
             bSiguiente.setLocation(new Point(124, 6));
             bSiguiente.setSize(new Dimension(34, 34));
             bSiguiente.setIcon(new ImageIcon(getClass().getResource("/recursos/SIGUIENTE.JPG")));
@@ -371,7 +417,7 @@ public class f_lineas extends JFrame {
     private JButton getBUltimo() {
         if (bUltimo == null) {
             bUltimo = new JButton();
-            bUltimo.setToolTipText("Ultimo Linea");
+            bUltimo.setToolTipText("Ultimo Parametros");
             bUltimo.setLocation(new Point(163, 6));
             bUltimo.setSize(new Dimension(34, 34));
             bUltimo.setIcon(new ImageIcon(getClass().getResource("/recursos/ULTIMO.JPG")));
@@ -405,7 +451,7 @@ public class f_lineas extends JFrame {
             bSalir.setIcon(new ImageIcon(getClass().getResource("/recursos/SALIR2.JPG")));
             bSalir.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    int resp = JOptionPane.showConfirmDialog(null, "¿Desea salir del formulario?", "Salir del formulario", 0);
+                    int resp = JOptionPane.showConfirmDialog(null, "�Desea salir del formulario?", "Salir del formulario", 0);
                     if (resp == 0) {
                         dispose();
                     }
@@ -448,7 +494,7 @@ public class f_lineas extends JFrame {
             bPrimero.setIcon(new ImageIcon(getClass().getResource("/recursos/PRIMERO.JPG")));
             bPrimero.setLocation(new Point(6, 6));
             bPrimero.setSize(new Dimension(34, 34));
-            bPrimero.setToolTipText("Primer Linea");
+            bPrimero.setToolTipText("Primer Parametros");
             bPrimero.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     try {
@@ -507,7 +553,7 @@ public class f_lineas extends JFrame {
         // TODO Auto-generated method stub
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                f_lineas thisClass = new f_lineas(true);
+                f_clientes thisClass = new f_clientes();
                 thisClass.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 thisClass.setVisible(true);
             }
@@ -516,13 +562,10 @@ public class f_lineas extends JFrame {
 
     /**
      * This is the default constructor
-     * @param linea
      */
-    public f_lineas(boolean linea) {
+    public f_parametros() {
         super();
         initialize();
-        this.linea=linea;
-        conectar();
     }
 
     /**
@@ -531,16 +574,17 @@ public class f_lineas extends JFrame {
      * @return void
      */
     private void initialize() {
-        this.setSize(731, 256);
-        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/recursos/icon_edit-page_40.gif")));
+        this.setSize(731, 395);
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/recursos/GENTE.JPG")));
         this.setContentPane(getJContentPane());
-        this.setTitle("Datos de las Lineas de Productos");
+        this.setTitle("PARAMETROS DEL SISTEMA");
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent e) {
                 System.out.println("windowOpened()"); // TODO Auto-generated Event stub windowOpened()
             }
         });
         this.setLocationRelativeTo(null);
+        conectar();
     }
 
     /**
@@ -555,48 +599,47 @@ public class f_lineas extends JFrame {
             jLabel4.setLocation(new Point(604, 11));
             jLabel4.setSize(new Dimension(89, 99));
             jLabel4.setText("");
+            jLabel31 = new JLabel();
+            jLabel31.setText("VALOR:");
+            jLabel31.setLocation(new Point(20, 244));
+            jLabel31.setSize(new Dimension(85, 21));
+            jLabel2 = new JLabel();
+            jLabel2.setText("DESCRIPCION:");
+            jLabel2.setLocation(new Point(20, 95));
+            jLabel2.setSize(new Dimension(77, 22));
             jLabel1 = new JLabel();
             jLabel1.setBounds(new Rectangle(20, 66, 78, 21));
-            jLabel1.setText("LINEA:");
+            jLabel1.setText("NOMBRE:");
             jContentPane = new JPanel();
             jContentPane.setLayout(null);
             jContentPane.add(jLabel1, null);
-            jContentPane.add(getTxtLinea(), null);
+            jContentPane.add(jLabel2, null);
+            jContentPane.add(jLabel31, null);
+            jContentPane.add(getTxtNombre(), null);
+            jContentPane.add(getTxtValor(), null);
             jContentPane.add(getJPanel(), null);
             jContentPane.add(jLabel4, null);
             jContentPane.add(getJPanel1(), null);
 
             jContentPane.add(getJPanel2(), null);
+            
+            txtDescripcion = new JTextArea();
+            txtDescripcion.setFont(new Font("Tahoma", Font.PLAIN, 11));
+            txtDescripcion.setEnabled(false);
+            txtDescripcion.setBounds(131, 94, 452, 137);
+            jContentPane.add(txtDescripcion);
+            
+            ckbxEstado = new JCheckBox("ACTIVO");
+            ckbxEstado.setBounds(315, 247, 97, 15);
+            jContentPane.add(ckbxEstado);
         }
         return jContentPane;
     }
-    
-    private ResultSet cargar()
-    {
-        ResultSet rs;
-        if(this.linea)
-            rs= ProductoController.listarLineas();
-        else
-            rs= ProductoController.listarMarcas();
-        
-        this.totalReg=0;
-        
-        try 
-        {
-            while(rs.next())
-            {
-                this.totalReg+=1;
-            }
-        } catch (SQLException ex) {
-             ex.printStackTrace();
-        }
-        return rs;
-    }
 
-    private void conectar() {
+    public void conectar() {
         try {
-            resultado = cargar();
-            if (this.totalReg<1) {
+            resultado = ParametrosController.obtenerParametros();
+            if (resultado.next() == false) {
                 vacio();
                 xregistros = 0;
             } else {
@@ -605,7 +648,7 @@ public class f_lineas extends JFrame {
                 actualizar();
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "¡Ha ocurrido un error al intentar acceder los datos del Linea!", "Error de acceso", 2);
+            JOptionPane.showMessageDialog(null, "�Ha ocurrido un error al intentar acceder los datos del Parametros!", "Error de acceso", 2);
             return;
         }
     }
@@ -627,9 +670,11 @@ public class f_lineas extends JFrame {
 
     private void actualizar() {
         try {
-            txtCodigo.setText(resultado.getString("id_lm"));
-            txtLinea.setText(resultado.getString("detalle_lm"));
-           
+            txtCodigo.setText(resultado.getString("id_par"));
+            txtNombre.setText(resultado.getString("nombre_par"));
+            txtDescripcion.setText(resultado.getString("descripcion_par"));
+            txtValor.setText(resultado.getString("valor_par"));
+            ckbxEstado.setSelected(resultado.getBoolean("activo_par"));
         } catch (Exception m) {
         }
     }
@@ -637,32 +682,33 @@ public class f_lineas extends JFrame {
     public void generacodigo() {
         try {
             if (xregistros == 0) {
-                txtCodigo.setText("LM0001");
+                txtCodigo.setText("PR0001");
             } else {
                 resultado.last();
-                String numerocad = new String(resultado.getString("id_lm").substring(2));
+                String numerocad = new String(resultado.getString("id_par").substring(2));
                 String cadnuevo = String.valueOf(Integer.valueOf(numerocad) + 1);
                 int x;
                 String ceros = new String("");
                 for (x = 1; x <= 4 - cadnuevo.length(); x++) {
                     ceros = ceros + "0";
                 }
-                txtCodigo.setText("LM" + ceros + cadnuevo);
+                txtCodigo.setText("PR" + ceros + cadnuevo);
                 if (cadnuevo.length() == 5) {
                     txtCodigo.setText("");
-                    JOptionPane.showMessageDialog(null, "¡No se puede generar el codigo. Se ha superado la capacidad del sistema!", "Desbordamiento de valores", 0);
+                    JOptionPane.showMessageDialog(null, "�No se puede generar el codigo. Se ha superado la capacidad del sistema!", "Desbordamiento de valores", 0);
                     System.exit(0);
                 }
             }
         } catch (Exception g) {
-            g.printStackTrace();
         }
     }
 
     private void limpiar() {
         txtCodigo.setText("");
-        txtLinea.setText("");
-       
+        txtNombre.setText("");
+        txtDescripcion.setText("");
+        txtValor.setText("0.00");
+        ckbxEstado.setEnabled(false);
     }
 
     public void habilitanuemod() {
@@ -676,18 +722,10 @@ public class f_lineas extends JFrame {
         bBuscar.setEnabled(false);
         bSiguiente.setEnabled(false);
         bUltimo.setEnabled(false);
-        txtLinea.setEnabled(true);
-    }
-
-    public static boolean FechaValida(String fechax) {
-        try {
-            SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-            formatoFecha.setLenient(false);
-            formatoFecha.parse(fechax);
-        } catch (ParseException e) {
-            return false;
-        }
-        return true;
+        txtNombre.setEnabled(true);
+        txtDescripcion.setEnabled(true);
+        txtValor.setEnabled(true);
+        ckbxEstado.setEnabled(true);
     }
 
     public void habilitaguacan() {
@@ -701,43 +739,46 @@ public class f_lineas extends JFrame {
         bBuscar.setEnabled(true);
         bSiguiente.setEnabled(true);
         bUltimo.setEnabled(true);
-        txtLinea.setEnabled(false);
+        txtNombre.setEnabled(false);
+        txtDescripcion.setEnabled(false);
+        ckbxEstado.setEnabled(false);
+        txtValor.setEnabled(false);
     }
 
     public void eliminar() {
         try {
-           
-            //LineaController.eliminarLinea(txtCodigo.getText());
-            JOptionPane.showMessageDialog(null, "¡Los datos del Linea han sido eliminados!", "Eliminacion de datos", 1);
-            //resultado = LineaController.obtenerLineas();
-            if (resultado.next() == false) {
-                xregistros = 0;
-                limpiar();
-                vacio();
-            } else {
-                xregistros = 1;
-                resultado.last();
-                actualizar();
+
+                ParametrosController.actualizarEstadoParametro(txtCodigo.getText(),false);
+                JOptionPane.showMessageDialog(null, "�El Parametro ha sido inactivado!", "Eliminacion de datos", 1);
+                resultado = ParametrosController.obtenerParametros();
+                if (resultado.next() == false) {
+                    xregistros = 0;
+                    limpiar();
+                    vacio();
+                } else {
+                    xregistros = 1;
+                    resultado.last();
+                    actualizar();
+                
             }
-            
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "¡Ha ocurrido un error al intentar eliminar los datos del Linea!", "Error de eliminacion", 2);
+            JOptionPane.showMessageDialog(null, "�Ha ocurrido un error al intentar eliminar los datos del Parametros!", "Error de eliminacion", 2);
             return;
         }
     }
 
     private void guardar() {
         try {
-            
             if (nuevoreg == true) {
-                ProductoController.insertarLineaMarca(txtCodigo.getText(), txtLinea.getText(), this.linea);
+                ParametrosController.ingresarParametro();
                 xregistros = 1;
             } else {
 
-                ProductoController.actualizarLineaMarca(txtCodigo.getText(), txtLinea.getText(), this.linea);
+                ParametrosController.actualizarParametro(txtCodigo.getText(), txtNombre.getText(), txtDescripcion.getText(),
+                         txtValor.getText(), ckbxEstado.isSelected());
             }
 
-            resultado = cargar();
+            resultado = ParametrosController.obtenerParametros();
             if (nuevoreg == true) {
                 resultado.last();
                 actualizar();
@@ -745,32 +786,32 @@ public class f_lineas extends JFrame {
                 elcodigo = txtCodigo.getText();
                 encuentra();
             }
-            JOptionPane.showMessageDialog(null, "¡Los datos del Linea han sido guardados!", "Almacenamiento de datos", 1);
+            JOptionPane.showMessageDialog(null, "�Los datos del Parametros han sido guardados!", "Almacenamiento de datos", 1);
             habilitaguacan();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "¡Ha ocurrido un error al intentar almacenar los datos del Linea!", "Error de almacenamiento", 2);
+            JOptionPane.showMessageDialog(null, "�Ha ocurrido un error al intentar almacenar los datos del Parametros!", "Error de almacenamiento", 2);
             return;
         }
     }
 
     private void encuentra() {
         try {
-            //resultadoxreg = cargar();
-            //resultadoxreg.last();
+            resultadoxreg = ParametrosController.obtenerTotalParametros();
+            resultadoxreg.last();
             resultado.first();
-            for (int x = 1; x <= this.totalReg; x++) {
-                if (resultado.getString("id_lm").equals(elcodigo) == true) {
+            for (int x = 1; x <= resultadoxreg.getInt("cuantos"); x++) {
+                if (resultado.getString("id_par").equals(elcodigo) == true) {
                     break;
                 }
                 resultado.next();
             }
             if (resultado.isAfterLast() == true) {
-                JOptionPane.showMessageDialog(null, "¡El Linea no pudo ser localizado!", "Error de busqueda", 2);
+                JOptionPane.showMessageDialog(null, "�El Parametros no pudo ser localizado!", "Error de busqueda", 2);
                 resultado.last();
             }
             actualizar();
         } catch (Exception m) {
-            JOptionPane.showMessageDialog(null, "¡El Linea no pudo ser localizado!", "Error de busqueda", 2);
+            JOptionPane.showMessageDialog(null, "�El Parametros no pudo ser localizado!", "Error de busqueda", 2);
         }
     }
 }  //  FIN DEL FORMULARIO

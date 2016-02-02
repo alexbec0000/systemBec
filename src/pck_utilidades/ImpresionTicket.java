@@ -15,20 +15,9 @@ import static java.awt.print.Printable.NO_SUCH_PAGE;
 import static java.awt.print.Printable.PAGE_EXISTS;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.StringTokenizer;
-import javax.print.Doc;
-import javax.print.DocFlavor;
-import javax.print.DocPrintJob;
-import javax.print.PrintService;
-import javax.print.PrintServiceLookup;
-import javax.print.SimpleDoc;
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.JOptionPane;
+import pck_controller.ParametrosController;
 
 /**
  *
@@ -59,18 +48,10 @@ public class ImpresionTicket implements Printable {
         //Lee la data del objeto serializable
         String texto = null;
         try {
-            FileInputStream fis = new FileInputStream("plantilla.txt");
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            if (ois != null) {
-                texto =  (String) ois.readObject();
-                 System.out.println(texto);
-                ois.close();
-            }
-
-           
+            texto=ParametrosController.obtenerDescripcionParametroXid("PAR001");
         }//Fin del try
         catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al cargar el archivo binaro Configuracion: " + e);
+            JOptionPane.showMessageDialog(null, "Error al cargar la plantilla del ticket: " + e);
         }
         return texto;
     }

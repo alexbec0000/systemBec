@@ -5,6 +5,7 @@
  */
 package appsistema;
 
+import appFactura.f_parametros;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,7 +16,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.sql.SQLException;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import pck_accesoDatos.cls_conexion;
 import pck_entidades.AppConfig;
 import pck_utilidades.FiltroArchivo;
@@ -32,15 +35,15 @@ public class Configurar extends javax.swing.JFrame {
      */
     AppConfig obj;
     boolean cargar;
-    
+
     public Configurar() {
         initComponents();
         Cargar_Data();
     }
-    
+
     public Configurar(boolean cargar) {
         initComponents();
-        this.cargar=cargar;
+        this.cargar = cargar;
     }
 
     /**
@@ -210,96 +213,95 @@ public class Configurar extends javax.swing.JFrame {
     }//GEN-LAST:event_jTxtDBActionPerformed
 
     private void jBtnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnOkActionPerformed
-        obj=new AppConfig();
+        obj = new AppConfig();
         obj.setHost(jTxTHost.getText());
         obj.setDataBase(jTxtDB.getText());
         obj.setUser(jTxtUser.getText());
         obj.setPass(jTxtClave.getText());
         Grabar();
-        if(this.cargar)
-        {
+        if (this.cargar) {
             Acceso objAcceso = new Acceso();
             objAcceso.setVisible(true);
         }
-        
+
         setVisible(false);
     }//GEN-LAST:event_jBtnOkActionPerformed
 
     private void jBtnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnExitActionPerformed
-        if(this.cargar)
-        {
+        if (this.cargar) {
             System.exit(0);
-        }
-        else
+        } else {
             setVisible(false);
+        }
     }//GEN-LAST:event_jBtnExitActionPerformed
 
     private void jBtnRespaldarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnRespaldarActionPerformed
         // TODO add your handling code here:
-        JFileChooser selectorDeArchivos = new JFileChooser();        
+        JFileChooser selectorDeArchivos = new JFileChooser();
         int showSaveDialog = selectorDeArchivos.showSaveDialog(this);
-        if(showSaveDialog == JFileChooser.APPROVE_OPTION)
-        {
+        if (showSaveDialog == JFileChooser.APPROVE_OPTION) {
             File archivo = selectorDeArchivos.getSelectedFile();
-            
+
             /*NOTE: Used to create a cmd command*/
-            String pasword = (obj.getPass() == null || obj.getPass().isEmpty())?"":" -p " + obj.getPass();
-            String datosComando = obj.getUser() + pasword + " --database " + obj.getDataBase() + " -r " + archivo.getAbsoluteFile()+".sql";
-            String executeCmd = "mysqldump -u "+datosComando;
-             /*NOTE: processComplete=0 if correctly executed, will contain other values if not*/
-              
+            String pasword = (obj.getPass() == null || obj.getPass().isEmpty()) ? "" : " -p " + obj.getPass();
+            String datosComando = obj.getUser() + pasword + " --database " + obj.getDataBase() + " -r " + archivo.getAbsoluteFile() + ".sql";
+            String executeCmd = "mysqldump -u " + datosComando;
+            /*NOTE: processComplete=0 if correctly executed, will contain other values if not*/
+
             int processComplete = respaldarBd(executeCmd);
             if (processComplete == 0) {
-                    System.out.println("Backup Complete");
-                } else {
-                    JFileChooser seleccionarExe = new JFileChooser();  
-                    seleccionarExe.setFileFilter(new FiltroArchivo());
-                    int showOpenDialog = seleccionarExe.showOpenDialog(this);
-                    if(showOpenDialog == JFileChooser.APPROVE_OPTION)
-                    {                        
-                       executeCmd = seleccionarExe.getSelectedFile().getAbsolutePath()+" -u "+datosComando;
-                       System.out.println(executeCmd);
-                        int respaldarBd = respaldarBd(executeCmd);
-                        if(processComplete == 0)
-                        {
-                           JOptionPane.showMessageDialog(this, "Respaldo de base de datos se realizo correctamente.\n"
-                                   + "en "+seleccionarExe.getSelectedFile().getAbsolutePath(), "El Proceso se realizo correctammente", JOptionPane.PLAIN_MESSAGE);                 
-                        }
+                System.out.println("Backup Complete");
+            } else {
+                JFileChooser seleccionarExe = new JFileChooser();
+                seleccionarExe.setFileFilter(new FiltroArchivo());
+                int showOpenDialog = seleccionarExe.showOpenDialog(this);
+                if (showOpenDialog == JFileChooser.APPROVE_OPTION) {
+                    executeCmd = seleccionarExe.getSelectedFile().getAbsolutePath() + " -u " + datosComando;
+                    System.out.println(executeCmd);
+                    int respaldarBd = respaldarBd(executeCmd);
+                    if (processComplete == 0) {
+                        JOptionPane.showMessageDialog(this, "Respaldo de base de datos se realizo correctamente.\n"
+                                + "en " + seleccionarExe.getSelectedFile().getAbsolutePath(), "El Proceso se realizo correctammente", JOptionPane.PLAIN_MESSAGE);
                     }
                 }
-        
-        }        
+            }
+
+        }
     }//GEN-LAST:event_jBtnRespaldarActionPerformed
 
     private void jBtnExit2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnExit2ActionPerformed
         // TODO add your handling code here:
-        
-        JFileChooser selectorDeArchivos = new JFileChooser();        
+
+        JFileChooser selectorDeArchivos = new JFileChooser();
         int showSaveDialog = selectorDeArchivos.showOpenDialog(this);
-        if(showSaveDialog == JFileChooser.APPROVE_OPTION)
-        {
+        if (showSaveDialog == JFileChooser.APPROVE_OPTION) {
             try {
                 FileReader archivo = new FileReader(selectorDeArchivos.getSelectedFile());
                 cls_conexion.conectar();
-                ScriptRunner sr = new ScriptRunner(cls_conexion.getCns(),false,true);
-                sr.runScript(archivo);                
+                ScriptRunner sr = new ScriptRunner(cls_conexion.getCns(), false, true);
+                sr.runScript(archivo);
                 cls_conexion.cerrarTodo(1);
             } catch (FileNotFoundException ex) {
-                JOptionPane.showMessageDialog(this, "Archivo no soportado");                
-            }
-            catch(IOException ex)
-            {
+                JOptionPane.showMessageDialog(this, "Archivo no soportado");
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Archivo no soportado");
+            } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(this, "Archivo no soportado");
             }
-            catch(SQLException ex){JOptionPane.showMessageDialog(this, "Archivo no soportado");}
             JOptionPane.showMessageDialog(this, "Base de datos Importado correctamente");
         }
     }//GEN-LAST:event_jBtnExit2ActionPerformed
 
     private void jBtnParametrsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnParametrsActionPerformed
         // TODO add your handling code here:
-        
-        
+
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                f_parametros thisClass = new f_parametros();
+                thisClass.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                thisClass.setVisible(true);
+            }
+        });
     }//GEN-LAST:event_jBtnParametrsActionPerformed
 
     public void Cargar_Data() {
@@ -308,23 +310,23 @@ public class Configurar extends javax.swing.JFrame {
             FileInputStream fis = new FileInputStream("AppConfig.bin");
             ObjectInputStream ois = new ObjectInputStream(fis);
             if (ois != null) {
-                obj =  (AppConfig) ois.readObject();
-                 System.out.println(obj.getDataBase());
+                obj = (AppConfig) ois.readObject();
+                System.out.println(obj.getDataBase());
                 ois.close();
             }
-            
+
             jTxTHost.setText(obj.getHost());
             jTxtDB.setText(obj.getDataBase());
             jTxtUser.setText(obj.getUser());
             jTxtClave.setText(obj.getPass());
-           
+
         }//Fin del try
         catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al cargar el archivo binaro Configuracion: " + e);
         }
     }
-    
-     public void Grabar() {
+
+    public void Grabar() {
         //Guarda la data en el archivo serializado
         try {
             FileOutputStream fos = new FileOutputStream("AppConfig.bin");
@@ -334,29 +336,28 @@ public class Configurar extends javax.swing.JFrame {
                 out.writeObject(obj);
                 out.close();
             }//Fin del if
-            
+
         }//Fin del try
         catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error en la grabacion sobre el arreglo: " + e);
         }
     }//Fin de Grabar
-     
-     public int respaldarBd(String executeCmd)
-    {
-           int processComplete = -1;
-            /*NOTE: Executing the command here*/
-            Process runtimeProcess;
-            try {
-                runtimeProcess = Runtime.getRuntime().exec(executeCmd);
-                processComplete = runtimeProcess.waitFor();               
-                return processComplete;
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "error", JOptionPane.ERROR_MESSAGE);                
-            }
-            catch(InterruptedException ex){ex.printStackTrace();}
+
+    public int respaldarBd(String executeCmd) {
+        int processComplete = -1;
+        /*NOTE: Executing the command here*/
+        Process runtimeProcess;
+        try {
+            runtimeProcess = Runtime.getRuntime().exec(executeCmd);
+            processComplete = runtimeProcess.waitFor();
             return processComplete;
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "error", JOptionPane.ERROR_MESSAGE);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+        return processComplete;
     }
-    
 
     /**
      * @param args the command line arguments
