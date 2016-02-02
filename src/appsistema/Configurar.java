@@ -5,12 +5,21 @@
  */
 package appsistema;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.sql.SQLException;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import pck_accesoDatos.cls_conexion;
 import pck_entidades.AppConfig;
+import pck_utilidades.FiltroArchivo;
+import pck_utilidades.ScriptRunner;
 
 /**
  *
@@ -54,6 +63,8 @@ public class Configurar extends javax.swing.JFrame {
         jTxtClave = new javax.swing.JTextField();
         jBtnOk = new javax.swing.JButton();
         jBtnExit = new javax.swing.JButton();
+        jBtnRespaldar = new javax.swing.JButton();
+        jBtnExit2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -91,6 +102,24 @@ public class Configurar extends javax.swing.JFrame {
             }
         });
 
+        jBtnRespaldar.setBackground(new java.awt.Color(255, 255, 255));
+        jBtnRespaldar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/database_save.png"))); // NOI18N
+        jBtnRespaldar.setText("RESPALDAR");
+        jBtnRespaldar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnRespaldarActionPerformed(evt);
+            }
+        });
+
+        jBtnExit2.setBackground(new java.awt.Color(255, 255, 255));
+        jBtnExit2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/database_refresh.png"))); // NOI18N
+        jBtnExit2.setText("RESTAURAR");
+        jBtnExit2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnExit2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -111,34 +140,45 @@ public class Configurar extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jTxtDB)
-                        .addComponent(jTxTHost)
-                        .addComponent(jTxtUser)
-                        .addComponent(jTxtClave, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTxtDB)
+                            .addComponent(jTxTHost)
+                            .addComponent(jTxtUser)
+                            .addComponent(jTxtClave, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jBtnRespaldar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jBtnExit2, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE))))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTxTHost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(jTxTHost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(jTxtDB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jBtnRespaldar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jTxtDB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(jTxtUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(jTxtClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(jTxtUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(jTxtClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jBtnExit2, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jBtnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -179,6 +219,68 @@ public class Configurar extends javax.swing.JFrame {
             setVisible(false);
     }//GEN-LAST:event_jBtnExitActionPerformed
 
+    private void jBtnRespaldarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnRespaldarActionPerformed
+        // TODO add your handling code here:
+        JFileChooser selectorDeArchivos = new JFileChooser();        
+        int showSaveDialog = selectorDeArchivos.showSaveDialog(this);
+        if(showSaveDialog == JFileChooser.APPROVE_OPTION)
+        {
+            File archivo = selectorDeArchivos.getSelectedFile();
+            
+            /*NOTE: Used to create a cmd command*/
+            String pasword = (obj.getPass() == null || obj.getPass().isEmpty())?"":" -p " + obj.getPass();
+            String datosComando = obj.getUser() + pasword + " --database " + obj.getDataBase() + " -r " + archivo.getAbsoluteFile()+".sql";
+            String executeCmd = "mysqldump -u "+datosComando;
+             /*NOTE: processComplete=0 if correctly executed, will contain other values if not*/
+              
+            int processComplete = respaldarBd(executeCmd);
+            if (processComplete == 0) {
+                    System.out.println("Backup Complete");
+                } else {
+                    JFileChooser seleccionarExe = new JFileChooser();  
+                    seleccionarExe.setFileFilter(new FiltroArchivo());
+                    int showOpenDialog = seleccionarExe.showOpenDialog(this);
+                    if(showOpenDialog == JFileChooser.APPROVE_OPTION)
+                    {                        
+                       executeCmd = seleccionarExe.getSelectedFile().getAbsolutePath()+" -u "+datosComando;
+                       System.out.println(executeCmd);
+                        int respaldarBd = respaldarBd(executeCmd);
+                        if(processComplete == 0)
+                        {
+                           JOptionPane.showMessageDialog(this, "Respaldo de base de datos se realizo correctamente.\n"
+                                   + "en "+seleccionarExe.getSelectedFile().getAbsolutePath(), "El Proceso se realizo correctammente", JOptionPane.PLAIN_MESSAGE);                 
+                        }
+                    }
+                }
+        
+        }        
+    }//GEN-LAST:event_jBtnRespaldarActionPerformed
+
+    private void jBtnExit2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnExit2ActionPerformed
+        // TODO add your handling code here:
+        
+        JFileChooser selectorDeArchivos = new JFileChooser();        
+        int showSaveDialog = selectorDeArchivos.showOpenDialog(this);
+        if(showSaveDialog == JFileChooser.APPROVE_OPTION)
+        {
+            try {
+                FileReader archivo = new FileReader(selectorDeArchivos.getSelectedFile());
+                cls_conexion.conectar();
+                ScriptRunner sr = new ScriptRunner(cls_conexion.getCns(),false,true);
+                sr.runScript(archivo);                
+                cls_conexion.cerrarTodo(1);
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(this, "Archivo no soportado");                
+            }
+            catch(IOException ex)
+            {
+                JOptionPane.showMessageDialog(this, "Archivo no soportado");
+            }
+            catch(SQLException ex){JOptionPane.showMessageDialog(this, "Archivo no soportado");}
+            JOptionPane.showMessageDialog(this, "Base de datos Importado correctamente");
+        }
+    }//GEN-LAST:event_jBtnExit2ActionPerformed
+
     public void Cargar_Data() {
         //Lee la data del objeto serializable
         try {
@@ -217,6 +319,23 @@ public class Configurar extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Error en la grabacion sobre el arreglo: " + e);
         }
     }//Fin de Grabar
+     
+     public int respaldarBd(String executeCmd)
+    {
+           int processComplete = -1;
+            /*NOTE: Executing the command here*/
+            Process runtimeProcess;
+            try {
+                runtimeProcess = Runtime.getRuntime().exec(executeCmd);
+                processComplete = runtimeProcess.waitFor();               
+                return processComplete;
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "error", JOptionPane.ERROR_MESSAGE);                
+            }
+            catch(InterruptedException ex){ex.printStackTrace();}
+            return processComplete;
+    }
+    
 
     /**
      * @param args the command line arguments
@@ -255,7 +374,9 @@ public class Configurar extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBtnExit;
+    private javax.swing.JButton jBtnExit2;
     private javax.swing.JButton jBtnOk;
+    private javax.swing.JButton jBtnRespaldar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;

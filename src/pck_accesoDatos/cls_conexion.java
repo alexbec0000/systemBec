@@ -49,6 +49,10 @@ public class cls_conexion {
           }
                  
      }
+
+    public static Connection getCns() {
+        return cns;
+    }
     
     public static PreparedStatement getPreparedStatement(String sql)
     {
