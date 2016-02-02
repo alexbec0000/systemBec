@@ -116,6 +116,7 @@ public class Factura_venta extends JFrame {
     static String numero = new String();  //  @jve:decl-index=0:
     private JLabel LblCondicion = null;
     private JButton BModifica = null;
+    private Factura obFactura;
 
     /**
      * This method initializes Panel2
@@ -691,8 +692,6 @@ public class Factura_venta extends JFrame {
                     generanumero();
                     cargarfecha();
 
-                    imprimirFacturaTicket();
-                            
                     LblCondicion.setText("FACTURA EN EDICION...");
                     LblCondicion.setForeground(new Color(51, 51, 51));
                     CboForma.setEnabled(true);
@@ -771,7 +770,6 @@ public class Factura_venta extends JFrame {
                         BInsertar.requestFocus();
                     } else {
                         guardar();
-                        new ImpresionTicket().impresion(null);
                     }
                 }
             });
@@ -1104,7 +1102,7 @@ public class Factura_venta extends JFrame {
             TxtPago.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     TxtPago.setText(redondear.format(Double.parseDouble(TxtPago.getText())).replace(",", "."));
-					//TxtPago.setText(TxtPago.getText().replace(",","."));
+                    //TxtPago.setText(TxtPago.getText().replace(",","."));
                     //TxtPago.setText(cambiarsep(redondeo.format(Double.parseDouble(TxtPago.getText()))));
                     calculos();
                 }
@@ -1112,7 +1110,7 @@ public class Factura_venta extends JFrame {
             TxtPago.addFocusListener(new java.awt.event.FocusAdapter() {
                 public void focusLost(java.awt.event.FocusEvent e) {
                     TxtPago.setText(redondear.format(Double.parseDouble(TxtPago.getText())).replace(",", "."));
-					//TxtPago.setText(TxtPago.getText().replace(",","."));
+                    //TxtPago.setText(TxtPago.getText().replace(",","."));
                     //TxtPago.setText(cambiarsep(redondeo.format(Double.parseDouble(TxtPago.getText()))));
                     calculos();
                 }
@@ -1803,6 +1801,15 @@ public class Factura_venta extends JFrame {
         }
     }
 
+    public void vacio() {
+        BAnular.setEnabled(false);
+        BPrimero.setEnabled(false);
+        BAnterior.setEnabled(false);
+        BBuscar.setEnabled(false);
+        BSiguiente.setEnabled(false);
+        BUltimo.setEnabled(false);
+    }
+
     private void guardar() {
         try {
             int xfac = modelo.getRowCount();
@@ -1835,14 +1842,34 @@ public class Factura_venta extends JFrame {
                 }
                 //GUARDAR CABECERA
                 String fechasql = new String(TxtFecha.getText().substring(6) + "-" + TxtFecha.getText().substring(3, 5) + "-" + TxtFecha.getText().substring(0, 2));
+                
+                obFactura = new Factura();
+                List<FacturaDetalle> ls_FacturaDetalle = new ArrayList();
+                FacturaDetalle objFacturaDetalle;
+                obFactura.setFecha(fechasql);
+                
+                obFactura.setSubTotalFac(TxtSubtotal.getText());
+                obFactura.setIva(TxtTotiva.getText());
+                obFactura.setValorFac(TxtPago.getText());
+                
+                obFactura.setResponsable(resultadoven.getString("ELVENDEDOR"));
                 FacturaController.insertarFACV_CAB(LblNumero.getText(), resultadocli.getString("id_cli"), resultadoven.getString("ID_VEN"), fechasql, CboForma.getSelectedItem(),
                         TxtDescuento.getText(), TxtSubtotal.getText(), TxtTotdes.getText(), TxtTotiva.getText(), TxtPago.getText(), TxtObserva.getText());
                 //GUARDAR DETALLE Y ACTUALIZAR STOCK DE ARTICULOS
                 for (int i = 0; i < xfac; i++) {
+                    objFacturaDetalle = new FacturaDetalle();
+                    
+                    objFacturaDetalle.setCantidad(JTable.getValueAt(i, 3).toString());
+                    objFacturaDetalle.setDescripcion(JTable.getValueAt(i, 1).toString());
+                    objFacturaDetalle.setValorUnit(JTable.getValueAt(i, 2).toString());
+                    objFacturaDetalle.setValorTotalDet(JTable.getValueAt(i, 4).toString());
+                    
+                    ls_FacturaDetalle.add(objFacturaDetalle);
                     FacturaController.insertarFACV_DET(LblNumero.getText(), JTable.getValueAt(i, 0), JTable.getValueAt(i, 3), JTable.getValueAt(i, 2));
                     ProductoController.actualizarStock(JTable.getValueAt(i, 3), JTable.getValueAt(i, 0));
                 }
-
+                obFactura.setLs_FacturaDetalle(ls_FacturaDetalle);
+                imprimirFacturaTicket();
                 resultadocab = FacturaController.obtenerFACV_CAB();
                 resultadocab.last();
                 guacan();
@@ -1850,56 +1877,30 @@ public class Factura_venta extends JFrame {
                 JOptionPane.showMessageDialog(null, "¡La Factura de Venta No. " + LblNumero.getText() + " ha sido almacenada correctamente!", "Venta procesada", 1);
             }
         } catch (Exception s) {
-            JOptionPane.showMessageDialog(null, "Error al guardar");
+            JOptionPane.showMessageDialog(null, "Error al guardar "+s.getMessage());
         }
     }
 
-    public void vacio() {
-        BAnular.setEnabled(false);
-        BPrimero.setEnabled(false);
-        BAnterior.setEnabled(false);
-        BBuscar.setEnabled(false);
-        BSiguiente.setEnabled(false);
-        BUltimo.setEnabled(false);
-    }
-    
-    private void imprimirFacturaTicket()
-    {
-        Factura obFactura=new Factura();
-        List<FacturaDetalle> ls_FacturaDetalle=new ArrayList();
-        FacturaDetalle objFacturaDetalle=new FacturaDetalle();
+    private void imprimirFacturaTicket() {
         
+
         obFactura.setSucursal("MATRIZ");
         obFactura.setDireccionSucursal("AMAZONAS");
         //obFactura.setCuidad(cantidad);
         obFactura.setRucEmpresa("1722741962001");
-        obFactura.setNumFac("000-000-000000");
-        obFactura.setFecha("02-02-2016");
-        obFactura.setRuc("99999999999");
-        obFactura.setCliente("CONSUMIDOR FINAL");
-        obFactura.setTelefono("N/A");
-        obFactura.setDireccion("N/A");
+        obFactura.setNumFac("000-000-"+LblNumero.getText());
         
-        objFacturaDetalle.setCantidad("1");
-        objFacturaDetalle.setDescripcion("EJEMPLO");
-        objFacturaDetalle.setValorUnit("1");
-        objFacturaDetalle.setValorTotalDet("1");
-        
-        obFactura.setSubTotalFac("1");
-        obFactura.setIva("0.5");
-        obFactura.setValorFac("1.50");
-        
-        obFactura.setResponsable("ADMIN");
+        obFactura.setRuc(TxtCedula.getText());
+        obFactura.setCliente(TxtCliente.getText());
+        obFactura.setTelefono(TxtTelefono.getText());
+        obFactura.setDireccion(TxtDireccion.getText());
+
         obFactura.setCargo("ADMIN");
-        
+
         //obFactura.setEmail(precio);
         //obFactura.setUnidadMedida(cantidad);
-        
-        ls_FacturaDetalle.add(objFacturaDetalle);
-        obFactura.setLs_FacturaDetalle(ls_FacturaDetalle);
 
         new ImpresionTicket().impresion(obFactura);
     }
-    
-    
+
 }  //  @jve:decl-index=0:visual-constraint="10,10"

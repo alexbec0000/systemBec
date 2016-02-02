@@ -42,6 +42,9 @@ public class FacturaDetalle {
     }
 
     public void setDescripcion(String descripcion) {
+        
+        if(descripcion.length()>18)
+            descripcion=descripcion.substring(0, 18);
         this.descripcion = descripcion;
     }
 
