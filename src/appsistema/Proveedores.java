@@ -872,7 +872,7 @@ int num = 0;
     }//GEN-LAST:event_jBtnEliminarActionPerformed
 
     private void jBtnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnSalirActionPerformed
-        setVisible(false);
+        this.dispose();
         // TODO add your handling code here:
     }//GEN-LAST:event_jBtnSalirActionPerformed
 

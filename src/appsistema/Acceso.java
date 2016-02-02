@@ -1,8 +1,10 @@
 package appsistema;
 import javax.swing.*;
+import pck_controller.VendedorController;
 
 public class Acceso extends javax.swing.JFrame {
     Principal principal = new Principal();
+ 
     public Acceso() {
         initComponents();
     }
@@ -12,11 +14,11 @@ public void Validacion()
     String pasword = txt_password.getText();
     String usuario = txt_usuario.getText();
 
-    if(usuario.equalsIgnoreCase("admin") && pasword.equalsIgnoreCase("admin"))
+    //if(usuario.equalsIgnoreCase("admin") && pasword.equalsIgnoreCase("admin"))
+    if(VendedorController.login(usuario, pasword))
     {
         principal.setVisible(true);
-        this.hide();
-        Limpiar_Entradas();
+        this.dispose();
     }
     else 
         if (usuario.equalsIgnoreCase(pasword) != true)
@@ -39,7 +41,7 @@ public void Limpiar_Entradas()
 
 public void mensaje(String texto)
 {
-JOptionPane.showMessageDialog(this, texto);
+    JOptionPane.showMessageDialog(this, texto);
 }//Fin del mensaje
 
     @SuppressWarnings("unchecked")

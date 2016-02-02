@@ -73,7 +73,8 @@ public class Presentacion extends javax.swing.JFrame {
     }
 
     public void esconder() {
-        this.hide();
+        //this.hide();
+        this.dispose();
     }
 
     public void Activar() {

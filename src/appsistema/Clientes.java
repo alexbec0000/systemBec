@@ -42,7 +42,7 @@ public final class Clientes extends javax.swing.JFrame
         Cargar_Data();
         Actualizar_Tabla();
         //jTxtRuc.requestFocus();
-        //jLabel2.setVisible(false);
+        //jLabel2.this.dispose();
     }
 
     public String Generar_Codigo ()
@@ -885,7 +885,7 @@ public final class Clientes extends javax.swing.JFrame
     }//GEN-LAST:event_formWindowOpened
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        setVisible(false);
+        this.dispose();
 }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jTblClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTblClientesMouseClicked

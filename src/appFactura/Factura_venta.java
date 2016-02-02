@@ -33,6 +33,7 @@ import pck_controller.ClienteController;
 import pck_controller.FacturaController;
 import pck_controller.ProductoController;
 import pck_controller.VendedorController;
+import pck_utilidades.ImpresionTicket;
 
 public class Factura_venta extends JFrame {
 
@@ -687,6 +688,7 @@ public class Factura_venta extends JFrame {
                     limpiar();
                     generanumero();
                     cargarfecha();
+                    ImpresionTicket.impresion();
                     LblCondicion.setText("FACTURA EN EDICION...");
                     LblCondicion.setForeground(new Color(51, 51, 51));
                     CboForma.setEnabled(true);
@@ -765,6 +767,7 @@ public class Factura_venta extends JFrame {
                         BInsertar.requestFocus();
                     } else {
                         guardar();
+                        ImpresionTicket.impresion();
                     }
                 }
             });

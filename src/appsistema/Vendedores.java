@@ -828,7 +828,7 @@ public class Vendedores extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtnEliminarActionPerformed
 
     private void jBtnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnSalirActionPerformed
-        setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_jBtnSalirActionPerformed
 
     private void jTxtCIKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTxtCIKeyPressed
