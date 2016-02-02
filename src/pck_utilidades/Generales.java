@@ -168,6 +168,36 @@ public class Generales {
         return contador;
     }
     
+    public static String padLeft(String valor, String pad, int relleno) {
+        try {
+            String str = valor;
+            StringBuilder sb = new StringBuilder();
+            
+            for (int toPrepend = relleno - str.length(); toPrepend > 0; toPrepend--) {
+                sb.append(pad);
+            }
+            
+            sb.append(str);
+            return sb.toString();
+        } catch (NumberFormatException ex) {
+        }
+        return "-1";
+    }
+    
+    public static String padRight(String valor, String pad, int relleno) {
+        try {
+            String str = valor;
+            StringBuilder sb = new StringBuilder();
+            sb.append(str);
+            for (int toPrepend = relleno - str.length(); toPrepend > 0; toPrepend--) {
+                sb.append(pad);
+            }
+            return sb.toString();
+        } catch (NumberFormatException ex) {
+        }
+        return "-1";
+    }
+    
     /**
      * 
      * @param dc Docuement del compoenente

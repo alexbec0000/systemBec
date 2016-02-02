@@ -18,6 +18,7 @@ import java.awt.print.PrinterJob;
 import java.util.StringTokenizer;
 import javax.swing.JOptionPane;
 import pck_controller.ParametrosController;
+import pck_entidades.Factura;
 
 /**
  *
@@ -37,31 +38,136 @@ public class ImpresionTicket implements Printable {
     public ImpresionTicket() {
     }
 
-    public void impresion() {
+    public void impresion(Factura objFactura) {
         
-        lineasdetexto = new StringTokenizer(Cargar_Plantilla(), "\n", true);
+        lineasdetexto = new StringTokenizer(Cargar_Plantilla(objFactura), "\n", true);
         totallineas = lineasdetexto.countTokens();
         imprimirTicket();
     }
 
-    public String Cargar_Plantilla() {
+    public String Cargar_Plantilla(Factura objFactura) {
         //Lee la data del objeto serializable
-        String texto = null;
+        String textoImprimir = null;
         try {
-            texto=ParametrosController.obtenerDescripcionParametroXid("PAR001");
+            String texto=ParametrosController.obtenerDescripcionParametroXid("PAR001");
+            String [] plantilla=texto.split("\n");
+            
+            for (int index=0;index<plantilla.length;index++)
+            {
+                plantilla[index] = mergePlantilla(plantilla[index], objFactura);
+            }
+            
+            textoImprimir="";
+            
+            for (String plantilla1 : plantilla) {
+                textoImprimir += plantilla1+"\n";
+            }
+            
         }//Fin del try
         catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al cargar la plantilla del ticket: " + e);
         }
-        return texto;
+        return textoImprimir;
     }
    
+    /// <summary>
+        /// Función que lee la plantilla y coloca los datos en esas posiciones
+        /// </summary>
+        /// <param name="fila"></param>
+        /// <param name="objFactura"></param>
+        /// <returns></returns>
+        private String mergePlantilla(String fila, Factura objFactura)
+        {
+            String linea = fila;
+
+            if (fila.indexOf("@NUMFAC") > 0)
+                linea = fila.replace("@NUMFAC", objFactura.getNumFac());
+
+            if (fila.indexOf("@FECHAEMISION") > 0)
+                linea = fila.replace("@FECHAEMISION", objFactura.getFecha());
+
+            if (fila.indexOf("@CLIENTE") > 0)
+                linea = fila.replace("@CLIENTE", objFactura.getCliente());
+
+            if (fila.indexOf("@RUC") > 0)
+                linea = fila.replace("@RUC", objFactura.getRuc());
+
+            if (fila.indexOf("@TELEFONO") > 0)
+                linea = fila.replace("@TELEFONO", objFactura.getTelefono());
+
+            if (fila.indexOf("@DIRECCION") > 0)
+                linea = fila.replace("@DIRECCION", objFactura.getDireccion());
+
+            if (fila.indexOf("@DETALLE") > 0)
+            {
+                String cantidad = objFactura.getCantidad();
+                String detalle = objFactura.getDescripcion();
+                String pUnit = objFactura.getValorUnit();
+                String costo = objFactura.getValorTotalDet();
+
+                cantidad = Generales.padLeft(cantidad, " ", 5);
+                cantidad = Generales.padRight(cantidad," ",10);
+                detalle = Generales.padLeft(detalle," ",15);
+                detalle = Generales.padRight(detalle," ",26);
+                pUnit = Generales.padLeft(pUnit," ",6);
+                pUnit = Generales.padRight(pUnit," ",10);
+                costo = Generales.padLeft(costo," ",8);
+                costo = Generales.padRight(costo," ",10);
+
+                linea = fila.replace("@DETALLE", cantidad + detalle + pUnit + costo);
+            }
+
+            if (fila.indexOf("@SUBTOTAL") > 0)
+            {
+                String SubTotalFac = objFactura.getSubTotalFac();
+                SubTotalFac = Generales.padLeft(SubTotalFac," ",12);
+                linea = fila.replace("@SUBTOTAL", "SUBTOTAL: " + SubTotalFac);
+            }
+
+            if (fila.indexOf("@IVA") > 0)
+            {
+                String Iva = objFactura.getIva();
+                Iva = Generales.padLeft(Iva," ",14);
+                linea = fila.replace("@IVA", "IVA12%:     " + Iva);
+            }
+
+            if (fila.indexOf("@TOTAL") > 0)
+            {
+                String ValorFac = objFactura.getValorFac();
+                ValorFac = Generales.padLeft(ValorFac," ",15);
+                linea = fila.replace("@TOTAL", "TOTAL:     " + ValorFac);
+            }
+
+            if (fila.indexOf("@RESP") > 0)
+            {
+                linea = fila.replace("@RESP", objFactura.getResponsable());
+            }
+
+            if (fila.indexOf("@CARGO") > 0)
+            {
+                linea = fila.replace("@CARGO", objFactura.getCargo());
+            }
+
+            if (fila.indexOf("@SUCURSAL") > 0)
+            {
+                linea = fila.replace("@SUCURSAL", objFactura.getSucursal());
+            }
+
+            if (fila.indexOf("@DIRSUCURSAL") > 0)
+            {
+                linea = fila.replace("@DIRSUCURSAL", objFactura.getDireccionSucursal());
+            }
+
+            return linea.replace('\r', ' ');
+        }
+    
+    
     //Metodo que se crea por default cuando una clase implementa a Printable
     public int print(Graphics g, PageFormat pf, int pageIndex)
             throws PrinterException {
         //Se establece la fuente, el tipo, el tamaño, la metrica según la fuente asignada, 
         //obtiene la altura de cada linea de texto para que todas queden iguales
-        Font font = new Font("Serif", Font.PLAIN, 8);
+        Font font = new Font("Arial", Font.PLAIN, 8);
         FontMetrics metrics = g.getFontMetrics(font);
         int altodelinea = metrics.getHeight();
         //Calcula el número de lineas por pagina y el total de paginas
