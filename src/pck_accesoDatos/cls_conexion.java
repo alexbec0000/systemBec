@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+import pck_entidades.AppConfig;
 
 /**
  *
@@ -27,10 +28,10 @@ public class cls_conexion {
     public static final int CERRAR_ST_PS = 4;
     
     
-    private static final String host = "localhost";
-    private static final String dataBase = "facturacion";
-    private static final String user = "root";
-    private static final String pass = "";
+    private static String host = "";
+    private static String dataBase = "";
+    private static String user = "";
+    private static String pass = "";
     
     public static void conectar()
      {

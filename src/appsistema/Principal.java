@@ -56,8 +56,13 @@ public class Principal extends javax.swing.JFrame {
         });
 
         jButton5.setBackground(new java.awt.Color(255, 255, 255));
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/icon-48-article-add.png"))); // NOI18N
-        jButton5.setText("KARDEX");
+        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/cog.png"))); // NOI18N
+        jButton5.setText("CONFIGURAR");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton4.setBackground(new java.awt.Color(255, 255, 255));
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/order_shop_icon.gif"))); // NOI18N
@@ -161,7 +166,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
-         Vendedores vendedor = new Vendedores();
+        Vendedores vendedor = new Vendedores();
         vendedor.setVisible(true);
     }//GEN-LAST:event_jButton6ActionPerformed
 
@@ -186,6 +191,12 @@ public class Principal extends javax.swing.JFrame {
                });
         
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        Configurar configurar = new Configurar();
+        configurar.setVisible(true);
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     public int finalizar()
     {

@@ -1,20 +1,26 @@
 package appsistema;
 //Declaracion de librerias
+
 import java.awt.event.*;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import javax.swing.*;
+import pck_entidades.AppConfig;
 
 public class Presentacion extends javax.swing.JFrame {
 //Inicializando los parametros
+
     private final Timer timer;
     private int cont;
     //Dimension pantalla;
     //private String newline;
     public final static int ONE_SECOND = 10;
 
-    public Presentacion()
-    {
+    public Presentacion() {
         initComponents();
-        cont =-1;
+        cont = -1;
         jProgressBar1.setValue(0);
         jProgressBar1.setStringPainted(true);
         timer = new Timer(ONE_SECOND, new TimerListener());
@@ -25,33 +31,55 @@ public class Presentacion extends javax.swing.JFrame {
     }
 
     class TimerListener implements ActionListener {
+
         @Override
         public void actionPerformed(ActionEvent evt) {
             cont++;
             //jLabel1.setText("nume es :"+cont);
             jProgressBar1.setValue(cont);
-            if(cont==120)
-            {
+            if (cont == 120) {
                 timer.stop();
                 esconder();
-
-                Acceso objAcceso = new Acceso();
-                
-                //objAcceso.setLocation((pantalla.width-objAcceso.getWidth())/2, (pantalla.height-objAcceso.getHeight())/2);
-                objAcceso.setVisible(true);
+                if(Cargar_Data())
+                {
+                    Acceso objAcceso = new Acceso();
+                    //objAcceso.setLocation((pantalla.width-objAcceso.getWidth())/2, (pantalla.height-objAcceso.getHeight())/2);
+                    objAcceso.setVisible(true);
+                }
             }
         }
     }
-    
-    public void esconder()
-    {
+
+   
+    public boolean Cargar_Data() {
+        //Lee la data del objeto serializable
+        try {
+            FileInputStream fis = new FileInputStream("AppConfig.bin");
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            if (ois != null) {
+                AppConfig obj =  (AppConfig) ois.readObject();
+                 System.out.println(obj.getDataBase());
+                ois.close();
+            }
+           
+        }//Fin del try
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al cargar el archivo binaro Configuracion: " + e);
+            Configurar configurar = new Configurar(true);
+            configurar.setVisible(true);
+            return false;
+        }
+        return true;
+    }
+
+    public void esconder() {
         this.hide();
     }
-        
-   public void Activar()
-    {
+
+    public void Activar() {
         timer.start();
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -108,7 +136,6 @@ public class Presentacion extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {

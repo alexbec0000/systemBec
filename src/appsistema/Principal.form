@@ -122,10 +122,13 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/recursos/icon-48-article-add.png"/>
+              <Image iconType="3" name="/recursos/cog.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="KARDEX"/>
+            <Property name="text" type="java.lang.String" value="CONFIGURAR"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton5ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton4">
           <Properties>
