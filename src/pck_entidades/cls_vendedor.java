@@ -3,6 +3,7 @@ package pck_entidades;
 import java.io.FileInputStream;
 import java.io.Serializable;
 import javax.swing.*;
+import pck_utilidades.EncriptadorPassword;
 
 public class cls_vendedor implements Serializable
 {
@@ -24,7 +25,7 @@ public class cls_vendedor implements Serializable
     private Icon imagen;
     private boolean estado;
     private boolean editar;
-
+    private String salt;
     //Declarando el constructor vacío
     public cls_vendedor () {}
 
@@ -240,6 +241,20 @@ public class cls_vendedor implements Serializable
         this.estado = estado;
     }
     
+    public void encriptarPass()
+    {
+        StringBuilder sb = new StringBuilder(this.CI+this.nombres.length()
+                +this.codigo);
+        this.salt = sb.reverse().append(this.codigo).toString();
+        EncriptadorPassword ep = new EncriptadorPassword(this.salt);
+        this.clave = ep.encrypt(this.clave);        
+    }
     
+    public String desencriptarPass()
+    {
+        EncriptadorPassword ep = new EncriptadorPassword(this.salt);           
+        String desEncrypted  = ep.decrypt(this.clave);
+        return  desEncrypted;
+    }
     
 }//Fin de la clace Vendedor
