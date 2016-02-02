@@ -35,6 +35,7 @@ import pck_controller.ProductoController;
 import pck_controller.VendedorController;
 import pck_entidades.Factura;
 import pck_entidades.FacturaDetalle;
+import pck_utilidades.DocumentosElectronicos;
 import pck_utilidades.ImpresionTicket;
 
 public class Factura_venta extends JFrame {
@@ -1901,6 +1902,10 @@ public class Factura_venta extends JFrame {
         //obFactura.setUnidadMedida(cantidad);
 
         new ImpresionTicket().impresion(obFactura);
+        
+        DocumentosElectronicos objDocumentosElectronicos=new DocumentosElectronicos();
+        objDocumentosElectronicos.generarFacturaElectronica(obFactura);
+        
     }
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

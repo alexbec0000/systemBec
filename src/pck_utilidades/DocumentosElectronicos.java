@@ -6,7 +6,16 @@
 
 package pck_utilidades;
 
+import comprobantes.entidades.Clientes;
+import comprobantes.entidades.Emisor;
+import generaXML.GeneraXMLsri;
+import java.util.ArrayList;
+import java.util.List;
 import pck_entidades.Factura;
+import pck_entidades.FacturaDetalle;
+import pck_entidades.dElectronicos.DetalleFacturaElectronica;
+import pck_entidades.dElectronicos.FacturaElectronica;
+import servicios.cls_fechas;
 
 /**
  *
@@ -14,96 +23,93 @@ import pck_entidades.Factura;
  */
 public class DocumentosElectronicos {
     
+    private static  String rucEmpresa = "1768158410001";
+    private static  String razonSocial = "Empresa Pública Metropolitana de Gestión Integral de Residuos Sólidos EMGIRS - EP";
+    private static  String nombreComercial = "Empresa Pública Metropolitana de Gestión Integral de Residuos Sólidos EMGIRS - EP";
+    private static  String claveInterna = "00000001";
+    private static  String contribuyenteEspecial = "162";
+    private static  String llevaContabilidad = "SI";
+    private static  String tipoEmision = "1";
+
+    private static  boolean autorizar = false;    // true produccion
+    private static  String ambiente = "1";     // 2 produccion
+    
      public String generarFacturaElectronica(Factura factura)
         {
+            Emisor sucursalEmisora=new Emisor();
             String[] numFac = factura.getNumFac().split("-");
             String observacion = "";
-            facturaElectronica fac = new facturaElectronica();
-            fac.autorizar = autorizar;
+            FacturaElectronica fac = new FacturaElectronica();
+            fac.setAutorizar(autorizar) ;
 
-            sucursalEmisora.ruc = rucEmpresa;
-            sucursalEmisora.razonSocial = razonSocial;
-            sucursalEmisora.nombreComercial = nombreComercial;
-            sucursalEmisora.claveInterna = claveInterna;
-            sucursalEmisora.contribuyenteEspecial = contribuyenteEspecial;
-            sucursalEmisora.llevaContabilidad = llevaContabilidad;
-            sucursalEmisora.tipoAmbiente = ambiente;
-            sucursalEmisora.tipoEmision = tipoEmision;
+            sucursalEmisora.setRuc(rucEmpresa);
+            sucursalEmisora.setRazonSocial(razonSocial) ;
+            sucursalEmisora.setNombreComercial (nombreComercial) ;
+            sucursalEmisora.setClaveInterna (claveInterna) ;
+            sucursalEmisora.setContribuyenteEspecial (contribuyenteEspecial) ;
+            sucursalEmisora.setLlevaContabilidad (llevaContabilidad) ;
+            sucursalEmisora.setTipoAmbiente (ambiente) ;
+            sucursalEmisora.setTipoEmision (tipoEmision) ;
 
-            clientes cliente = new clientes();
-            cliente.numeroIdentificacio = factura.Ruc;
-            cliente.apellido = factura.Cliente;
-            cliente.direccion = factura.Direccion;
-            cliente.correo = factura.Email;
-            cliente.telefonoConvencional = factura.Telefono;
-            if (factura.Placa.Length > 0 || factura.NumTicketBascula.Length > 0)
-            {
-                if (factura.Placa.Length > 0 && factura.NumTicketBascula.Length > 0)
-                {
-                    observacion = "Placa: " + factura.Placa;
-                    observacion += " - Ticket Báscula: " + factura.NumTicketBascula;
-                }
-                else
-                {
-                    if (factura.Placa.Length > 0)
-                        observacion = "Placa: " + factura.Placa;
-
-                    if (factura.NumTicketBascula.Length > 0)
-                        observacion = "Ticket Báscula: " + factura.NumTicketBascula;
-                }
-                cliente.observacion = observacion;
-            }
+            Clientes cliente = new Clientes();
+            cliente.setNumeroIdentificacio (factura.getRuc()) ;
+            cliente.setApellido (factura.getCliente()) ;
+            cliente.setDireccion (factura.getDireccion()) ;
+            cliente.setCorreo (factura.getEmail()) ;
+            cliente.setTelefonoConvencional (factura.getTelefono()) ;
+            
+            cliente.setObservacion(observacion);
+            
  
-            fac.emisor = sucursalEmisora;
-            fac.cliente = cliente;
-            fac.fechaEmision = factura.Fecha; //"dd/MM/yyyy"
-            fac.secuencialFactura = numFac[2];
-            fac.subTotal = factura.SubTotalFac;
-            fac.valorTotal = factura.ValorFac;
-            fac.pathCore = SesionActiva.Config.PathCore;
-            fac.pathFactura = SesionActiva.Config.PathFactura;
+            fac.setEmisor (sucursalEmisora);
+            fac.setCliente ( cliente);
+            fac.setFechaEmision ( factura.getFecha()); //"dd/MM/yyyy"
+            fac.setSecuencialFactura (numFac[2]);
+            fac.setSubTotal ( factura.getSubTotalFac());
+            fac.setValorTotal (factura.getValorFac());
+            fac.setPathCore ("http://172.20.120.15/addocument/");
+            fac.setPathFactura ("C:\\TEMP\\Facturas\\Pruebas\\");
     
             // Arreglo de detalles
-            detalleFacturaElectronica[] Lisdetalle = new detalleFacturaElectronica[detalles.Count];
+            List<DetalleFacturaElectronica> Lisdetalle = new ArrayList();
 
             // Detalle a instanciarse
-            detalleFacturaElectronica detalle;
+            DetalleFacturaElectronica detalle;
 
             // Índice del arreglo
             int i = 0;
 
-            foreach (DetalleTicket det in detalles)
+            for (FacturaDetalle det : factura.getLs_FacturaDetalle())
             {
-                detalle = new detalleFacturaElectronica();
+                detalle = new DetalleFacturaElectronica();
 
-                detalle.codPrincipal = det.codDetalle.ToString();
-                detalle.codAux = det.codServicio.ToString();
-                detalle.cantidad = det.cantidad.ToString();
-                detalle.descipcion = det.descripcionServicio;
-                detalle.valorUnit = det.valorUnitario.ToString();
-                detalle.obs = det.observacion;
+                detalle.setCodPrincipal ("1");
+                detalle.setCodAux("1");
+                detalle.setCantidad(det.getCantidad());
+                detalle.setDescipcion(det.getDescripcion());
+                detalle.setValorUnit (det.getValorUnit());
+                detalle.setObs("");
 
-                Lisdetalle[i] = detalle;
+                Lisdetalle.add(detalle);
 
-                i++;
             }
 
             // Agregando la lista de facturas
-            fac.detalleFactura = Lisdetalle;
+            fac.setDetalleFactura( Lisdetalle);
             
-            java.util.Date fechaEmision = new cls_fechas().DeStringADate(facturaElectronica.getFechaEmision()); //"dd/MM/yyyy"
-            GeneraXMLsri objGeneraXMLsri = new GeneraXMLsri(facturaElectronica.getPathFactura(), facturaElectronica.getPathCore());
+            java.util.Date fechaEmision = new cls_fechas().DeStringADate(fac.getFechaEmision()); //"dd/MM/yyyy"
+            GeneraXMLsri objGeneraXMLsri = new GeneraXMLsri(fac.getPathFactura(), fac.getPathCore());
 
-            objGeneraXMLsri.llenarFactura(facturaElectronica.getEmisor(), facturaElectronica.getCliente(), fechaEmision, facturaElectronica.getSecuencialFactura(), facturaElectronica.getSubTotal(), facturaElectronica.getValorTotal());
+            objGeneraXMLsri.llenarFactura(fac.getEmisor(), fac.getCliente(), fechaEmision, fac.getSecuencialFactura(), fac.getSubTotal(), fac.getValorTotal());
 
-            for (DetalleFacturaElectronica objDetFacElect : facturaElectronica.getDetalleFactura()) {
+            for (DetalleFacturaElectronica objDetFacElect : fac.getDetalleFactura()) {
                 objGeneraXMLsri.llenarDetFact(objDetFacElect.getCodPrincipal(),
                         objDetFacElect.getCodAux(), objDetFacElect.getCantidad(),
                         objDetFacElect.getDescipcion(), objDetFacElect.getValorUnit(),
                         objDetFacElect.getObs());
             }
 
-            String[] mensaje = objGeneraXMLsri.generarXMLfact(facturaElectronica.isAutorizar());
+            String[] mensaje = objGeneraXMLsri.generarXMLfact(fac.isAutorizar());
 
             return mensaje[0];
 
