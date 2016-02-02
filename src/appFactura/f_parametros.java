@@ -314,7 +314,7 @@ public class f_parametros extends JFrame {
             bEliminar.setIcon(new ImageIcon(getClass().getResource("/recursos/ELIMINAR.JPG")));
             bEliminar.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    int respuesta = JOptionPane.showConfirmDialog(null, "�Desea eliminar el registro del Parametros " + txtNombre.getText().trim() + " " + txtDescripcion.getText() + "?", "Eliminar cliente", 0, 3);
+                    int respuesta = JOptionPane.showConfirmDialog(null, "�Desea eliminar el registro del Parametros " + txtNombre.getText().trim() + "?", "Eliminar Parametro", 0, 3);
                     if (respuesta == 0) {
                         eliminar();
                     }
@@ -368,11 +368,11 @@ public class f_parametros extends JFrame {
             bBuscar.setIcon(new ImageIcon(getClass().getResource("/recursos/BUSCAR.JPG")));
             bBuscar.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    new f_listaclientes().setVisible(true);
-                    if (f_listaclientes.seleccionacli == true) {
-                        elcodigo = f_listaclientes.codigocli;
-                        encuentra();
-                    }
+//                    new f_listaclientes().setVisible(true);
+//                    if (f_listaclientes.seleccionacli == true) {
+//                        elcodigo = f_listaclientes.codigocli;
+//                        encuentra();
+//                    }
                 }
             });
         }
@@ -627,10 +627,12 @@ public class f_parametros extends JFrame {
             txtDescripcion.setFont(new Font("Tahoma", Font.PLAIN, 11));
             txtDescripcion.setEnabled(false);
             txtDescripcion.setBounds(131, 94, 452, 137);
+            txtDescripcion.setRows(5);
             jContentPane.add(txtDescripcion);
             
             ckbxEstado = new JCheckBox("ACTIVO");
             ckbxEstado.setBounds(315, 247, 97, 15);
+            ckbxEstado.setEnabled(false);
             jContentPane.add(ckbxEstado);
         }
         return jContentPane;

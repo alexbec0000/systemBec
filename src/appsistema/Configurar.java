@@ -311,7 +311,6 @@ public class Configurar extends javax.swing.JFrame {
             ObjectInputStream ois = new ObjectInputStream(fis);
             if (ois != null) {
                 obj = (AppConfig) ois.readObject();
-                System.out.println(obj.getDataBase());
                 ois.close();
             }
 

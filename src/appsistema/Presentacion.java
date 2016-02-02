@@ -3,9 +3,7 @@ package appsistema;
 
 import java.awt.event.*;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import javax.swing.*;
 import pck_entidades.AppConfig;
 
@@ -58,7 +56,6 @@ public class Presentacion extends javax.swing.JFrame {
             ObjectInputStream ois = new ObjectInputStream(fis);
             if (ois != null) {
                 AppConfig obj =  (AppConfig) ois.readObject();
-                 System.out.println(obj.getDataBase());
                 ois.close();
             }
            
