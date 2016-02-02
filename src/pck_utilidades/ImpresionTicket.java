@@ -19,6 +19,7 @@ import java.util.StringTokenizer;
 import javax.swing.JOptionPane;
 import pck_controller.ParametrosController;
 import pck_entidades.Factura;
+import pck_entidades.FacturaDetalle;
 
 /**
  *
@@ -80,6 +81,11 @@ public class ImpresionTicket implements Printable {
         {
             String linea = fila;
 
+            if (fila.indexOf("@R_EMPRESA") > 0)
+            {
+                linea = fila.replace("@R_EMPRESA", objFactura.getRucEmpresa());
+            }
+            
             if (fila.indexOf("@NUMFAC") > 0)
                 linea = fila.replace("@NUMFAC", objFactura.getNumFac());
 
@@ -100,21 +106,32 @@ public class ImpresionTicket implements Printable {
 
             if (fila.indexOf("@DETALLE") > 0)
             {
-                String cantidad = objFactura.getCantidad();
-                String detalle = objFactura.getDescripcion();
-                String pUnit = objFactura.getValorUnit();
-                String costo = objFactura.getValorTotalDet();
+                String detTicket="";
+                String cantidad = "0";
+                String detalle = "";
+                String pUnit = "0";
+                String costo = "0";
+                
+                for (FacturaDetalle facDet : objFactura.getLs_FacturaDetalle()) 
+                {
+                    cantidad = facDet.getCantidad();
+                    detalle = facDet.getDescripcion();
+                    pUnit = facDet.getValorUnit();
+                    costo = facDet.getValorTotalDet();
 
-                cantidad = Generales.padLeft(cantidad, " ", 5);
-                cantidad = Generales.padRight(cantidad," ",10);
-                detalle = Generales.padLeft(detalle," ",15);
-                detalle = Generales.padRight(detalle," ",26);
-                pUnit = Generales.padLeft(pUnit," ",6);
-                pUnit = Generales.padRight(pUnit," ",10);
-                costo = Generales.padLeft(costo," ",8);
-                costo = Generales.padRight(costo," ",10);
+                    cantidad = Generales.padLeft(cantidad, " ", 5);
+                    cantidad = Generales.padRight(cantidad," ",10);
+                    detalle = Generales.padLeft(detalle," ",15);
+                    detalle = Generales.padRight(detalle," ",26);
+                    pUnit = Generales.padLeft(pUnit," ",6);
+                    pUnit = Generales.padRight(pUnit," ",10);
+                    costo = Generales.padLeft(costo," ",8);
+                    costo = Generales.padRight(costo," ",10);
+                    
+                    detTicket += cantidad + detalle + pUnit + costo+"\n";
+                }
 
-                linea = fila.replace("@DETALLE", cantidad + detalle + pUnit + costo);
+                linea = fila.replace("@DETALLE", detTicket);
             }
 
             if (fila.indexOf("@SUBTOTAL") > 0)

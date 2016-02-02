@@ -6,35 +6,37 @@
 
 package pck_entidades;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author abecerra
  */
 public class Factura {
     
+    String sucursal;
+    String direccionSucursal;
+
     String numFac;
     String fecha;
     String cuidad;
     String cliente;
     String direccion;
     String ruc;
+    String rucEmpresa;
     String telefono;
     String email;
-    String cantidad;
-    String unidadMedida;
-    String descripcion;
-    String valorUnit;
-    String valorTotalDet;
+    List<FacturaDetalle> ls_FacturaDetalle=new ArrayList();
     String subTotalFac;
     String iva;
     String valorFac;
     String responsable;
     String cargo;
-    String sucursal;
-    String direccionSucursal;
-
+    
     public Factura() {
         
+        rucEmpresa="";
         numFac="";
         fecha="";
         cuidad="";
@@ -43,11 +45,6 @@ public class Factura {
         ruc="";
         telefono="";
         email="";
-        cantidad="";
-        unidadMedida="";
-        descripcion="";
-        valorUnit="";
-        valorTotalDet="";
         subTotalFac="";
         iva="";
         valorFac="";
@@ -55,6 +52,14 @@ public class Factura {
         cargo="";
         sucursal="";
         direccionSucursal="";
+    }
+
+    public String getRucEmpresa() {
+        return rucEmpresa;
+    }
+
+    public void setRucEmpresa(String rucEmpresa) {
+        this.rucEmpresa = rucEmpresa;
     }
 
     public String getNumFac() {
@@ -121,46 +126,6 @@ public class Factura {
         this.email = email;
     }
 
-    public String getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(String cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    public String getUnidadMedida() {
-        return unidadMedida;
-    }
-
-    public void setUnidadMedida(String unidadMedida) {
-        this.unidadMedida = unidadMedida;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public String getValorUnit() {
-        return valorUnit;
-    }
-
-    public void setValorUnit(String valorUnit) {
-        this.valorUnit = valorUnit;
-    }
-
-    public String getValorTotalDet() {
-        return valorTotalDet;
-    }
-
-    public void setValorTotalDet(String valorTotalDet) {
-        this.valorTotalDet = valorTotalDet;
-    }
-
     public String getSubTotalFac() {
         return subTotalFac;
     }
@@ -215,6 +180,14 @@ public class Factura {
 
     public void setDireccionSucursal(String direccionSucursal) {
         this.direccionSucursal = direccionSucursal;
+    }
+
+    public List<FacturaDetalle> getLs_FacturaDetalle() {
+        return ls_FacturaDetalle;
+    }
+
+    public void setLs_FacturaDetalle(List<FacturaDetalle> ls_FacturaDetalle) {
+        this.ls_FacturaDetalle = ls_FacturaDetalle;
     }
     
     

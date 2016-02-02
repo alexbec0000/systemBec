@@ -34,6 +34,7 @@ import pck_controller.FacturaController;
 import pck_controller.ProductoController;
 import pck_controller.VendedorController;
 import pck_entidades.Factura;
+import pck_entidades.FacturaDetalle;
 import pck_utilidades.ImpresionTicket;
 
 public class Factura_venta extends JFrame {
@@ -689,13 +690,9 @@ public class Factura_venta extends JFrame {
                     limpiar();
                     generanumero();
                     cargarfecha();
-                    
-                    Factura obFactura=new Factura();
-                    
-                    obFactura.setCliente("ALEX BECERRA");
-                    
-                    new ImpresionTicket().impresion(obFactura);
-                    
+
+                    imprimirFacturaTicket();
+                            
                     LblCondicion.setText("FACTURA EN EDICION...");
                     LblCondicion.setForeground(new Color(51, 51, 51));
                     CboForma.setEnabled(true);
@@ -1865,4 +1862,44 @@ public class Factura_venta extends JFrame {
         BSiguiente.setEnabled(false);
         BUltimo.setEnabled(false);
     }
+    
+    private void imprimirFacturaTicket()
+    {
+        Factura obFactura=new Factura();
+        List<FacturaDetalle> ls_FacturaDetalle=new ArrayList();
+        FacturaDetalle objFacturaDetalle=new FacturaDetalle();
+        
+        obFactura.setSucursal("MATRIZ");
+        obFactura.setDireccionSucursal("AMAZONAS");
+        //obFactura.setCuidad(cantidad);
+        obFactura.setRucEmpresa("1722741962001");
+        obFactura.setNumFac("000-000-000000");
+        obFactura.setFecha("02-02-2016");
+        obFactura.setRuc("99999999999");
+        obFactura.setCliente("CONSUMIDOR FINAL");
+        obFactura.setTelefono("N/A");
+        obFactura.setDireccion("N/A");
+        
+        objFacturaDetalle.setCantidad("1");
+        objFacturaDetalle.setDescripcion("EJEMPLO");
+        objFacturaDetalle.setValorUnit("1");
+        objFacturaDetalle.setValorTotalDet("1");
+        
+        obFactura.setSubTotalFac("1");
+        obFactura.setIva("0.5");
+        obFactura.setValorFac("1.50");
+        
+        obFactura.setResponsable("ADMIN");
+        obFactura.setCargo("ADMIN");
+        
+        //obFactura.setEmail(precio);
+        //obFactura.setUnidadMedida(cantidad);
+        
+        ls_FacturaDetalle.add(objFacturaDetalle);
+        obFactura.setLs_FacturaDetalle(ls_FacturaDetalle);
+
+        new ImpresionTicket().impresion(obFactura);
+    }
+    
+    
 }  //  @jve:decl-index=0:visual-constraint="10,10"
