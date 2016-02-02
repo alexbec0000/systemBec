@@ -688,7 +688,7 @@ public class Factura_venta extends JFrame {
                     limpiar();
                     generanumero();
                     cargarfecha();
-                    ImpresionTicket.impresion();
+                    new ImpresionTicket().impresion();
                     LblCondicion.setText("FACTURA EN EDICION...");
                     LblCondicion.setForeground(new Color(51, 51, 51));
                     CboForma.setEnabled(true);
@@ -767,7 +767,7 @@ public class Factura_venta extends JFrame {
                         BInsertar.requestFocus();
                     } else {
                         guardar();
-                        ImpresionTicket.impresion();
+                        new ImpresionTicket().impresion();
                     }
                 }
             });
