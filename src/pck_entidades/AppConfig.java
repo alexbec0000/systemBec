@@ -7,12 +7,14 @@ package pck_entidades;
 
 import java.io.Serializable;
 
-
 /**
  *
  * @author Alex
  */
+
 public class AppConfig implements Serializable {
+    
+    private static AppConfig config = new AppConfig();
     
     private String host = "localhost";
     private String dataBase = "facturacion";
@@ -22,6 +24,14 @@ public class AppConfig implements Serializable {
     public AppConfig() {
     }
 
+    public static AppConfig getConfig() {
+        return config;
+    }
+
+    public static void setConfig(AppConfig config) {
+        AppConfig.config = config;
+    }
+    
     public String getHost() {
         return host;
     }

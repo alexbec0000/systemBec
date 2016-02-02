@@ -28,10 +28,10 @@ public class cls_conexion {
     public static final int CERRAR_ST_PS = 4;
     
     
-    private static String host = "";
-    private static String dataBase = "";
-    private static String user = "";
-    private static String pass = "";
+    private static String host = AppConfig.getConfig().getHost();
+    private static String dataBase = AppConfig.getConfig().getDataBase();
+    private static String user = AppConfig.getConfig().getUser();
+    private static String pass = AppConfig.getConfig().getPass();
     
     public static void conectar()
      {

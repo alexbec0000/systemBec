@@ -166,12 +166,17 @@ public class Configurar extends javax.swing.JFrame {
             Acceso objAcceso = new Acceso();
             objAcceso.setVisible(true);
         }
-        else
-            setVisible(false);
+        
+        setVisible(false);
     }//GEN-LAST:event_jBtnOkActionPerformed
 
     private void jBtnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnExitActionPerformed
-        System.exit(0);
+        if(this.cargar)
+        {
+            System.exit(0);
+        }
+        else
+            setVisible(false);
     }//GEN-LAST:event_jBtnExitActionPerformed
 
     public void Cargar_Data() {
