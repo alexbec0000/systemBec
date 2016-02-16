@@ -1,5 +1,6 @@
 package appFactura;
 
+import comprobantes.entidades.Emisor;
 import javax.swing.SwingUtilities;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
@@ -31,6 +32,7 @@ import java.text.ParseException;
 import javax.swing.JOptionPane;
 import pck_controller.ClienteController;
 import pck_controller.FacturaController;
+import pck_controller.ParametrosController;
 import pck_controller.ProductoController;
 import pck_controller.VendedorController;
 import pck_entidades.Factura;
@@ -118,6 +120,8 @@ public class Factura_venta extends JFrame {
     private JLabel LblCondicion = null;
     private JButton BModifica = null;
     private Factura obFactura;
+    
+    private Emisor sucursalEmisora=null;
 
     /**
      * This method initializes Panel2
@@ -608,7 +612,7 @@ public class Factura_venta extends JFrame {
             BCalculadora.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     try {
-                        Process programa = Runtime.getRuntime().exec("\\INVENTARIO\\CALC.EXE");
+                        Process programa = Runtime.getRuntime().exec("\\recursos\\calc.exe");
                     } catch (Exception ex) {
                     }
                 }
@@ -625,7 +629,7 @@ public class Factura_venta extends JFrame {
     private JButton getBQuitar() {
         if (BQuitar == null) {
             BQuitar = new JButton();
-            BQuitar.setIcon(new ImageIcon(getClass().getResource("/recursos/CANCELAR2.JPG")));
+            BQuitar.setIcon(new ImageIcon(getClass().getResource("/recursos/icon48Delete.png")));
             BQuitar.setSize(new Dimension(54, 54));
             BQuitar.setToolTipText("Quitar producto de factura");
             BQuitar.setEnabled(false);
@@ -657,7 +661,7 @@ public class Factura_venta extends JFrame {
             BInsertar = new JButton();
             BInsertar.setLocation(new Point(9, 135));
             BInsertar.setToolTipText("Insertar producto en factura");
-            BInsertar.setIcon(new ImageIcon(getClass().getResource("/recursos/INSERTAR.JPG")));
+            BInsertar.setIcon(new ImageIcon(getClass().getResource("/recursos/plus-icon.png")));
             BInsertar.setEnabled(false);
             BInsertar.setSize(new Dimension(54, 54));
             BInsertar.addActionListener(new java.awt.event.ActionListener() {
@@ -1341,7 +1345,7 @@ public class Factura_venta extends JFrame {
         columna5.setMinWidth(100);
         columna5.setMaxWidth(100);
         JTable.isCellEditable(JTable.getSelectedRow(), JTable.getSelectedColumn());
-
+        sucursalEmisora = new Emisor();
         conectar();
     }
 
@@ -1411,6 +1415,18 @@ public class Factura_venta extends JFrame {
 
     public void conectar() {
         try {
+            
+            ResultSet rs=ParametrosController.obtenerEmpresa();
+            rs.first();
+            sucursalEmisora.setRuc(rs.getString("ruc_emp"));
+            sucursalEmisora.setRazonSocial("razon_social_emp");
+            sucursalEmisora.setNombreComercial("nombre_comercial_emp");
+            sucursalEmisora.setContribuyenteEspecial("contribuyenteEspecial_emp");
+            sucursalEmisora.setLlevaContabilidad("llevaContabilidad_emp");
+            sucursalEmisora.setTipoAmbiente("ambiente_emp");
+            sucursalEmisora.setTipoEmision("tipoEmision_emp");
+            sucursalEmisora.setClaveInterna("claveInterna_emp");
+            
             resultadocli = ClienteController.obtenerClientes();
             resultadoven = VendedorController.obtenerVendedores();
             cargarvendedores();
@@ -1847,7 +1863,7 @@ public class Factura_venta extends JFrame {
                 obFactura = new Factura();
                 List<FacturaDetalle> ls_FacturaDetalle = new ArrayList();
                 FacturaDetalle objFacturaDetalle;
-                obFactura.setFecha(fechasql);
+                obFactura.setFecha(TxtFecha.getText());
                 
                 obFactura.setSubTotalFac(TxtSubtotal.getText());
                 obFactura.setIva(TxtTotiva.getText());
@@ -1888,8 +1904,8 @@ public class Factura_venta extends JFrame {
         obFactura.setSucursal("MATRIZ");
         obFactura.setDireccionSucursal("AMAZONAS");
         //obFactura.setCuidad(cantidad);
-        obFactura.setRucEmpresa("1722741962001");
-        obFactura.setNumFac("000-000-"+LblNumero.getText());
+        obFactura.setRucEmpresa("1768158410001");
+        obFactura.setNumFac("001-001-"+LblNumero.getText());
         
         obFactura.setRuc(TxtCedula.getText());
         obFactura.setCliente(TxtCliente.getText());
@@ -1901,11 +1917,12 @@ public class Factura_venta extends JFrame {
         //obFactura.setEmail(precio);
         //obFactura.setUnidadMedida(cantidad);
 
-        new ImpresionTicket().impresion(obFactura);
-        
         DocumentosElectronicos objDocumentosElectronicos=new DocumentosElectronicos();
-        objDocumentosElectronicos.generarFacturaElectronica(obFactura);
+        String respuesta=objDocumentosElectronicos.generarFacturaElectronica(obFactura, sucursalEmisora);
+        FacturaController.actualizarFactura(LblNumero.getText(), "SRI: "+respuesta, "0");
         
+        new ImpresionTicket().impresion(obFactura);
+
     }
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

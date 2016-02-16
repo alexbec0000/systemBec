@@ -109,11 +109,8 @@ public class EncriptadorPassword {
             // Encode bytes to base64 to get a string
             return new sun.misc.BASE64Encoder().encode(enc);
 
-        } catch (BadPaddingException e) {
-        } catch (IllegalBlockSizeException e) {
-        } catch (UnsupportedEncodingException e) {
-        } catch (IOException e) {
-        }
+        } catch (BadPaddingException | IllegalBlockSizeException | UnsupportedEncodingException e) {
+        } 
         return null;
     }
 

@@ -5,7 +5,7 @@ import java.awt.event.*;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import javax.swing.*;
-import pck_entidades.AppConfig;
+import comprobantes.util.AppConfig;
 
 public class Presentacion extends javax.swing.JFrame {
 //Inicializando los parametros

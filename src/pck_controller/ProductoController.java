@@ -271,7 +271,7 @@ public class ProductoController extends AbstractController{
     public static void actualizarStock(Object stock, Object ID_ART)
     {
         try {
-            String sql ="UPDATE ARTICULOS SET STOCK=STOCK+"+stock+" WHERE ID_ART='"+ID_ART+"'";
+            String sql ="UPDATE ARTICULOS SET STOCK=STOCK-"+stock+" WHERE ID_ART='"+ID_ART+"'";
             cls_conexion.getStatement().executeUpdate(sql);
         } catch (SQLException ex) {
             ex.printStackTrace();

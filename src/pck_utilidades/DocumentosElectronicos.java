@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package pck_utilidades;
 
 import comprobantes.entidades.Clientes;
 import comprobantes.entidades.Emisor;
+import comprobantes.util.AppConfig;
 import generaXML.GeneraXMLsri;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,97 +22,77 @@ import servicios.cls_fechas;
  * @author abecerra
  */
 public class DocumentosElectronicos {
-    
-    private static  String rucEmpresa = "1768158410001";
-    private static  String razonSocial = "Empresa Pública Metropolitana de Gestión Integral de Residuos Sólidos EMGIRS - EP";
-    private static  String nombreComercial = "Empresa Pública Metropolitana de Gestión Integral de Residuos Sólidos EMGIRS - EP";
-    private static  String claveInterna = "00000001";
-    private static  String contribuyenteEspecial = "162";
-    private static  String llevaContabilidad = "SI";
-    private static  String tipoEmision = "1";
 
-    private static  boolean autorizar = false;    // true produccion
-    private static  String ambiente = "1";     // 2 produccion
-    
-     public String generarFacturaElectronica(Factura factura)
-        {
-            Emisor sucursalEmisora=new Emisor();
-            String[] numFac = factura.getNumFac().split("-");
-            String observacion = "";
-            FacturaElectronica fac = new FacturaElectronica();
-            fac.setAutorizar(autorizar) ;
+    private static boolean autorizar = false;    // true produccion
+//    private static String ambiente = "1";     // 2 produccion
 
-            sucursalEmisora.setRuc(rucEmpresa);
-            sucursalEmisora.setRazonSocial(razonSocial) ;
-            sucursalEmisora.setNombreComercial (nombreComercial) ;
-            sucursalEmisora.setClaveInterna (claveInterna) ;
-            sucursalEmisora.setContribuyenteEspecial (contribuyenteEspecial) ;
-            sucursalEmisora.setLlevaContabilidad (llevaContabilidad) ;
-            sucursalEmisora.setTipoAmbiente (ambiente) ;
-            sucursalEmisora.setTipoEmision (tipoEmision) ;
+    public String generarFacturaElectronica(Factura factura, Emisor sucursalEmisora) {
+        //Emisor sucursalEmisora = new Emisor();
+        String[] numFac = factura.getNumFac().split("-");
+        String observacion = "";
+        FacturaElectronica fac = new FacturaElectronica();
+        fac.setAutorizar(autorizar);
 
-            Clientes cliente = new Clientes();
-            cliente.setNumeroIdentificacio (factura.getRuc()) ;
-            cliente.setApellido (factura.getCliente()) ;
-            cliente.setDireccion (factura.getDireccion()) ;
-            cliente.setCorreo (factura.getEmail()) ;
-            cliente.setTelefonoConvencional (factura.getTelefono()) ;
-            
-            cliente.setObservacion(observacion);
-            
- 
-            fac.setEmisor (sucursalEmisora);
-            fac.setCliente ( cliente);
-            fac.setFechaEmision ( factura.getFecha()); //"dd/MM/yyyy"
-            fac.setSecuencialFactura (numFac[2]);
-            fac.setSubTotal ( factura.getSubTotalFac());
-            fac.setValorTotal (factura.getValorFac());
-            fac.setPathCore ("http://172.20.120.15/addocument/");
-            fac.setPathFactura ("C:\\TEMP\\Facturas\\Pruebas\\");
-    
-            // Arreglo de detalles
-            List<DetalleFacturaElectronica> Lisdetalle = new ArrayList();
+        sucursalEmisora.setCodigoEstablecimiento(numFac[0]);
+        sucursalEmisora.setCodPuntoEmision(numFac[1]);
 
-            // Detalle a instanciarse
-            DetalleFacturaElectronica detalle;
+        Clientes cliente = new Clientes();
+        cliente.setNumeroIdentificacio(factura.getRuc());
+        cliente.setApellido(factura.getCliente());
+        cliente.setDireccion(factura.getDireccion());
+        cliente.setCorreo(factura.getEmail());
+        cliente.setTelefonoConvencional(factura.getTelefono());
 
-            // Índice del arreglo
-            int i = 0;
+        cliente.setObservacion(observacion);
 
-            for (FacturaDetalle det : factura.getLs_FacturaDetalle())
-            {
-                detalle = new DetalleFacturaElectronica();
+        fac.setEmisor(sucursalEmisora);
+        fac.setCliente(cliente);
+        fac.setFechaEmision(factura.getFecha()); //"dd/MM/yyyy"
+        fac.setSecuencialFactura(numFac[2]);
+        fac.setSubTotal(factura.getSubTotalFac());
+        fac.setValorTotal(factura.getValorFac());
+        fac.setPathCore("http://"+AppConfig.getConfig().getHost()+"/html/addocument/");
+        fac.setPathFactura("C:\\TEMP\\Facturas\\");
 
-                detalle.setCodPrincipal ("1");
-                detalle.setCodAux("1");
-                detalle.setCantidad(det.getCantidad());
-                detalle.setDescipcion(det.getDescripcion());
-                detalle.setValorUnit (det.getValorUnit());
-                detalle.setObs("");
+        // Arreglo de detalles
+        List<DetalleFacturaElectronica> Lisdetalle = new ArrayList();
 
-                Lisdetalle.add(detalle);
+        // Detalle a instanciarse
+        DetalleFacturaElectronica detalle;
 
-            }
+        for (FacturaDetalle det : factura.getLs_FacturaDetalle()) {
+            detalle = new DetalleFacturaElectronica();
 
-            // Agregando la lista de facturas
-            fac.setDetalleFactura( Lisdetalle);
-            
-            java.util.Date fechaEmision = new cls_fechas().DeStringADate(fac.getFechaEmision()); //"dd/MM/yyyy"
-            GeneraXMLsri objGeneraXMLsri = new GeneraXMLsri(fac.getPathFactura(), fac.getPathCore());
+            detalle.setCodPrincipal("1");
+            detalle.setCodAux("1");
+            detalle.setCantidad(det.getCantidad());
+            detalle.setDescipcion(det.getDescripcion());
+            detalle.setValorUnit(det.getValorUnit());
+            detalle.setObs("");
 
-            objGeneraXMLsri.llenarFactura(fac.getEmisor(), fac.getCliente(), fechaEmision, fac.getSecuencialFactura(), fac.getSubTotal(), fac.getValorTotal());
-
-            for (DetalleFacturaElectronica objDetFacElect : fac.getDetalleFactura()) {
-                objGeneraXMLsri.llenarDetFact(objDetFacElect.getCodPrincipal(),
-                        objDetFacElect.getCodAux(), objDetFacElect.getCantidad(),
-                        objDetFacElect.getDescipcion(), objDetFacElect.getValorUnit(),
-                        objDetFacElect.getObs());
-            }
-
-            String[] mensaje = objGeneraXMLsri.generarXMLfact(fac.isAutorizar());
-
-            return mensaje[0];
+            Lisdetalle.add(detalle);
 
         }
-    
+
+        // Agregando la lista de facturas
+        fac.setDetalleFactura(Lisdetalle);
+
+        java.util.Date fechaEmision = new cls_fechas().DeStringADate(fac.getFechaEmision()); //"dd/MM/yyyy"
+        GeneraXMLsri objGeneraXMLsri = new GeneraXMLsri(fac.getPathFactura(), fac.getPathCore());
+
+        objGeneraXMLsri.llenarFactura(fac.getEmisor(), fac.getCliente(), fechaEmision, fac.getSecuencialFactura(), fac.getSubTotal(), fac.getValorTotal());
+
+        for (DetalleFacturaElectronica objDetFacElect : fac.getDetalleFactura()) {
+            objGeneraXMLsri.llenarDetFact(objDetFacElect.getCodPrincipal(),
+                    objDetFacElect.getCodAux(), objDetFacElect.getCantidad(),
+                    objDetFacElect.getDescipcion(), objDetFacElect.getValorUnit(),
+                    objDetFacElect.getObs());
+        }
+
+        String[] mensaje = objGeneraXMLsri.generarXMLfact(fac.isAutorizar());
+        
+        return mensaje[0];
+
+    }
+
 }

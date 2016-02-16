@@ -100,4 +100,14 @@ public class FacturaController extends AbstractController{
         }
     }
     
+    public static void actualizarFactura(String NUM_FACV, String observacion, String estado)
+    {
+        try {
+            String sql ="update facv_cab set OBSERVAC='"+observacion+"', ANULADA="+estado+" where NUM_FACV='"+NUM_FACV+"'";
+            cls_conexion.getStatement().executeUpdate(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
 }

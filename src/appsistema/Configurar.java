@@ -20,7 +20,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import pck_accesoDatos.cls_conexion;
-import pck_entidades.AppConfig;
+import comprobantes.util.AppConfig;
 import pck_utilidades.FiltroArchivo;
 import pck_utilidades.ScriptRunner;
 

@@ -83,4 +83,16 @@ public class ParametrosController extends AbstractController {
             ex.printStackTrace();
         }
     }
+    
+    public static ResultSet obtenerEmpresa() {
+        try {
+            Statement sentenciacli = cls_conexion.getStatement();
+            sentenciacli.executeQuery("SELECT * FROM empresa order by id_emp");
+            return sentenciacli.getResultSet();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return null;
+    }
 }

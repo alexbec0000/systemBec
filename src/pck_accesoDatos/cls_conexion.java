@@ -5,13 +5,13 @@
  */
 package pck_accesoDatos;
 
+import comprobantes.util.AppConfig;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
-import pck_entidades.AppConfig;
 
 /**
  *
