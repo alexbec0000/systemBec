@@ -25,10 +25,13 @@ import javax.swing.table.*;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.awt.SystemColor;
+import java.sql.SQLException;
 import java.util.*;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import pck_controller.ClienteController;
 import pck_controller.FacturaController;
@@ -1912,10 +1915,15 @@ public class Factura_venta extends JFrame {
         obFactura.setTelefono(TxtTelefono.getText());
         obFactura.setDireccion(TxtDireccion.getText());
 
-        obFactura.setCargo("ADMIN");
+        //obFactura.setCargo("ADMIN");
 
-        //obFactura.setEmail(precio);
-        //obFactura.setUnidadMedida(cantidad);
+        try {
+            obFactura.setEmail(resultadocli.getString("EMAIL_CLI"));
+            //obFactura.setUnidadMedida(cantidad);
+        } catch (SQLException ex) {
+            obFactura.setEmail(" ");
+            ex.printStackTrace();
+        }
 
         DocumentosElectronicos objDocumentosElectronicos=new DocumentosElectronicos();
         String respuesta=objDocumentosElectronicos.generarFacturaElectronica(obFactura, sucursalEmisora);
