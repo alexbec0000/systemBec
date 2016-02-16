@@ -59,17 +59,17 @@ public class DocumentosElectronicos {
 
         // Detalle a instanciarse
         DetalleFacturaElectronica detalle;
-
+        int cod=1;
         for (FacturaDetalle det : factura.getLs_FacturaDetalle()) {
             detalle = new DetalleFacturaElectronica();
 
-            detalle.setCodPrincipal("1");
-            detalle.setCodAux("1");
+            detalle.setCodPrincipal(cod+"");
+            detalle.setCodAux(det.getCodigoArticulo());
             detalle.setCantidad(det.getCantidad());
             detalle.setDescipcion(det.getDescripcion());
             detalle.setValorUnit(det.getValorUnit());
             detalle.setObs("");
-
+            cod++;
             Lisdetalle.add(detalle);
 
         }

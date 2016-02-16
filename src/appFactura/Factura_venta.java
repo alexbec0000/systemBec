@@ -1422,13 +1422,13 @@ public class Factura_venta extends JFrame {
             ResultSet rs=ParametrosController.obtenerEmpresa();
             rs.first();
             sucursalEmisora.setRuc(rs.getString("ruc_emp"));
-            sucursalEmisora.setRazonSocial("razon_social_emp");
-            sucursalEmisora.setNombreComercial("nombre_comercial_emp");
-            sucursalEmisora.setContribuyenteEspecial("contribuyenteEspecial_emp");
-            sucursalEmisora.setLlevaContabilidad("llevaContabilidad_emp");
-            sucursalEmisora.setTipoAmbiente("ambiente_emp");
-            sucursalEmisora.setTipoEmision("tipoEmision_emp");
-            sucursalEmisora.setClaveInterna("claveInterna_emp");
+            sucursalEmisora.setRazonSocial(rs.getString("razon_social_emp"));
+            sucursalEmisora.setNombreComercial(rs.getString("nombre_comercial_emp"));
+            sucursalEmisora.setContribuyenteEspecial(rs.getString("contribuyenteEspecial_emp"));
+            sucursalEmisora.setLlevaContabilidad(rs.getString("llevaContabilidad_emp"));
+            sucursalEmisora.setTipoAmbiente(rs.getString("ambiente_emp"));
+            sucursalEmisora.setTipoEmision(rs.getString("tipoEmision_emp"));
+            sucursalEmisora.setClaveInterna(rs.getString("claveInterna_emp"));
             
             resultadocli = ClienteController.obtenerClientes();
             resultadoven = VendedorController.obtenerVendedores();
@@ -1879,6 +1879,7 @@ public class Factura_venta extends JFrame {
                 for (int i = 0; i < xfac; i++) {
                     objFacturaDetalle = new FacturaDetalle();
                     
+                    objFacturaDetalle.setCodigoArticulo(JTable.getValueAt(i, 0).toString());
                     objFacturaDetalle.setCantidad(JTable.getValueAt(i, 3).toString());
                     objFacturaDetalle.setDescripcion(JTable.getValueAt(i, 1).toString());
                     objFacturaDetalle.setValorUnit(JTable.getValueAt(i, 2).toString());

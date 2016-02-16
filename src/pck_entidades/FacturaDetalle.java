@@ -12,6 +12,7 @@ package pck_entidades;
  */
 public class FacturaDetalle {
     
+    String codigoArticulo;
     String cantidad;
     String unidadMedida;
     String descripcion;
@@ -20,7 +21,15 @@ public class FacturaDetalle {
 
     public FacturaDetalle() {
     }
-    
+
+    public String getCodigoArticulo() {
+        return codigoArticulo;
+    }
+
+    public void setCodigoArticulo(String codigoArticulo) {
+        this.codigoArticulo = codigoArticulo;
+    }
+
     public String getCantidad() {
         return cantidad;
     }
