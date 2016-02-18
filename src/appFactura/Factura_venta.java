@@ -1,6 +1,7 @@
 package appFactura;
 
 import comprobantes.entidades.Emisor;
+import comprobantes.util.AppConfig;
 import javax.swing.SwingUtilities;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
@@ -30,8 +31,6 @@ import java.util.*;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import pck_controller.ClienteController;
 import pck_controller.FacturaController;
@@ -73,6 +72,7 @@ public class Factura_venta extends JFrame {
     private JButton BNueva = null;
     private JButton BAnular = null;
     private JButton BGuardar = null;
+    private JButton BReprocesar = null;
     private JButton BCancelar = null;
     private JLabel LblCliente = null;
     private JLabel LblDireccion = null;
@@ -123,8 +123,8 @@ public class Factura_venta extends JFrame {
     private JLabel LblCondicion = null;
     private JButton BModifica = null;
     private Factura obFactura;
-    
-    private Emisor sucursalEmisora=null;
+
+    private Emisor sucursalEmisora = null;
 
     /**
      * This method initializes Panel2
@@ -409,7 +409,7 @@ public class Factura_venta extends JFrame {
             BSalir.setActionCommand("");
             BSalir.setHorizontalAlignment(SwingConstants.CENTER);
             BSalir.setHorizontalTextPosition(SwingConstants.CENTER);
-            BSalir.setIcon(new ImageIcon(getClass().getResource("/recursos/SALIR2.JPG")));
+            BSalir.setIcon(new ImageIcon(getClass().getResource("/recursos/eqsl_exit.png")));
             BSalir.setText("Salir");
             BSalir.setVerticalAlignment(SwingConstants.CENTER);
             BSalir.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -513,6 +513,7 @@ public class Factura_venta extends JFrame {
             Panel7.add(getBNueva(), null);
             Panel7.add(getBAnular(), null);
             Panel7.add(getBGuardar(), null);
+            Panel7.add(getBReprocesar(), null);
             Panel7.add(getBCancelar(), null);
         }
         return Panel7;
@@ -590,7 +591,7 @@ public class Factura_venta extends JFrame {
             BNuevocli.setLocation(new Point(9, 9));
             BNuevocli.setSize(new Dimension(54, 54));
             BNuevocli.setToolTipText("Ingresar nuevo Cliente");
-            BNuevocli.setIcon(new ImageIcon(getClass().getResource("/recursos/GENTE.JPG")));
+            BNuevocli.setIcon(new ImageIcon(getClass().getResource("/recursos/User.png")));
             BNuevocli.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     new f_clientes().setVisible(true);
@@ -609,13 +610,13 @@ public class Factura_venta extends JFrame {
         if (BCalculadora == null) {
             BCalculadora = new JButton();
             BCalculadora.setLocation(new Point(9, 71));
-            BCalculadora.setIcon(new ImageIcon(getClass().getResource("/recursos/CALCULADORA.JPG")));
+            BCalculadora.setIcon(new ImageIcon(getClass().getResource("/recursos/CALCULADORA.png")));
             BCalculadora.setToolTipText("Calculadora");
             BCalculadora.setSize(new Dimension(54, 54));
             BCalculadora.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     try {
-                        Process programa = Runtime.getRuntime().exec("\\recursos\\calc.exe");
+                        Process programa = Runtime.getRuntime().exec("C:\\Windows\\System32\\calc.exe");
                     } catch (Exception ex) {
                     }
                 }
@@ -689,7 +690,7 @@ public class Factura_venta extends JFrame {
         if (BNueva == null) {
             BNueva = new JButton();
             BNueva.setLocation(new Point(14, 14));
-            BNueva.setIcon(new ImageIcon(getClass().getResource("/recursos/NUEVO.JPG")));
+            BNueva.setIcon(new ImageIcon(getClass().getResource("/recursos/NUEVO.png")));
             BNueva.setToolTipText("Nueva Factura");
             BNueva.setSize(new Dimension(54, 54));
             BNueva.addActionListener(new java.awt.event.ActionListener() {
@@ -699,11 +700,12 @@ public class Factura_venta extends JFrame {
                     limpiar();
                     generanumero();
                     cargarfecha();
-
+                    vendedorfac = AppConfig.getConfig().getIdUsuario();
+                    localizavendedor();
                     LblCondicion.setText("FACTURA EN EDICION...");
                     LblCondicion.setForeground(new Color(51, 51, 51));
                     CboForma.setEnabled(true);
-                    CboVendedor.setEnabled(true);
+                    //CboVendedor.setEnabled(true);
                     BClientes.setEnabled(true);
                     BInsertar.setEnabled(true);
                     BQuitar.setEnabled(true);
@@ -736,7 +738,7 @@ public class Factura_venta extends JFrame {
         if (BAnular == null) {
             BAnular = new JButton();
             BAnular.setLocation(new Point(82, 14));
-            BAnular.setIcon(new ImageIcon(getClass().getResource("/recursos/ELIMINAR.JPG")));
+            BAnular.setIcon(new ImageIcon(getClass().getResource("/recursos/ELIMINAR.PNG")));
             BAnular.setToolTipText("Anular Factura");
             BAnular.setSize(new Dimension(54, 54));
             BAnular.addActionListener(new java.awt.event.ActionListener() {
@@ -759,12 +761,11 @@ public class Factura_venta extends JFrame {
     private JButton getBGuardar() {
         if (BGuardar == null) {
             BGuardar = new JButton();
-            BGuardar.setSize(new Dimension(114, 54));
-            BGuardar.setIcon(new ImageIcon(getClass().getResource("/recursos/GUARDARIMP.JPG")));
+            BGuardar.setSize(new Dimension(54, 54));
+            BGuardar.setIcon(new ImageIcon(getClass().getResource("/recursos/iconPrint.gif")));
             BGuardar.setToolTipText("Guardar e Imprimir");
             BGuardar.setEnabled(false);
-            BGuardar.setDisabledIcon(new ImageIcon(getClass().getResource("/recursos/GUARDARIMP2.JPG")));
-            BGuardar.setLocation(new Point(159, 14));
+            BGuardar.setLocation(new Point(150, 14));
             BGuardar.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     if (TxtCliente.getText().length() == 0) {
@@ -783,6 +784,28 @@ public class Factura_venta extends JFrame {
             });
         }
         return BGuardar;
+    }
+
+    /**
+     * This method initializes BGuardar
+     *
+     * @return javax.swing.JButton
+     */
+    private JButton getBReprocesar() {
+        if (BReprocesar == null) {
+            BReprocesar = new JButton();
+            BReprocesar.setSize(new Dimension(54, 54));
+            BReprocesar.setIcon(new ImageIcon(getClass().getResource("/recursos/refresh.png")));
+            BReprocesar.setToolTipText("Solicitar Autorización");
+            BReprocesar.setEnabled(false);
+            BReprocesar.setLocation(new Point(218, 14));
+            BReprocesar.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    guardarFactura(false, modelo.getRowCount());
+                }
+            });
+        }
+        return BReprocesar;
     }
 
     /**
@@ -1004,7 +1027,7 @@ public class Factura_venta extends JFrame {
             BClientes.setBounds(new Rectangle(644, 14, 65, 40));
             BClientes.setToolTipText("Lista de Clientes");
             BClientes.setEnabled(false);
-            BClientes.setIcon(new ImageIcon(this.getClass().getResource("/recursos/GENTES.JPG")));
+            BClientes.setIcon(new ImageIcon(this.getClass().getResource("/recursos/users_icon.gif")));
             BClientes.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     new f_listaclientes().setVisible(true);
@@ -1418,8 +1441,8 @@ public class Factura_venta extends JFrame {
 
     public void conectar() {
         try {
-            
-            ResultSet rs=ParametrosController.obtenerEmpresa();
+
+            ResultSet rs = ParametrosController.obtenerEmpresa();
             rs.first();
             sucursalEmisora.setRuc(rs.getString("ruc_emp"));
             sucursalEmisora.setRazonSocial(rs.getString("razon_social_emp"));
@@ -1429,7 +1452,10 @@ public class Factura_venta extends JFrame {
             sucursalEmisora.setTipoAmbiente(rs.getString("ambiente_emp"));
             sucursalEmisora.setTipoEmision(rs.getString("tipoEmision_emp"));
             sucursalEmisora.setClaveInterna(rs.getString("claveInterna_emp"));
-            
+            sucursalEmisora.setDireccionMatriz(rs.getString("direccion_emp"));
+            sucursalEmisora.setCodigoEstablecimiento(rs.getString("establecimiento_emp"));
+            sucursalEmisora.setCodPuntoEmision(rs.getString("punto_emp"));
+
             resultadocli = ClienteController.obtenerClientes();
             resultadoven = VendedorController.obtenerVendedores();
             cargarvendedores();
@@ -1658,7 +1684,13 @@ public class Factura_venta extends JFrame {
             TxtFecha.setText(lafecha);
             if (resultadocab.getInt("anulada") == 0) {
                 BAnular.setEnabled(true);
-                LblCondicion.setText("FACTURA PROCESADA");
+                if (resultadocab.getInt("PROCESADA") == 1) {
+                    BReprocesar.setEnabled(false);
+                    LblCondicion.setText("FACTURA PROCESADA");
+                } else {
+                    BReprocesar.setEnabled(true);
+                    LblCondicion.setText("FACTURA NO PROCESADA");
+                }
                 LblCondicion.setForeground(new Color(47, 141, 235));
             } else {
                 BAnular.setEnabled(false);
@@ -1845,6 +1877,16 @@ public class Factura_venta extends JFrame {
                 }
             }
             if (control == true) {
+                guardarFactura(true, xfac);
+            }
+        } catch (Exception s) {
+            JOptionPane.showMessageDialog(null, "Error al guardar " + s.getMessage());
+        }
+    }
+
+    private void guardarFactura(boolean guardar, int xfac) {
+        try {
+            if (guardar) {
                 //ACTUALIZAR VENTAS DEL VENDEDOR
                 resultadoxreg = VendedorController.obtenerTotalVendedores();
                 resultadoxreg.last();
@@ -1860,64 +1902,71 @@ public class Factura_venta extends JFrame {
                 if (CboForma.getSelectedItem() == "CREDITO") {
                     ClienteController.actualizarSaldoCliente(TxtSaldo.getText(), resultadocli.getString("id_cli"));
                 }
-                //GUARDAR CABECERA
-                String fechasql = new String(TxtFecha.getText().substring(6) + "-" + TxtFecha.getText().substring(3, 5) + "-" + TxtFecha.getText().substring(0, 2));
-                
-                obFactura = new Factura();
-                List<FacturaDetalle> ls_FacturaDetalle = new ArrayList();
-                FacturaDetalle objFacturaDetalle;
-                obFactura.setFecha(TxtFecha.getText());
-                
-                obFactura.setSubTotalFac(TxtSubtotal.getText());
-                obFactura.setIva(TxtTotiva.getText());
-                obFactura.setValorFac(TxtPago.getText());
-                
-                obFactura.setResponsable(resultadoven.getString("ELVENDEDOR"));
+            }
+            //GUARDAR CABECERA
+            String fechasql = new String(TxtFecha.getText().substring(6) + "-" + TxtFecha.getText().substring(3, 5) + "-" + TxtFecha.getText().substring(0, 2));
+
+            obFactura = new Factura();
+            List<FacturaDetalle> ls_FacturaDetalle = new ArrayList();
+            FacturaDetalle objFacturaDetalle;
+            obFactura.setFecha(TxtFecha.getText());
+
+            obFactura.setSubTotalFac(TxtSubtotal.getText());
+            obFactura.setIva(TxtTotiva.getText());
+            obFactura.setValorFac(TxtPago.getText());
+
+            obFactura.setResponsable(resultadoven.getString("ELVENDEDOR"));
+            if (guardar) {
                 FacturaController.insertarFACV_CAB(LblNumero.getText(), resultadocli.getString("id_cli"), resultadoven.getString("ID_VEN"), fechasql, CboForma.getSelectedItem(),
-                        TxtDescuento.getText(), TxtSubtotal.getText(), TxtTotdes.getText(), TxtTotiva.getText(), TxtPago.getText(), TxtObserva.getText());
-                //GUARDAR DETALLE Y ACTUALIZAR STOCK DE ARTICULOS
-                for (int i = 0; i < xfac; i++) {
-                    objFacturaDetalle = new FacturaDetalle();
-                    
-                    objFacturaDetalle.setCodigoArticulo(JTable.getValueAt(i, 0).toString());
-                    objFacturaDetalle.setCantidad(JTable.getValueAt(i, 3).toString());
-                    objFacturaDetalle.setDescripcion(JTable.getValueAt(i, 1).toString());
-                    objFacturaDetalle.setValorUnit(JTable.getValueAt(i, 2).toString());
-                    objFacturaDetalle.setValorTotalDet(JTable.getValueAt(i, 4).toString());
-                    
-                    ls_FacturaDetalle.add(objFacturaDetalle);
+                    TxtDescuento.getText(), TxtSubtotal.getText(), TxtTotdes.getText(), TxtTotiva.getText(), TxtPago.getText(), TxtObserva.getText());
+            }
+            //GUARDAR DETALLE Y ACTUALIZAR STOCK DE ARTICULOS
+            for (int i = 0; i < xfac; i++) {
+                objFacturaDetalle = new FacturaDetalle();
+
+                objFacturaDetalle.setCodigoArticulo(JTable.getValueAt(i, 0).toString());
+                objFacturaDetalle.setCantidad(JTable.getValueAt(i, 3).toString());
+                objFacturaDetalle.setDescripcion(JTable.getValueAt(i, 1).toString());
+                objFacturaDetalle.setValorUnit(JTable.getValueAt(i, 2).toString());
+                objFacturaDetalle.setValorTotalDet(JTable.getValueAt(i, 4).toString());
+
+                ls_FacturaDetalle.add(objFacturaDetalle);
+                if (guardar) {
                     FacturaController.insertarFACV_DET(LblNumero.getText(), JTable.getValueAt(i, 0), JTable.getValueAt(i, 3), JTable.getValueAt(i, 2));
                     ProductoController.actualizarStock(JTable.getValueAt(i, 3), JTable.getValueAt(i, 0));
                 }
-                obFactura.setLs_FacturaDetalle(ls_FacturaDetalle);
-                imprimirFacturaTicket();
-                resultadocab = FacturaController.obtenerFACV_CAB();
-                resultadocab.last();
-                guacan();
-                nuevafac = false;
-                JOptionPane.showMessageDialog(null, "¡La Factura de Venta No. " + LblNumero.getText() + " ha sido almacenada correctamente!", "Venta procesada", 1);
             }
+            obFactura.setLs_FacturaDetalle(ls_FacturaDetalle);
+            String respSRI=imprimirFacturaTicket();
+            resultadocab = FacturaController.obtenerFACV_CAB();
+            resultadocab.last();
+            cargarfactura();
+            guacan();
+            nuevafac = false;
+            if (guardar) 
+                JOptionPane.showMessageDialog(null, "¡La Factura de Venta No. " + obFactura.getNumFac() + " ha sido almacenada correctamente! SRI: "+respSRI, "Venta procesada", 1);
+            else
+                JOptionPane.showMessageDialog(null, "¡La Factura de Venta No. " + obFactura.getNumFac() + " ha sido procesada! SRI: "+respSRI, "Venta procesada", 1);
+
         } catch (Exception s) {
-            JOptionPane.showMessageDialog(null, "Error al guardar "+s.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al guardar la factura " + s.getMessage());
         }
     }
 
-    private void imprimirFacturaTicket() {
-        
+    private String imprimirFacturaTicket() {
 
-        obFactura.setSucursal("MATRIZ");
-        obFactura.setDireccionSucursal("AMAZONAS");
+        obFactura.setSucursal(sucursalEmisora.getNombreComercial());
+        obFactura.setDireccionSucursal(sucursalEmisora.getDireccionMatriz());
         //obFactura.setCuidad(cantidad);
-        obFactura.setRucEmpresa("1768158410001");
-        obFactura.setNumFac("001-001-"+LblNumero.getText());
-        
+        obFactura.setRucEmpresa(sucursalEmisora.getRuc());
+        obFactura.setNumFac(sucursalEmisora.getCodigoEstablecimiento() + "-"
+                + sucursalEmisora.getCodPuntoEmision() + "-" + LblNumero.getText());
         obFactura.setRuc(TxtCedula.getText());
         obFactura.setCliente(TxtCliente.getText());
         obFactura.setTelefono(TxtTelefono.getText());
         obFactura.setDireccion(TxtDireccion.getText());
 
         //obFactura.setCargo("ADMIN");
-
         try {
             obFactura.setEmail(resultadocli.getString("EMAIL_CLI"));
             //obFactura.setUnidadMedida(cantidad);
@@ -1926,12 +1975,17 @@ public class Factura_venta extends JFrame {
             ex.printStackTrace();
         }
 
-        DocumentosElectronicos objDocumentosElectronicos=new DocumentosElectronicos();
-        String respuesta=objDocumentosElectronicos.generarFacturaElectronica(obFactura, sucursalEmisora);
-        FacturaController.actualizarFactura(LblNumero.getText(), "SRI: "+respuesta, "0");
-        
-        new ImpresionTicket().impresion(obFactura);
+        DocumentosElectronicos objDocumentosElectronicos = new DocumentosElectronicos();
+        String respuesta = objDocumentosElectronicos.generarFacturaElectronica(obFactura, sucursalEmisora);
+        if (respuesta.equals("OK") || respuesta.equals("AUTORIZADO")) {
+            FacturaController.actualizarFactura(LblNumero.getText(), "SRI: " + respuesta, "1");
+        } else {
+            FacturaController.actualizarFactura(LblNumero.getText(), "SRI: " + respuesta, "0");
+        }
 
+        new ImpresionTicket().impresion(obFactura);
+        
+        return respuesta;
     }
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

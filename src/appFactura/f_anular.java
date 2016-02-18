@@ -1,5 +1,6 @@
 package appFactura;
 
+import comprobantes.util.AppConfig;
 import javax.swing.JPanel;
 import javax.swing.JDialog;
 import java.awt.Dimension;
@@ -17,6 +18,7 @@ import javax.swing.JPasswordField;
 import java.awt.event.KeyEvent;
 import java.awt.Color;
 import javax.swing.JOptionPane;
+import pck_controller.VendedorController;
 
 public class f_anular extends JDialog {
 
@@ -128,18 +130,19 @@ public class f_anular extends JDialog {
     private JButton getBAnular() {
         if (BAnular == null) {
             BAnular = new JButton();
-            BAnular.setText("    Anular");
+            BAnular.setText("Anular");
             BAnular.setToolTipText("Anular Factura");
             BAnular.setHorizontalTextPosition(SwingConstants.RIGHT);
             BAnular.setHorizontalAlignment(SwingConstants.LEFT);
             BAnular.setLocation(new Point(301, 121));
             BAnular.setSize(new Dimension(116, 41));
             BAnular.setFont(new Font("Dialog", Font.PLAIN, 12));
-            BAnular.setIcon(new ImageIcon(getClass().getResource("/recursos/ELIMINAR.JPG")));
+            BAnular.setIcon(new ImageIcon(getClass().getResource("/recursos/ELIMINAR.PNG")));
             BAnular.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     String clave = new String(PswClave.getPassword());
-                    if (clave.equals("ANULAR") == true) {
+                    String retorno=VendedorController.login(AppConfig.getConfig().getUsuario(), clave);
+                    if (retorno.length()>0) {
                         anulafac = true;
                         dispose();
                     } else {

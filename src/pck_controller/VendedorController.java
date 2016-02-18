@@ -112,22 +112,22 @@ public class VendedorController extends AbstractController {
 
     }
 
-    public static boolean login(String usuario, String clave) {
-        boolean retorno=false;
+    public static String login(String usuario, String clave) {
+        String retorno="";
         try {
 
             String sql = "SELECT ID_VEN FROM vendedores where LABORA=true and USUARIO_VEN='"+usuario+"'"
                     + " and CLAVE_VEN='"+clave+"';";
             ResultSet rs = cls_conexion.getStatement().executeQuery(sql);
             while (rs.next()) {
-                retorno=true;
+                retorno=rs.getString("ID_VEN");
             }
 
             rs.close();
 
         } catch (SQLException ex) {
             System.out.println(ex);
-            retorno=false;
+            retorno="";
         }
 
         return retorno;

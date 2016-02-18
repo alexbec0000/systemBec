@@ -1,4 +1,5 @@
 package appsistema;
+import comprobantes.util.AppConfig;
 import javax.swing.*;
 import pck_controller.VendedorController;
 
@@ -14,9 +15,11 @@ public void Validacion()
     String pasword = txt_password.getText();
     String usuario = txt_usuario.getText();
 
-    //if(usuario.equalsIgnoreCase("admin") && pasword.equalsIgnoreCase("admin"))
-    if(VendedorController.login(usuario, pasword))
+    String retorno=VendedorController.login(usuario, pasword);
+    if(retorno.length()>0)
     {
+        AppConfig.getConfig().setIdUsuario(retorno);
+        AppConfig.getConfig().setUsuario(usuario);
         principal.setVisible(true);
         this.dispose();
     }

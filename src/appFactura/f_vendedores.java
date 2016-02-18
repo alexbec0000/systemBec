@@ -514,7 +514,7 @@ public class f_vendedores extends JFrame {
             bNuevo.setText("   Nuevo");
             bNuevo.setFont(new Font("Dialog", Font.PLAIN, 11));
             bNuevo.setMnemonic(KeyEvent.VK_N);
-            bNuevo.setIcon(new ImageIcon(getClass().getResource("/recursos/NUEVO.JPG")));
+            bNuevo.setIcon(new ImageIcon(getClass().getResource("/recursos/NUEVO.png")));
             bNuevo.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     nuevoreg = true;
@@ -570,7 +570,7 @@ public class f_vendedores extends JFrame {
             bGuardar.setFont(new Font("Dialog", Font.PLAIN, 11));
             bGuardar.setText(" Guardar");
             bGuardar.setMnemonic(KeyEvent.VK_G);
-            bGuardar.setIcon(new ImageIcon(getClass().getResource("/recursos/GUARDAR2.JPG")));
+            bGuardar.setIcon(new ImageIcon(getClass().getResource("/recursos/save.png")));
             bGuardar.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     double elsueldo = Double.parseDouble(txtSueldo.getText());
@@ -667,7 +667,7 @@ public class f_vendedores extends JFrame {
             bEliminar.setFont(new Font("Dialog", Font.PLAIN, 11));
             bEliminar.setText("  Eliminar");
             bEliminar.setMnemonic(KeyEvent.VK_E);
-            bEliminar.setIcon(new ImageIcon(getClass().getResource("/recursos/ELIMINAR.JPG")));
+            bEliminar.setIcon(new ImageIcon(getClass().getResource("/recursos/ELIMINAR.PNG")));
             bEliminar.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     int respuesta = JOptionPane.showConfirmDialog(null, "¿Desea eliminar el registro del Vendedor " + txtNombre.getText().trim() + " " + txtUsuario.getText() + "?", "Eliminar cliente", 0, 3);
