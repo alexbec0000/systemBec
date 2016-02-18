@@ -1937,7 +1937,7 @@ public class Factura_venta extends JFrame {
                 }
             }
             obFactura.setLs_FacturaDetalle(ls_FacturaDetalle);
-            String respSRI=imprimirFacturaTicket();
+            String respSRI=imprimirFacturaTicket(guardar);
             resultadocab = FacturaController.obtenerFACV_CAB();
             resultadocab.last();
             cargarfactura();
@@ -1953,7 +1953,7 @@ public class Factura_venta extends JFrame {
         }
     }
 
-    private String imprimirFacturaTicket() {
+    private String imprimirFacturaTicket(boolean imprimir) {
 
         obFactura.setSucursal(sucursalEmisora.getNombreComercial());
         obFactura.setDireccionSucursal(sucursalEmisora.getDireccionMatriz());
@@ -1982,8 +1982,9 @@ public class Factura_venta extends JFrame {
         } else {
             FacturaController.actualizarFactura(LblNumero.getText(), "SRI: " + respuesta, "0");
         }
-
-        new ImpresionTicket().impresion(obFactura);
+        
+        if(imprimir)
+            new ImpresionTicket().impresion(obFactura);
         
         return respuesta;
     }
