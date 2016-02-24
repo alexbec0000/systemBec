@@ -1,5 +1,7 @@
 package appFactura;
 
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
@@ -626,9 +628,11 @@ public class f_parametros extends JFrame {
             txtDescripcion = new JTextArea();
             txtDescripcion.setFont(new Font("Tahoma", Font.PLAIN, 11));
             txtDescripcion.setEnabled(false);
-            txtDescripcion.setBounds(131, 94, 452, 137);
-            txtDescripcion.setRows(5);
-            jContentPane.add(txtDescripcion);
+
+            JScrollPane outScroll = new JScrollPane(txtDescripcion);
+            outScroll.setBounds(131, 94, 452, 137);
+            outScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+            jContentPane.add(outScroll);
             
             ckbxEstado = new JCheckBox("ACTIVO");
             ckbxEstado.setBounds(315, 247, 97, 15);
