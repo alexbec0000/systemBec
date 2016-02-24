@@ -1,6 +1,5 @@
 package appFactura;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -10,30 +9,20 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 
 import pck_controller.ParametrosController;
 
-import appFactura.f_clientes;
-import appFactura.f_listaclientes;
 import javax.swing.JCheckBox;
 
 public class f_empresa extends JFrame {
