@@ -690,7 +690,7 @@ public class Factura_venta extends JFrame {
         if (BNueva == null) {
             BNueva = new JButton();
             BNueva.setLocation(new Point(14, 14));
-            BNueva.setIcon(new ImageIcon(getClass().getResource("/recursos/NUEVO.png")));
+            BNueva.setIcon(new ImageIcon(getClass().getResource("/recursos/nuevo.png")));
             BNueva.setToolTipText("Nueva Factura");
             BNueva.setSize(new Dimension(54, 54));
             BNueva.addActionListener(new java.awt.event.ActionListener() {

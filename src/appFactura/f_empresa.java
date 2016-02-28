@@ -357,7 +357,7 @@ public class f_empresa extends JFrame {
             bNuevo.setText("   Nuevo");
             bNuevo.setFont(new Font("Dialog", Font.PLAIN, 11));
             bNuevo.setMnemonic(KeyEvent.VK_N);
-            bNuevo.setIcon(new ImageIcon(getClass().getResource("/recursos/NUEVO.png")));
+            bNuevo.setIcon(new ImageIcon(getClass().getResource("/recursos/nuevo.png")));
             bNuevo.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     nuevoreg = true;
