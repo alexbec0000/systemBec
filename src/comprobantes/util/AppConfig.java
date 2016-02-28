@@ -16,10 +16,10 @@ public class AppConfig implements Serializable {
     
     private static AppConfig config = new AppConfig();
     
-    private String host = "localhost";
-    private String dataBase = "facturacion";
-    private String user = "root";
-    private String pass = "";
+    private String host = "www.db4free.net";
+    private String dataBase = "ab_facturacion";
+    private String user = "ab_sys";
+    private String pass = "ab_admin";
     private String idUsuario = "";
     private String usuario = "";
 
