@@ -133,7 +133,7 @@ public class ProductoController extends AbstractController{
         try 
         {          
             Statement sentenciacli=cls_conexion.getStatement();
-            sentenciacli.executeQuery("SELECT ID_ART,DESCRIPCION_ART,STOCK,PVP_ART FROM ARTICULOS ORDER BY ID_ART");
+            sentenciacli.executeQuery("SELECT ID_ART,DESCRIPCION_ART,STOCK,PVP_ART FROM articulos ORDER BY ID_ART");
             return sentenciacli.getResultSet();
         } 
         catch (SQLException ex) {
@@ -228,7 +228,7 @@ public class ProductoController extends AbstractController{
         try 
         {          
             Statement sentenciacli=cls_conexion.getStatement();
-            sentenciacli.executeQuery("SELECT ID_ART,DESCRIPCION_ART,STOCK,PVP_ART FROM ARTICULOS WHERE DESCRIPCION_ART LIKE '" + descripcion + "%' ORDER BY DESCRIPCION_ART");
+            sentenciacli.executeQuery("SELECT ID_ART,DESCRIPCION_ART,STOCK,PVP_ART FROM articulos WHERE DESCRIPCION_ART LIKE '" + descripcion + "%' ORDER BY DESCRIPCION_ART");
             return sentenciacli.getResultSet();
         } 
         catch (SQLException ex) {
@@ -258,7 +258,7 @@ public class ProductoController extends AbstractController{
         try 
         {          
             Statement sentenciacli=cls_conexion.getStatement();
-            sentenciacli.executeQuery("SELECT STOCK FROM ARTICULOS WHERE ID_ART='"+codlinea+"'");
+            sentenciacli.executeQuery("SELECT STOCK FROM articulos WHERE ID_ART='"+codlinea+"'");
             return sentenciacli.getResultSet();
         } 
         catch (SQLException ex) {
@@ -271,7 +271,7 @@ public class ProductoController extends AbstractController{
     public static void actualizarStock(Object stock, Object ID_ART)
     {
         try {
-            String sql ="UPDATE ARTICULOS SET STOCK=STOCK-"+stock+" WHERE ID_ART='"+ID_ART+"'";
+            String sql ="UPDATE articulos SET STOCK=STOCK-"+stock+" WHERE ID_ART='"+ID_ART+"'";
             cls_conexion.getStatement().executeUpdate(sql);
         } catch (SQLException ex) {
             ex.printStackTrace();

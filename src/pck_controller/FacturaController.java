@@ -22,7 +22,7 @@ public class FacturaController extends AbstractController{
         try 
         {          
             Statement sentenciacli=cls_conexion.getStatement();
-            sentenciacli.executeQuery("SELECT *,(sub_gen-tot_des+tot_iva) as total,round((sub_gen-tot_des+tot_iva-pago_ini),2) as saldo FROM FACV_CAB ORDER BY NUM_FACV");
+            sentenciacli.executeQuery("SELECT *,(sub_gen-tot_des+tot_iva) as total,round((sub_gen-tot_des+tot_iva-pago_ini),2) as saldo FROM facv_cab ORDER BY NUM_FACV");
             return sentenciacli.getResultSet();
         } 
         catch (SQLException ex) {
@@ -54,7 +54,7 @@ public class FacturaController extends AbstractController{
         try 
         {          
             Statement sentenciacli=cls_conexion.getStatement();
-            sentenciacli.executeQuery("SELECT COUNT(NUM_FACV) AS CUANTOS FROM FACV_CAB WHERE ID_CLI='" + ID_CLI + "'");
+            sentenciacli.executeQuery("SELECT COUNT(NUM_FACV) AS CUANTOS FROM facv_cab WHERE ID_CLI='" + ID_CLI + "'");
             return sentenciacli.getResultSet();
         } 
         catch (SQLException ex) {
@@ -67,7 +67,7 @@ public class FacturaController extends AbstractController{
     public static void anularFactura(String observacion, String NUM_FACV)
     {
         try {
-            String sql ="UPDATE FACV_CAB SET ANULADA=1,OBSERVAC='"+observacion+"' WHERE NUM_FACV='"+NUM_FACV+"'";
+            String sql ="UPDATE facv_cab SET ANULADA=1,OBSERVAC='"+observacion+"' WHERE NUM_FACV='"+NUM_FACV+"'";
             cls_conexion.getStatement().executeUpdate(sql);
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -79,7 +79,7 @@ public class FacturaController extends AbstractController{
                     ,String Pago, String Observa)
     {
         try {
-            String sql ="INSERT INTO FACV_CAB (NUM_FACV,ID_CLI,ID_VEN,FECHA,FOR_PAG,DESCU,SUB_GEN,TOT_DES,TOT_IVA,pago_ini,OBSERVAC,ANULADA) VALUES('"+Numero+
+            String sql ="INSERT INTO facv_cab (NUM_FACV,ID_CLI,ID_VEN,FECHA,FOR_PAG,DESCU,SUB_GEN,TOT_DES,TOT_IVA,pago_ini,OBSERVAC,ANULADA) VALUES('"+Numero+
                         "','"+id_cli+"','"+ID_VEN+"','"+fechasql+"','"+formaPago+
                         "',"+Descuento+","+Subtotal+","+Totdes+","+Totiva+","+
                         Pago+",'"+Observa+"',0)";

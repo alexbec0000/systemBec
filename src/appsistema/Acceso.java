@@ -18,10 +18,19 @@ public void Validacion()
     String retorno=VendedorController.login(usuario, pasword);
     if(retorno.length()>0)
     {
-        AppConfig.getConfig().setIdUsuario(retorno);
-        AppConfig.getConfig().setUsuario(usuario);
-        principal.setVisible(true);
-        this.dispose();
+        if(!retorno.equals("-1"))
+        {
+            AppConfig.getConfig().setIdUsuario(retorno);
+            AppConfig.getConfig().setUsuario(usuario);
+            principal.setVisible(true);
+            this.dispose();
+        }
+        else
+        {
+            Configurar configurar = new Configurar(true);
+            configurar.setVisible(true);
+            this.dispose();
+        }
     }
     else 
         if (usuario.equalsIgnoreCase(pasword) != true)

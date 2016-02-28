@@ -99,7 +99,7 @@ public class ParametrosController extends AbstractController {
     public static ResultSet obtenerTotalEmpresa() {
         try {
             Statement sentenciacli = cls_conexion.getStatement();
-            sentenciacli.executeQuery("select count(id_par) as cuantos from parametros");
+            sentenciacli.executeQuery("select count(id_emp) as cuantos from empresa");
             return sentenciacli.getResultSet();
         } catch (SQLException ex) {
             ex.printStackTrace();

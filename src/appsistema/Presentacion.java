@@ -55,7 +55,7 @@ public class Presentacion extends javax.swing.JFrame {
             FileInputStream fis = new FileInputStream("AppConfig.bin");
             ObjectInputStream ois = new ObjectInputStream(fis);
             if (ois != null) {
-                AppConfig obj =  (AppConfig) ois.readObject();
+                AppConfig.setConfig((AppConfig) ois.readObject());
                 ois.close();
             }
            

@@ -12,7 +12,6 @@ import pck_accesoDatos.cls_conexion;
  */
 public abstract class AbstractController{
     
-    cls_conexion objcls_conexion=new cls_conexion();
     public ResultSet rs;   
     public final static int TODO = 1;
     public final static int POR_CONDICION = 2;

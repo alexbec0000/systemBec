@@ -127,7 +127,7 @@ public class VendedorController extends AbstractController {
 
         } catch (SQLException ex) {
             System.out.println(ex);
-            retorno="";
+            retorno="-1";
         }
 
         return retorno;

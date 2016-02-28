@@ -120,6 +120,8 @@ public class Factura_venta extends JFrame {
     static String precio = new String();  //  @jve:decl-index=0:
     static String cantidad = new String();  //  @jve:decl-index=0:
     static String numero = new String();  //  @jve:decl-index=0:
+    static String urlCore = new String();
+    static String pathXML = new String();
     private JLabel LblCondicion = null;
     private JButton BModifica = null;
     private Factura obFactura;
@@ -1340,7 +1342,7 @@ public class Factura_venta extends JFrame {
      */
     private void initialize() {
         this.setResizable(false);
-        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/recursos/VENTAS.JPG")));
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/recursos/ventas.jpg")));
         this.setSize(827, 528);
         this.setContentPane(getJContentPane());
         this.setTitle("Venta de Productos");
@@ -1455,6 +1457,9 @@ public class Factura_venta extends JFrame {
             sucursalEmisora.setDireccionMatriz(rs.getString("direccion_emp"));
             sucursalEmisora.setCodigoEstablecimiento(rs.getString("establecimiento_emp"));
             sucursalEmisora.setCodPuntoEmision(rs.getString("punto_emp"));
+            
+            urlCore = ParametrosController.obtenerDescripcionParametroXid("PAR002");
+            pathXML = ParametrosController.obtenerDescripcionParametroXid("PAR003");
 
             resultadocli = ClienteController.obtenerClientes();
             resultadoven = VendedorController.obtenerVendedores();
@@ -1975,7 +1980,7 @@ public class Factura_venta extends JFrame {
             ex.printStackTrace();
         }
 
-        DocumentosElectronicos objDocumentosElectronicos = new DocumentosElectronicos();
+        DocumentosElectronicos objDocumentosElectronicos = new DocumentosElectronicos(urlCore, pathXML);
         String respuesta = objDocumentosElectronicos.generarFacturaElectronica(obFactura, sucursalEmisora);
         if (respuesta.equals("OK") || respuesta.equals("AUTORIZADO")) {
             FacturaController.actualizarFactura(LblNumero.getText(), "SRI: " + respuesta, "1");

@@ -555,7 +555,7 @@ public class f_parametros extends JFrame {
         // TODO Auto-generated method stub
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                f_clientes thisClass = new f_clientes();
+                f_parametros thisClass = new f_parametros();
                 thisClass.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 thisClass.setVisible(true);
             }
@@ -580,11 +580,6 @@ public class f_parametros extends JFrame {
         this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/recursos/cog.png")));
         this.setContentPane(getJContentPane());
         this.setTitle("PARAMETROS DEL SISTEMA");
-        this.addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowOpened(java.awt.event.WindowEvent e) {
-                System.out.println("windowOpened()"); // TODO Auto-generated Event stub windowOpened()
-            }
-        });
         this.setLocationRelativeTo(null);
         conectar();
     }

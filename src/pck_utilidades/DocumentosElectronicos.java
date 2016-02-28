@@ -7,7 +7,6 @@ package pck_utilidades;
 
 import comprobantes.entidades.Clientes;
 import comprobantes.entidades.Emisor;
-import comprobantes.util.AppConfig;
 import generaXML.GeneraXMLsri;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +22,17 @@ import servicios.cls_fechas;
  */
 public class DocumentosElectronicos {
 
-    private static boolean autorizar = false;    // true produccion
+    private static String urlCore;
+    private static String pathXML;
+    private static final boolean autorizar = false;    // true produccion
 //    private static String ambiente = "1";     // 2 produccion
 
+    public DocumentosElectronicos(String urlCore, String pathXML) {
+        DocumentosElectronicos.urlCore = urlCore;
+        DocumentosElectronicos.pathXML=pathXML;
+    }
+
+    
     public String generarFacturaElectronica(Factura factura, Emisor sucursalEmisora) {
         //Emisor sucursalEmisora = new Emisor();
         String[] numFac = factura.getNumFac().split("-");
@@ -51,8 +58,8 @@ public class DocumentosElectronicos {
         fac.setSecuencialFactura(numFac[2]);
         fac.setSubTotal(factura.getSubTotalFac());
         fac.setValorTotal(factura.getValorFac());
-        fac.setPathCore("http://"+AppConfig.getConfig().getHost()+"/html/addocument/");
-        fac.setPathFactura("C:\\TEMP\\Facturas\\");
+        fac.setPathCore(urlCore);
+        fac.setPathFactura(pathXML);
 
         // Arreglo de detalles
         List<DetalleFacturaElectronica> Lisdetalle = new ArrayList();
