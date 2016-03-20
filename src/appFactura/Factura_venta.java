@@ -122,6 +122,7 @@ public class Factura_venta extends JFrame {
     static String numero = new String();  //  @jve:decl-index=0:
     static String urlCore = new String();
     static String pathXML = new String();
+    int estadoFactura=0;
     private JLabel LblCondicion = null;
     private JButton BModifica = null;
     private Factura obFactura;
@@ -1684,12 +1685,14 @@ public class Factura_venta extends JFrame {
             TxtTotiva.setText(resultadocab.getString("tot_iva"));
             TxtTotal.setText(resultadocab.getString("total"));
             TxtSaldo.setText(resultadocab.getString("saldo"));
+            
             String lafecha = new String("");
             lafecha = resultadocab.getString("fecha").substring(8) + "/" + resultadocab.getString("fecha").substring(5, 7) + "/" + resultadocab.getString("fecha").substring(0, 4);
             TxtFecha.setText(lafecha);
             if (resultadocab.getInt("anulada") == 0) {
+                estadoFactura=resultadocab.getInt("PROCESADA");
                 BAnular.setEnabled(true);
-                if (resultadocab.getInt("PROCESADA") == 1) {
+                if (estadoFactura == 1) {
                     BReprocesar.setEnabled(false);
                     LblCondicion.setText("FACTURA PROCESADA");
                 } else {
@@ -1833,7 +1836,10 @@ public class Factura_venta extends JFrame {
             LblCondicion.setText("FACTURA ANULADA");
             LblCondicion.setForeground(new Color(168, 20, 20));
             FacturaController.anularFactura(observacion, LblNumero.getText());
-
+            if(estadoFactura==1) //Factura autorizada por el sri
+            {
+                //Generar nota de credito
+            }
             for (int x = 0; x < modelo.getRowCount(); x++) {
                 ProductoController.actualizarStock(JTable.getValueAt(x, 3), JTable.getValueAt(x, 0));
             }
